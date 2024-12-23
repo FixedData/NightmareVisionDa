@@ -1,7 +1,6 @@
 package math;
 
 // modified from lime.math.Vector4
-
 /**
 	`Vector3` is a vector suitable for three-dimensional
 	math, containing (x, y, z) components
@@ -111,16 +110,11 @@ class Vector3
 		@param alpha How far the interpolation is
 		@return A `Vector3 instance linearly interpolated`
 	**/
-
-	//https://gamedev.stackexchange.com/questions/18615/how-do-i-linearly-interpolate-between-two-vectors
-	public function lerp(goal:Vector3, alpha:Float):Vector3{
-		return new Vector3(
-			alpha*goal.x + x*(1-alpha),
-			alpha*goal.y + y*(1-alpha),
-			alpha*goal.z + z*(1-alpha)
-		);
+	// https://gamedev.stackexchange.com/questions/18615/how-do-i-linearly-interpolate-between-two-vectors
+	public function lerp(goal:Vector3, alpha:Float):Vector3
+	{
+		return new Vector3(alpha * goal.x + x * (1 - alpha), alpha * goal.y + y * (1 - alpha), alpha * goal.z + z * (1 - alpha));
 	}
-
 
 	/**
 		Copies the x, y and z component values of another `Vector3` instance
@@ -230,9 +224,7 @@ class Vector3
 	**/
 	public inline function nearEquals(toCompare:Vector3, tolerance:Float):Bool
 	{
-		return Math.abs(x - toCompare.x) < tolerance
-			&& Math.abs(y - toCompare.y) < tolerance
-			&& Math.abs(z - toCompare.z) < tolerance;
+		return Math.abs(x - toCompare.x) < tolerance && Math.abs(y - toCompare.y) < tolerance && Math.abs(z - toCompare.z) < tolerance;
 	}
 
 	/**

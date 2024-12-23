@@ -23,6 +23,11 @@ function onLoad(){
     }
 }
 
+function onCreatePost(){
+    game.playHUD.ratingPrefix = 'pixelUI/';
+	game.playHUD.ratingSuffix = '-pixel';
+}
+
 function onUpdate(elapsed){
     if(!ClientPrefs.lowQuality && bgGhouls.animation.curAnim.finished) {
         bgGhouls.visible = false;
@@ -48,8 +53,10 @@ function doStartCountdown() {
     }
 }
 
-function schoolIntro(?dialogueBox:DialogueBox):Void {
+function schoolIntro(dialogueBox) {
     game.inCutscene = true;
+    game.snapCamFollowToPos(600, 550);
+
     var black:FlxSprite = new FlxSprite(-100, -100).makeGraphic(FlxG.width * 2, FlxG.height * 2, FlxColor.BLACK);
     black.scrollFactor.set();
     black.cameras = [ game.camHUD ];

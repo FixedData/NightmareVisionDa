@@ -1,5 +1,10 @@
+
+import funkin.objects.BGSprite;
+import funkin.states.transitions.FixedFlxBGSprite;
+
 var halloweenWhite:BGSprite;
-function onLoad(){
+function onLoad()
+{
     if(!ClientPrefs.lowQuality) {
         halloweenBG = new BGSprite('week2/halloween_bg', -200, -100, ['halloweem bg0', 'halloweem bg lightning strike']);
     } else {
@@ -11,7 +16,7 @@ function onLoad(){
     halloweenWhite = new BGSprite(null, -800, -400, 0, 0);
     halloweenWhite.makeGraphic(Std.int(FlxG.width * 2), Std.int(FlxG.height * 2), FlxColor.WHITE);
     halloweenWhite.alpha = 0;
-    // halloweenWhite.blend = ADD;
+    halloweenWhite.blend = BlendMode.ADD;
     foreground.add(halloweenWhite);
 }
 
@@ -42,4 +47,40 @@ function lightningStrikeShit(){
         FlxTween.tween(halloweenWhite, {alpha: 0.5}, 0.075);
         FlxTween.tween(halloweenWhite, {alpha: 0}, 0.25, {startDelay: 0.15});
     }
+}
+
+function doStartCountdown()
+{
+    if (game.curSong == 'Monster' && PlayState.isStoryMode && !PlayState.seenCutscene)
+    {
+        var whiteScreen:FlxSprite = new FlxSprite(0, 0).makeScaledGraphic(Std.int(FlxG.width * 2), Std.int(FlxG.height * 2), FlxColor.WHITE);
+        foreground.add(whiteScreen);
+        whiteScreen.scrollFactor.set();
+        whiteScreen.blend = BlendMode.ADD;
+        game.camHUD.visible = false;
+        game.snapCamFollowToPos(dad.getMidpoint().x + 150, dad.getMidpoint().y - 100);
+        game.inCutscene = true;
+    
+        FlxTween.tween(whiteScreen, {alpha: 0}, 1, {
+            startDelay: 0.1,
+            ease: FlxEase.linear,
+            onComplete: function(twn:FlxTween)
+            {
+                camHUD.visible = true;
+                remove(whiteScreen);
+                game.startCountdown();
+            }
+        });
+        FlxG.sound.play(Paths.soundRandom('thunder_', 1, 2));
+        if (gf != null)
+            gf.playAnim('scared', true);
+        boyfriend.playAnim('scared', true);
+
+
+        return Globals.Function_Stop;
+    }
+
+
+
+
 }

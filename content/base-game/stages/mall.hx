@@ -1,4 +1,11 @@
-importClass("meta.states.LoadingState");
+// importClass("meta.states.LoadingState");
+import funkin.objects.BGSprite;
+import funkin.utils.CoolUtil;
+import funkin.states.LoadingState;
+import funkin.data.Song;
+import flixel.addons.transition.FlxTransitionableState;
+import funkin.states.transitions.FixedFlxBGSprite;
+import funkin.states.PlayState;
 
 var heyTimer:Float;
 var upperBoppers:BGSprite;

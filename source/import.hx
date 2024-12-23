@@ -1,5 +1,5 @@
 #if !macro
-//flixel
+// flixel
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxCamera;
@@ -12,32 +12,26 @@ import flixel.util.FlxTimer;
 import flixel.FlxBasic;
 import flixel.math.FlxPoint;
 import flixel.system.FlxSound;
-
-#if DISCORD_ALLOWED
-import meta.data.Discord;
+#if sys
+import sys.io.*;
+import sys.*;
 #end
-
-import Init;
-
+#if DISCORD_ALLOWED
+import funkin.api.Discord;
+import funkin.api.Discord.DiscordClient;
+#end
+#if VIDEOS_ALLOWED
 import hxvlc.flixel.*;
-
-import meta.data.Paths;
-import meta.data.ClientPrefs;
-import meta.data.Conductor;
-import meta.data.CoolUtil;
-import meta.data.Highscore;
-
-import meta.states.*;
-
-import gameObjects.BGSprite;
-
-import meta.states.KUTValueHandler;
-
-import meta.data.ExUtils;
-import meta.data.ExUtils.addShader as ApplyShaderToCamera;
-import meta.data.ExUtils.removeShader as RemoveShaderFromCamera;
-import meta.data.ExUtils.insertFlxCamera as insertFlxCamera;
+#end
+import Init;
+import funkin.Paths;
+import funkin.data.ClientPrefs;
+import funkin.data.Conductor;
+import funkin.utils.CoolUtil;
+import funkin.data.Highscore;
+import funkin.states.*;
+import funkin.objects.BGSprite;
+import funkin.backend.MusicBeatState;
 
 using StringTools;
-using meta.FlxObjectTools;
 #end
