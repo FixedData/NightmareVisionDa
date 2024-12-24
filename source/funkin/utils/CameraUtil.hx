@@ -9,7 +9,7 @@ import openfl.filters.ShaderFilter;
 class CameraUtil
 {
 	/**
-		returns the last camera in the list
+		returns the last camera in FlxG.cameras.list
 	**/
 	public static var lastCamera(get, never):FlxCamera;
 
@@ -79,6 +79,9 @@ class CameraUtil
 	**/
 	public static function insertFlxCamera(idx:Int, camera:FlxCamera, defDraw:Bool = false)
 	{
+		#if (flixel > "5.8.0")
+		return FlxG.cameras.insert(camera,idx,defDraw);
+		#else
 		var cameras = [
 			for (i in FlxG.cameras.list)
 				{
@@ -96,5 +99,6 @@ class CameraUtil
 			FlxG.cameras.add(i.cam, i.defaultDraw);
 
 		return camera;
+		#end
 	}
 }

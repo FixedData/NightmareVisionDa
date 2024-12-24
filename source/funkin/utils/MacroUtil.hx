@@ -8,6 +8,9 @@ using haxe.macro.Tools;
 using Lambda;
 #end
 
+/**
+    Utility class for Macro related functions 
+**/
 class MacroUtil
 {
 	/**

@@ -20,8 +20,6 @@ class Main extends Sprite
 	@:noCompletion static function get_FUNKIN_VERSION() return lime.app.Application.current.meta.get('version');
 
 	
-
-
 	var gameWidth:Int = 1280; // Width of the game in pixels (might be less / more in actual pixels depending on your zoom).
 	var gameHeight:Int = 720; // Height of the game in pixels (might be less / more in actual pixels depending on your zoom).
 

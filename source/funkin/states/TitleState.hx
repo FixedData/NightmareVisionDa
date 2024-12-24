@@ -37,7 +37,6 @@ typedef TitleData =
 class TitleState extends MusicBeatState
 {
 	public static var initialized:Bool = false;
-	public static var instance:TitleState;
 
 	public var blackScreen:FlxSprite;
 	public var credGroup:FlxGroup;
@@ -52,15 +51,12 @@ class TitleState extends MusicBeatState
 
 	public var wackyImage:FlxSprite;
 
-	public var mustUpdate:Bool = false;
-
 	public var titleJSON:TitleData;
 
 	public static var updateVersion:String = '';
 
 	override public function create():Void
 	{
-		instance = this;
 		Paths.clearStoredMemory();
 		Paths.clearUnusedMemory();
 
@@ -74,41 +70,12 @@ class TitleState extends MusicBeatState
 
 		curWacky = FlxG.random.getObject(getIntroTextShit());
 
-		// DEBUG BULLSHIT
-
 		swagShader = new ColorSwap();
 
 		setUpScript('TitleState');
 
 		super.create();
 
-		#if CHECK_FOR_UPDATES
-		if (ClientPrefs.checkForUpdates && !closedState)
-		{
-			trace('checking for update');
-			var http = new haxe.Http("https://raw.githubusercontent.com/ShadowMario/FNF-PsychEngine/main/gitVersion.txt");
-
-			http.onData = function(data:String) {
-				updateVersion = data.split('\n')[0].trim();
-				var curVersion:String = Main.PSYCH_VERSION.trim();
-				trace('version online: ' + updateVersion + ', your version: ' + curVersion);
-				if (updateVersion != curVersion)
-				{
-					trace('versions arent matching!');
-					// mustUpdate = true;
-					// for now we dont have a nightmare vision ver indicator so we are just gonna disable this
-				}
-			}
-
-			http.onError = function(error) {
-				trace('error: $error');
-			}
-
-			http.request();
-		}
-		#end
-
-		setOnScript('game', instance);
 
 		// IGNORE THIS!!!
 		titleJSON = Json.parse(Paths.getTextFromFile('images/gfDanceTitle.json'));
@@ -181,10 +148,6 @@ class TitleState extends MusicBeatState
 			{
 				bg.makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
 			}
-
-			// bg.antialiasing = ClientPrefs.globalAntialiasing;
-			// bg.setGraphicSize(Std.int(bg.width * 0.6));
-			// bg.updateHitbox();
 			add(bg);
 
 			logoBl = new FlxSprite(titleJSON.titlex, titleJSON.titley);
@@ -355,14 +318,9 @@ class TitleState extends MusicBeatState
 					// FlxG.sound.music.stop();
 
 					new FlxTimer().start(1, function(tmr:FlxTimer) {
-						if (mustUpdate)
-						{
-							FlxG.switchState(new OutdatedState());
-						}
-						else
-						{
-							FlxG.switchState(new MainMenuState());
-						}
+			
+						FlxG.switchState(new MainMenuState());
+						
 						closedState = true;
 					});
 					// FlxG.sound.play(Paths.music('titleShoot'), 0.7);

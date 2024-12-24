@@ -71,7 +71,6 @@ class FunkinIris extends FunkinScript
 			PlayState.instance?.addTextToDebug(message, FlxColor.YELLOW);
 
 			FlxG.log.warn(message);
-			// trace(message);
 
 			Iris.logLevel(ERROR, x, pos);
 		}
@@ -81,7 +80,6 @@ class FunkinIris extends FunkinScript
 			PlayState.instance?.addTextToDebug(message, FlxColor.RED);
 
 			FlxG.log.error(message);
-			// trace(message);
 
 			Iris.logLevel(NONE, x, pos);
 		}
@@ -90,16 +88,10 @@ class FunkinIris extends FunkinScript
 			final message:String = '[${pos.fileName}]: TRACE: ${pos.lineNumber} -> $x';
 			PlayState.instance?.addTextToDebug(message);
 
-			// FlxG.log.add(message);
-
-			// trace(message);
-
 			Iris.logLevel(NONE, x, pos);
 		}
 	}
-
-	public static var defaultVars:Map<String, Dynamic> = new Map<String, Dynamic>();
-
+	
 	public var _script:Iris;
 
 	public var parsingException:Null<String> = null;
@@ -322,7 +314,6 @@ class FunkinIris extends FunkinScript
 		set("Character", Character);
 		set("NoteSplash", NoteSplash);
 		set("BGSprite", BGSprite);
-		set('SpriteFromSheet', SpriteFromSheet);
 		set("StrumNote", StrumNote);
 		set("Alphabet", Alphabet);
 		set("AttachedSprite", AttachedSprite);
@@ -343,7 +334,6 @@ class FunkinIris extends FunkinScript
 		set("SetEvent", funkin.modchart.events.SetEvent);
 
 		set("GameOverSubstate", funkin.states.substates.GameOverSubstate);
-		set("GameOverVideoSubstate", funkin.states.substates.GameOverVideoSubstate);
 
 		if ((FlxG.state is PlayState) && PlayState.instance != null)
 		{
@@ -353,7 +343,6 @@ class FunkinIris extends FunkinScript
 			set("global", state.variables);
 			set("getInstance", funkin.data.scripts.Globals.getInstance);
 
-			// why is ther hscriptglobals and variables when they achieve the same thign maybe kill off one or smth
 			set('setGlobalFunc', (name:String, func:Dynamic) -> state.variables.set(name, func));
 			set('callGlobalFunc', (name:String, ?args:Dynamic) -> {
 				if (state.variables.exists(name)) return state.variables.get(name)(args);

@@ -24,7 +24,7 @@ class WindowUtil
 
 	public static function setTitle(?arg:String, append:Bool = false)
 	{
-		if (arg == null) arg = defaultAppTitle;
+		arg ??= defaultAppTitle;
 
 		if (append) getWindow().title += arg;
 		else getWindow().title = arg;

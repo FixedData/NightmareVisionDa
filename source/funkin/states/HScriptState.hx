@@ -1,4 +1,4 @@
-package funkin.states.editors;
+package funkin.states;
 
 #if sys
 import sys.io.File;

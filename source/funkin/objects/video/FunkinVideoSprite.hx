@@ -115,6 +115,21 @@ class FunkinVideoSprite extends FlxVideoSprite
 		}
 	}
 
+	public function onEnd(func:Void->Void,once:Bool = false)
+	{
+		bitmap.onEndReached.add(func, once);
+	}
+
+	public function onStart(func:Void->Void,once:Bool = false)
+	{
+		bitmap.onOpening.add(func, once);
+	}
+
+	public function onFormat(func:Void->Void,once:Bool = false)
+	{
+		bitmap.onFormatSetup.add(func, once);
+	}
+
 	public function addCallback(vidCallBack:VidCallbacks, func:Void->Void, once:Bool = false)
 	{
 		switch (vidCallBack)

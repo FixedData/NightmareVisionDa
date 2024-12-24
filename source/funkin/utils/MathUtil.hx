@@ -6,7 +6,7 @@ class MathUtil
 		FlxMath.lerp but accounts for FPS.
 	**/
 	public static inline function fpsLerp(v1:Float, v2:Float, ratio:Float) return FlxMath.lerp(v1, v2, ratio * 60 * FlxG.elapsed);
-
+	
 	/**
 		crude version of FlxMath.wrap. supports floats though
 	**/
@@ -16,19 +16,19 @@ class MathUtil
 		else if (value > max) return min;
 		else return value;
 	}
-
+	
 	public static function floorDecimal(value:Float, decimals:Int):Float
 	{
 		if (decimals < 1) return Math.floor(value);
-
+		
 		var tempMult:Float = 1;
 		for (i in 0...decimals)
 			tempMult *= 10;
-
+			
 		var newValue:Float = Math.floor(value * tempMult);
 		return newValue / tempMult;
 	}
-
+	
 	/**
 		Makes a number array
 		* @param	min starting number. default is 0
@@ -39,7 +39,7 @@ class MathUtil
 	{
 		return [for (i in min...max) i];
 	}
-
+	
 	/**
 		Clamps/Bounds a value. for Ints though.
 		* @param	input the value to clamp
@@ -51,7 +51,7 @@ class MathUtil
 		if (input > max) input = max;
 		return input;
 	}
-
+	
 	public static function betterLerp(a:Float, b:Float, ratio:Float)
 	{
 		if (a == b) return b;
@@ -59,7 +59,7 @@ class MathUtil
 		{
 			return b;
 		}
-
+		
 		return fpsLerp(a, b, ratio);
 	}
 }

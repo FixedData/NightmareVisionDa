@@ -43,7 +43,7 @@
 
 	<classpath name="source" />
 	
-	<!-- PSYCH ENGINE CUSTOMIZATION -->
+	<!-- ENGINE CUSTOMIZATION -->
 	<define name="MODS_ALLOWED" if="desktop" />
 	<define name="LUA_ALLOWED" if="desktop" />
 	<define name="VIDEOS_ALLOWED" if="cpp" />
@@ -87,7 +87,6 @@
 	<haxelib name="discord_rpc" if="DISCORD_ALLOWED"/>
 	<haxelib name="hxvlc" if="VIDEOS_ALLOWED"/>
 
-
 	<!-- ______________________________ macros _____________________________ -->
 
 	<haxeflag name="--macro" value="addMetadata('@:build(funkin.utils.MacroUtil.buildFlxSprite())', 'flixel.FlxSprite')" />
@@ -108,23 +107,14 @@
 	
 	<define name="DISABLE_TRACES" if="desktop release"/>
 
-
-	<haxedef name="FLX_NO_FOCUS_LOST_SCREEN" />
-
-	<!--Disable the Flixel core debugger. Automatically gets set whenever you compile in release mode!-->
-	<haxedef name="FLX_NO_DEBUG" unless="debug" />
-
 	<!--Enable this for Nape release builds for a serious peformance improvement-->
 	<haxedef name="NAPE_RELEASE_BUILD" unless="debug" />
 
-	<!-- <haxedef name="FLX_NO_PITCH" /> -->
-
+	<!--for haxe 4.3.0 and newer cleaner error reporting-->
 	<haxedef name="message.reporting" value="pretty" />
 	
+	<!--for haxe 4.3.0 and newer disables warnings-->
 	<haxedef name="no-deprecation-warnings"/>
-
-	<!-- <haxelib name="markdown" /> -->
-	<!-- <haxelib name="HtmlParser" /> -->
 
 	<!--In case you want to use nape with flixel-->
 	<!--<haxelib name="nape-haxe4" />-->
@@ -151,8 +141,13 @@
 	<!--<haxedef name="FLX_NO_SOUND_SYSTEM" />-->
 
 	<!--Disable the Flixel core focus lost screen-->
-	
+	<haxedef name="FLX_NO_FOCUS_LOST_SCREEN" />
 
+	<!--Disable the Flixel core debugger. Automatically gets set whenever you compile in release mode!-->
+	<haxedef name="FLX_NO_DEBUG" unless="debug" />
+
+	<!--Disable the ability to adjust FlxSounds pitch-->
+	<!-- <haxedef name="FLX_NO_PITCH" /> -->
 
 	<!-- _________________________________ Custom _______________________________ -->
 

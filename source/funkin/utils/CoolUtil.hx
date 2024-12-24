@@ -5,6 +5,10 @@ import flixel.math.FlxPoint;
 import flixel.FlxG;
 import openfl.utils.Assets;
 
+
+/**
+    General Utility class for more one off functions
+**/
 class CoolUtil
 {
 	inline public static function scale(x:Float, l1:Float, h1:Float, l2:Float, h2:Float):Float return ((x - l1) * (h2 - l2) / (h1 - l1) + l2);
@@ -35,14 +39,6 @@ class CoolUtil
 
 	//-----------------------------------------------------------------//
 
-	/**
-		sorting method that goes by FlxBasic's z values
-	**/
-	inline public static function sortByZ(order:Int, a:FlxBasic, b:FlxBasic):Int
-	{
-		if (a == null || b == null) return 0;
-		return flixel.util.FlxSort.byValues(order, a.zIndex, b.zIndex);
-	}
 
 	/**
 		capatalizes the first letter of a string.
