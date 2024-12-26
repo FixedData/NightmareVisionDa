@@ -81,6 +81,7 @@
 	<haxedev set='webgl'/>
 	<haxelib name="hscript"/>
 	<haxelib name="hscript-iris"/>
+	<haxelib name="polymod"/>
 	<define name="hscriptPos"/>
 
 	<haxelib name="linc_luajit" if="LUA_ALLOWED"/>

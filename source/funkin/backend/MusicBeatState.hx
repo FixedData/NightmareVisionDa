@@ -1,5 +1,7 @@
 package funkin.backend;
 
+import funkin.api.PolyClient;
+import funkin.scripting.ScriptManager;
 import funkin.utils.SortUtil;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import funkin.backend.BaseTransitionState;
@@ -124,6 +126,10 @@ class MusicBeatState extends FlxUIState
 			}
 		}
 
+		if (FlxG.keys.justPressed.F1) PolyClient.refresh();
+
+		ScriptManager.dispatchEvent(f->f.onUpdate(elapsed));
+
 		callOnScript('onUpdate', [elapsed]);
 
 		if (FlxG.save.data != null) FlxG.save.data.fullscreen = FlxG.fullscreen;
@@ -187,11 +193,19 @@ class MusicBeatState extends FlxUIState
 	public function stepHit():Void
 	{
 		if (curStep % 4 == 0) beatHit();
+		ScriptManager.dispatchEvent(script->script.onStepHit());
+
 	}
 
-	public function beatHit():Void {}
+	public function beatHit():Void 
+	{
+		ScriptManager.dispatchEvent(script->script.onBeatHit());
+	}
 
-	public function sectionHit():Void {}
+	public function sectionHit():Void 
+	{
+		ScriptManager.dispatchEvent(script->script.onSectionHit());
+	}
 
 	function getBeatsOnSection()
 	{

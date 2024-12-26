@@ -1,5 +1,6 @@
 package funkin.states;
 
+import funkin.scripting.classes.ScriptedStage;
 import funkin.utils.SortUtil;
 import funkin.utils.DifficultyUtil;
 import funkin.game.RatingInfo;
@@ -428,6 +429,13 @@ class PlayState extends MusicBeatState
 	public var onResumeSignal:FlxSignal = new FlxSignal();
 	
 	public var playHUD:BaseHUD = null;
+
+
+	public var newStage:StageNew;
+	function callStageFunc(f:StageNew->Void) if (newStage != null) f(newStage);
+
+
+
 	
 	@:noCompletion public function set_cpuControlled(val:Bool)
 	{
@@ -592,13 +600,30 @@ class PlayState extends MusicBeatState
 		{
 			introSoundsSuffix = '-pixel';
 		}
+
+
+		if (ScriptedStage.listScriptClasses().contains(curStage))
+		{
+			newStage = ScriptedStage.init(curStage);
+		}
+		else
+		{
+			newStage = new StageNew();
+		}
+
+		add(newStage);
+		newStage.add(gfGroup);
+		newStage.add(dadGroup);
+		newStage.add(boyfriendGroup);
+
+		callStageFunc(stage->stage.onCreate());
 		
 		if (callOnHScripts("onAddSpriteGroups", []) != Globals.Function_Stop)
 		{
-			add(stage);
-			stage.add(gfGroup);
-			stage.add(dadGroup);
-			stage.add(boyfriendGroup);
+			// add(stage);
+			// stage.add(gfGroup);
+			// stage.add(dadGroup);
+			// stage.add(boyfriendGroup);
 		}
 		
 		setOnHScripts('camGame', camGame);
@@ -926,6 +951,8 @@ class PlayState extends MusicBeatState
 		Conductor.safeZoneOffset = (ClientPrefs.safeFrames / 60) * 1000;
 		
 		callOnScripts('onCreatePost', []);
+		callStageFunc(stage->stage.onCreatePost());
+
 		setOnScripts('members', members);
 		
 		super.create();
@@ -4671,6 +4698,8 @@ class PlayState extends MusicBeatState
 		setOnScripts('curStep', curStep);
 		callOnScripts('onStepHit', []);
 		callHUDFunc(p -> p.stepHit());
+		callStageFunc(stage->stage.onStepHit());
+
 	}
 	
 
@@ -4722,6 +4751,9 @@ class PlayState extends MusicBeatState
 		setOnScripts('curBeat', curBeat); // DAWGG?????
 		callOnScripts('onBeatHit', []);
 		callHUDFunc(p -> p.beatHit());
+		callStageFunc(stage->stage.onBeatHit());
+		
+		
 	}
 	
 	// rework this
@@ -4772,6 +4804,8 @@ class PlayState extends MusicBeatState
 		setOnScripts('curSection', curSection);
 		callOnScripts('onSectionHit', [SONG.notes[curSection]]);
 		callHUDFunc(p -> p.sectionHit());
+		callStageFunc(stage->stage.onSectionHit());
+
 	}
 	
 	public var closeLuas:Array<FunkinLua> = [];

@@ -1,5 +1,7 @@
 package;
 
+import funkin.scripting.ScriptManager;
+import funkin.api.PolyClient;
 import flixel.FlxState;
 import flixel.FlxG;
 import flixel.input.keyboard.FlxKey;
@@ -40,6 +42,10 @@ class Init extends FlxState
 
 		funkin.objects.video.FunkinVideoSprite.init();
 
+		PolyClient.init();
+
+		ScriptManager.build();
+
 		if (FlxG.save.data != null && FlxG.save.data.fullscreen) FlxG.fullscreen = FlxG.save.data.fullscreen;
 		if (FlxG.save.data.weekCompleted != null) funkin.states.StoryMenuState.weekCompleted = FlxG.save.data.weekCompleted;
 
@@ -58,6 +64,6 @@ class Init extends FlxState
 
 		super.create();
 
-		FlxG.switchState(new funkin.states.TitleState());
+		FlxG.switchState(new TitleState());
 	}
 }
