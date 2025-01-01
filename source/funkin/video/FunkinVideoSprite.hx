@@ -54,59 +54,59 @@ class FunkinVideoSprite extends FlxVideoSprite
 		return local;
 	}
 	
-	override function load(location:Location, ?options:Array<String>):Bool
-	{
-		if (bitmap == null) return false;
+	// override function load(location:Location, ?options:Array<String>):Bool
+	// {
+	// 	if (bitmap == null) return false;
 		
-		if (autoPause)
-		{
-			if (!FlxG.signals.focusGained.has(bitmap.resume)) FlxG.signals.focusGained.add(bitmap.resume);
-			if (!FlxG.signals.focusLost.has(bitmap.pause)) FlxG.signals.focusLost.add(bitmap.pause);
-		}
+	// 	if (autoPause)
+	// 	{
+	// 		if (!FlxG.signals.focusGained.has(bitmap.resume)) FlxG.signals.focusGained.add(bitmap.resume);
+	// 		if (!FlxG.signals.focusLost.has(bitmap.pause)) FlxG.signals.focusLost.add(bitmap.pause);
+	// 	}
 		
-		final realLocal = decipherLocation(location);
+	// 	final realLocal = decipherLocation(location);
 		
-		if (realLocal != null && !(realLocal is Int) && !(realLocal is Bytes) && (realLocal is String))
-		{
-			final realLocal:String = cast(realLocal, String);
+	// 	if (realLocal != null && !(realLocal is Int) && !(realLocal is Bytes) && (realLocal is String))
+	// 	{
+	// 		final realLocal:String = cast(realLocal, String);
 			
-			if (!realLocal.contains('://'))
-			{
-				final absolutePath:String = FileSystem.absolutePath(realLocal);
+	// 		if (!realLocal.contains('://'))
+	// 		{
+	// 			final absolutePath:String = FileSystem.absolutePath(realLocal);
 				
-				if (FileSystem.exists(absolutePath)) return bitmap.load(absolutePath, options);
-				else
-				{
-					FlxG.log.warn('Unable to find the video file at location "$absolutePath".');
+	// 			if (FileSystem.exists(absolutePath)) return bitmap.load(absolutePath, options);
+	// 			else
+	// 			{
+	// 				FlxG.log.warn('Unable to find the video file at location "$absolutePath".');
 					
-					return false;
-				}
-			}
-		}
+	// 				return false;
+	// 			}
+	// 		}
+	// 	}
 		
-		return bitmap.load(realLocal, options);
-	}
+	// 	return bitmap.load(realLocal, options);
+	// }
 	
-	override function pause()
-	{
-		super.pause();
+	// override function pause()
+	// {
+	// 	super.pause();
 		
-		if (autoPause)
-		{
-			if (FlxG.signals.focusGained.has(bitmap.resume)) FlxG.signals.focusGained.remove(bitmap.resume);
-			if (FlxG.signals.focusLost.has(bitmap.pause)) FlxG.signals.focusLost.remove(bitmap.pause);
-		}
-	}
+	// 	if (autoPause)
+	// 	{
+	// 		if (FlxG.signals.focusGained.has(bitmap.resume)) FlxG.signals.focusGained.remove(bitmap.resume);
+	// 		if (FlxG.signals.focusLost.has(bitmap.pause)) FlxG.signals.focusLost.remove(bitmap.pause);
+	// 	}
+	// }
 	
-	override function resume()
-	{
-		super.resume();
-		if (autoPause)
-		{
-			if (!FlxG.signals.focusGained.has(bitmap.resume)) FlxG.signals.focusGained.add(bitmap.resume);
-			if (!FlxG.signals.focusLost.has(bitmap.pause)) FlxG.signals.focusLost.add(bitmap.pause);
-		}
-	}
+	// override function resume()
+	// {
+	// 	super.resume();
+	// 	if (autoPause)
+	// 	{
+	// 		if (!FlxG.signals.focusGained.has(bitmap.resume)) FlxG.signals.focusGained.add(bitmap.resume);
+	// 		if (!FlxG.signals.focusLost.has(bitmap.pause)) FlxG.signals.focusLost.add(bitmap.pause);
+	// 	}
+	// }
 	
 	public function onEnd(func:Void->Void, once:Bool = false)
 	{

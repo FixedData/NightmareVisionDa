@@ -54,6 +54,7 @@ import funkin.states.substates.*;
 import funkin.states.editors.*;
 import funkin.objects.*;
 import funkin.backend.MusicBeatSubstate;
+import extensions.FlxUIDropDownMenuCustom;
 
 using StringTools;
 

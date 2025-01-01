@@ -160,6 +160,7 @@ class PolyClient
 		Polymod.addDefaultImport(ScriptFlxTextAlign, 'FlxTextAlign');
 
 
+		// poly classes
 		final scriptedClasses = CompileTime.getAllClasses('funkin.scripting.classes');
 		for (i in scriptedClasses)
 		{

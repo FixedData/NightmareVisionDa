@@ -4,7 +4,7 @@ import funkin.data.options.OptionsState;
 import flixel.effects.FlxFlicker;
 import flixel.group.FlxGroup.FlxTypedGroup;
 
-@:build(funkin.data.scripts.ScriptMacros.buildScriptedState())
+// @:build(funkin.data.scripts.ScriptMacros.buildScriptedState())
 class MainMenuState extends MusicBeatState
 {
 	static var curSelected:Int = 0;
@@ -20,7 +20,7 @@ class MainMenuState extends MusicBeatState
 		FlxG.cameras.reset();
 		FlxG.camera.followLerp = 0.3;
 		
-		if (__script != null) __script.set('MenuButton', MenuButton);
+		// if (__script != null) __script.set('MenuButton', MenuButton);
 		
 		persistentUpdate = true;
 		

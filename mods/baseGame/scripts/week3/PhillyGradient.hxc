@@ -1,0 +1,49 @@
+import flixel.FlxG;
+import funkin.scripting.classes.ScriptedFlxSprite;
+import flixel.FlxSprite;
+
+
+
+class PhillyGradient extends ScriptedFlxSprite 
+{
+	public var originalY:Float;
+	public var originalHeight:Int = 400;
+
+	public function new(x:Float, y:Float)
+	{
+		super(x, y,Paths.image('week3/gradient'));
+		originalY = y;
+		antialiasing = ClientPrefs.globalAntialiasing;
+		scrollFactor.set(0, 0.75);
+		setGraphicSize(2000, originalHeight);
+		updateHitbox();
+	}
+
+	override function update(elapsed:Float)
+	{
+		var newHeight:Int = Math.round(height - 1000 * elapsed);
+		if (newHeight > 0)
+		{
+			alpha = 1;
+			setGraphicSize(2000, newHeight);
+			updateHitbox();
+			y = originalY + (originalHeight - height);
+		}
+		else
+		{
+			alpha = 0;
+			y = -5000;
+		}
+
+		super.update(elapsed);
+	}
+
+	public function bop():Void
+	{
+		setGraphicSize(2000, originalHeight);
+		updateHitbox();
+		y = originalY;
+		alpha = 1;
+		
+	}
+}

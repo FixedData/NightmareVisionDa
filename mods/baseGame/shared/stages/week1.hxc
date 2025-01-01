@@ -1,0 +1,39 @@
+import funkin.scripting.classes.ScriptedStage;
+
+class stage extends ScriptedStage 
+{
+
+    public function new()
+    {
+        super();
+    }
+
+    override function onCreate()
+    {
+        var bg:FlxSprite = new FlxSprite(-600, -200).loadGraphic(Paths.image("stageback"));
+        add(bg); 
+    
+        var stageFront:FlxSprite = new FlxSprite(-600, 600).loadGraphic(Paths.image("stagefront"));
+        add(stageFront);
+    
+        var stageCurtains:FlxSprite = new FlxSprite(-600, -300).loadGraphic(Paths.image("stagecurtains"));
+        add(stageCurtains);
+        stageCurtains.scrollFactor.set(1.1,1.1);
+
+        game.gfGroup.zIndex = 1;
+        game.dadGroup.zIndex = 2;
+        game.boyfriendGroup.zIndex = 3;
+
+        stageCurtains.zIndex = 10;
+
+        game.refreshZ(game.newStage);
+
+    }
+
+
+
+
+
+
+
+}

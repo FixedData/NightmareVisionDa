@@ -59,6 +59,8 @@
 	<library name="songs"         preload="true" />
 
 	<assets path='content' embed='false' if="MODS_ALLOWED"/>
+	<assets path='mods' embed='false' if="MODS_ALLOWED"/> <!-- TEMP-->
+
 
 	<!-- OpenAL config --> 	<!-- appreciate you cyn0x8 and smokey for finding this -->
 	<section if="desktop">
@@ -86,7 +88,7 @@
 
 	<haxelib name="linc_luajit" if="LUA_ALLOWED"/>
 	<haxelib name="discord_rpc" if="DISCORD_ALLOWED"/>
-	<haxelib name="hxvlc" if="VIDEOS_ALLOWED"/>
+	<haxelib name="hxvlc" if="VIDEOS_ALLOWED" version="1.9.5"/>
 
 	<!-- ______________________________ Macros _____________________________ -->
 

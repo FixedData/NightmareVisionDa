@@ -1,0 +1,40 @@
+import funkin.scripting.classes.ScriptedStage;
+
+class mallEvil extends ScriptedStage 
+{
+
+    var upperBoppers:BGSprite;
+    var bottomBoppers:BGSprite;
+    var santa:BGSprite;
+
+
+    public function new()
+    {
+        super();
+    }
+
+    override function onCreate()
+    {
+        var bg:BGSprite = new BGSprite('week5/evilBG', -400, -500, 0.2, 0.2);
+        bg.setGraphicSize(Std.int(bg.width * 0.8));
+        bg.updateHitbox();
+        add(bg);
+    
+        var evilTree:BGSprite = new BGSprite('week5/evilTree', 300, -300, 0.2, 0.2);
+        add(evilTree);
+    
+        var evilSnow:BGSprite = new BGSprite('week5/evilSnow', -200, 700);
+        add(evilSnow);
+    
+
+        game.gfGroup.zIndex = 10;
+        game.dadGroup.zIndex = 11;
+        game.boyfriendGroup.zIndex = 12;
+
+        game.refreshZ();
+
+
+    }
+
+
+}

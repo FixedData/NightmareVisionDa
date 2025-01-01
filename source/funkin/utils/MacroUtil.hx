@@ -19,9 +19,6 @@ class MacroUtil
 	public macro static function warnHaxelibs()
 	{
 		#if !display
-		#if (hxvlc != "1.5.5")
-		Context.fatalError('use Hxvlc version to 1.5.5 and do a clean compile.', (macro null).pos);
-		#end
 		
 		// better way to do this? eyeah prpboboably but ohhhh im so fat and lazy
 		var globalhxvlc = new sys.io.Process('haxelib libpath hxvlc --global').stdout.readAll().toString().toLowerCase();
@@ -29,9 +26,10 @@ class MacroUtil
 		globalhxvlc = StringTools.replace(globalhxvlc.split('').filter(f -> !(f.indexOf('/') != -1)).join(''), ',', '.');
 		globalhxvlc = StringTools.trim(globalhxvlc);
 		
-		if (globalhxvlc != '1.5.5')
+
+		if (Std.parseInt(globalhxvlc.split('')[2]) < 8)
 		{
-			Context.fatalError('Your hxvlc global version is mismatched! run "haxelib set hxvlc 1.5.5 --global" to fix" ', Context.currentPos());
+			Context.fatalError('Your hxvlc global version is mismatched! run "haxelib set hxvlc 1.9.5 --global" to fix" ', Context.currentPos());
 		}
 		
 		Context.warning('warning: ensure your hxvlc global version matches your local hmm install.\nIf errors related to .h files continue run "lime test windows -clean" for a clean rebuild.\nLastly, please use lime version 8.1.3 for stability\nCheck the projFiles folder for more info.',

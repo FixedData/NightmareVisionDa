@@ -1,7 +1,5 @@
 package funkin.backend;
 
-import flixel.util.FlxSignal;
-import flixel.util.FlxSignal.FlxTypedSignal;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.sound.FlxSound;
 

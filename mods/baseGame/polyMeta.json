@@ -1,0 +1,14 @@
+{
+    "title":"Base Game content",
+	"description":"Adds all base game songs from week 1 - 7",
+	"homepage": "",
+	"contributors": [
+		{
+			"name": "",
+			"role": "Developer"
+		}
+	],
+	"api_version":"1.0.0",
+	"mod_version":"1.0.0",
+	"license":""
+}

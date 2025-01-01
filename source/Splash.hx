@@ -1,6 +1,5 @@
 package;
 
-import funkin.objects.video.FunkinVideo;
 import flixel.FlxState;
 
 using StringTools;
@@ -9,7 +8,6 @@ using StringTools;
 @:access(Main)
 class Splash extends FlxState
 {
-	// var video:FunkinVideo;
 	var _cachedAutoPause:Bool;
 	
 	var spriteEvents:FlxTimer;
@@ -23,7 +21,6 @@ class Splash extends FlxState
 		FlxTimer.wait(1, () -> {
 			var folder = FileSystem.readDirectory('assets/shared/images/branding');
 			var img = folder[FlxG.random.int(0, folder.length - 1)];
-			trace(folder);
 			
 			logo = new FlxSprite().loadGraphic(Paths.image('branding/${img.replace('.png', '')}'));
 			logo.screenCenter();

@@ -35,6 +35,7 @@ import sys.io.File;
 import funkin.objects.*;
 import funkin.data.*;
 import funkin.states.*;
+import extensions.FlxUIDropDownMenuCustom;
 
 using StringTools;
 
