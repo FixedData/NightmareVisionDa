@@ -20,8 +20,9 @@ class SwipeTransition extends BaseTransitionState
 	public override function destroy():Void
 	{
 		super.destroy();
-		if (gradient != null) gradient.destroy();
-		if (gradientFill != null) gradientFill.destroy();
+
+		gradient?.destroy();
+		gradientFill?.destroy();
 		gradient = null;
 		gradientFill = null;
 	}
@@ -49,24 +50,14 @@ class SwipeTransition extends BaseTransitionState
 		
 		var yStart:Float = 0;
 		var yEnd:Float = 0;
-		var duration:Float = .48;
-		var angle:Int = 90;
+		var duration:Float = status == OUT_OF ? 0.6 : 0.48;
+		var angle:Int = status == OUT_OF ? 270 : 90;
 		var zoom:Float = FlxMath.bound(cam.zoom, 0.001);
 		var width:Int = Math.ceil(cam.width / zoom);
 		var height:Int = Math.ceil(cam.height / zoom);
 		
 		yStart = -height;
 		yEnd = height;
-		
-		switch (status)
-		{
-			case IN_TO:
-			case OUT_OF:
-				angle = 270;
-				duration = .6;
-			default:
-				// trace("bruh");
-		}
 		
 		gradient = FlxGradient.createGradientFlxSprite(1, height, [FlxColor.BLACK, FlxColor.TRANSPARENT], 1, angle);
 		gradient.scale.x = width;
@@ -80,7 +71,7 @@ class SwipeTransition extends BaseTransitionState
 		add(gradientFill);
 		add(gradient);
 		
-		FlxTween.tween(gradient, {y: yEnd}, duration, {onComplete: Void -> onFinish()});
+		FlxTween.tween(gradient, {y: yEnd}, duration, {onComplete: Void -> dispatchFinish()});
 		
 		super.create();
 	}

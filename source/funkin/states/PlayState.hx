@@ -1158,7 +1158,7 @@ class PlayState extends MusicBeatState
 		} if (foundFile)
 		{
 			inCutscene = true;
-			var bg = new funkin.states.transitions.FadeTransition.FixedFlxBGSprite();
+			var bg = new extensions.FlxBGSpriteEx();
 			bg.scrollFactor.set();
 			bg.cameras = [camHUD];
 			add(bg);

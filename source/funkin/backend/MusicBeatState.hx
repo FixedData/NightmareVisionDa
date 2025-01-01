@@ -17,11 +17,12 @@ import funkin.states.FreeplayState;
 class MusicBeatState extends FlxUIState
 {
 
-	@:noCompletion static var _defaultTransState:Class<BaseTransitionState> = SwipeTransition;
+	static final _defaultTransState:Class<BaseTransitionState> = SwipeTransition;
 	
 	// change these to change the transition
 	public static var transitionInState:Class<BaseTransitionState> = null;
 	public static var transitionOutState:Class<BaseTransitionState> = null;
+	public static var scriptedTransClName:Null<String> = null;
 	
 	public function new() super();
 	
@@ -43,13 +44,19 @@ class MusicBeatState extends FlxUIState
 		
 		if (!FlxTransitionableState.skipNextTransOut)
 		{
-			var transClass = _defaultTransState;
-			if (transitionOutState != null) transClass = transitionOutState;
+			#if !display
+			if (scriptedTransClName != null && funkin.scripting.classes.ScriptedBaseTransitionState.listScriptClasses().contains(scriptedTransClName)) 
+			{
+				openSubState(funkin.scripting.classes.ScriptedBaseTransitionState.init(scriptedTransClName,OUT_OF));
+			#end
+			}
+			else
+			{
+				openSubState(Type.createInstance(transitionOutState ?? _defaultTransState, [OUT_OF]));
+			}
+
 			
-			var sub:BaseTransitionState = Type.createInstance(transClass, [OUT_OF]);
-			
-			openSubState(sub);
-			sub.setCallback(sub.close);
+
 		}
 	}
 	
@@ -173,13 +180,18 @@ class MusicBeatState extends FlxUIState
 		
 		if (!FlxTransitionableState.skipNextTransIn)
 		{
-			var transClass = _defaultTransState;
-			if (transitionInState != null) transClass = transitionInState;
-			
-			var transitionState:BaseTransitionState = Type.createInstance(transClass, [IN_TO]);
-			openSubState(transitionState);
-			
-			transitionState.setCallback(onOutroComplete);
+
+			//i can clean this up later
+			#if !display
+			if (scriptedTransClName != null && funkin.scripting.classes.ScriptedBaseTransitionState.listScriptClasses().contains(scriptedTransClName)) 
+			{
+				openSubState(funkin.scripting.classes.ScriptedBaseTransitionState.init(scriptedTransClName,IN_TO,onOutroComplete));
+			#end
+			}
+			else
+			{
+				openSubState(Type.createInstance(transitionInState ?? _defaultTransState, [IN_TO,onOutroComplete]));
+			}
 			return;
 		}
 		

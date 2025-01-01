@@ -1,29 +1,28 @@
 package funkin.backend;
 
-// whole setup for this by data thx
 // incredibly basic. if you want to apply more to this feel free
 class BaseTransitionState extends MusicBeatSubstate
 {
-	var finishCallback:Void->Void = null;
-	
-	public function setCallback(func:Void->Void) finishCallback = func;
+	public var finishCallback:Void->Void = null;
 	
 	var status:TransStatus;
 	
-	public function new(status:TransStatus)
+	public function new(status:TransStatus,?finishCallback:Void->Void)
 	{
 		this.status = status;
+		if (finishCallback != null) this.finishCallback = finishCallback;
 		super();
 	}
 	
 	// ensure u call this to end!!
-	public function onFinish()
+	public function dispatchFinish()
 	{
 		if (finishCallback != null) finishCallback();
+		FlxTimer.wait(0,close);
 	}
 }
 
-enum abstract TransStatus(Int) from Int to Int
+enum abstract TransStatus(Int)
 {
 	public var IN_TO = 0;
 	public var OUT_OF = 1;
