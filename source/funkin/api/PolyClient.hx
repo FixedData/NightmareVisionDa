@@ -160,7 +160,11 @@ class PolyClient
 		Polymod.addDefaultImport(ScriptFlxTextAlign, 'FlxTextAlign');
 
 
-		//todo get smth like compile time to import ALL scripting classes
+		final scriptedClasses = CompileTime.getAllClasses('funkin.scripting.classes');
+		for (i in scriptedClasses)
+		{
+			Polymod.addDefaultImport(i);
+		}
 	}
 	
 	static function getFrameworkParams():Null<FrameworkParams>

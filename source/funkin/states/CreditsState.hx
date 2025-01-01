@@ -12,7 +12,6 @@ import flixel.tweens.FlxTween;
 import flixel.tweens.FlxEase;
 import lime.utils.Assets;
 import funkin.objects.AttachedSprite;
-using StringTools;
 
 class CreditsState extends MusicBeatState
 {
