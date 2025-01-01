@@ -1,20 +1,25 @@
 package funkin.backend;
 
+import flixel.addons.transition.FlxTransitionSprite.TransitionStatus;
+
 // incredibly basic. if you want to apply more to this feel free
 class BaseTransitionState extends MusicBeatSubstate
 {
 	public var finishCallback:Void->Void = null;
 	
-	var status:TransStatus;
+	var status:TransitionStatus;
 	
-	public function new(status:TransStatus,?finishCallback:Void->Void)
+	public function new(status:TransitionStatus,?finishCallback:Void->Void)
 	{
 		this.status = status;
 		if (finishCallback != null) this.finishCallback = finishCallback;
 		super();
+
 	}
-	
-	// ensure u call this to end!!
+
+	/**
+	 * ends the transition
+	 */
 	public function dispatchFinish()
 	{
 		if (finishCallback != null) finishCallback();
@@ -22,8 +27,3 @@ class BaseTransitionState extends MusicBeatSubstate
 	}
 }
 
-enum abstract TransStatus(Int)
-{
-	public var IN_TO = 0;
-	public var OUT_OF = 1;
-}

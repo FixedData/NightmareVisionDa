@@ -8,18 +8,18 @@ import funkin.backend.BaseTransitionState;
 import funkin.states.transitions.SwipeTransition;
 import flixel.addons.ui.FlxUIState;
 import flixel.FlxG;
-import flixel.addons.transition.FlxTransitionableState;
 import funkin.data.*;
 import funkin.data.scripts.*;
 import funkin.states.PlayState;
 import funkin.states.FreeplayState;
+import flixel.addons.transition.FlxTransitionableState;
+import flixel.addons.transition.FlxTransitionSprite.TransitionStatus;
 
 class MusicBeatState extends FlxUIState
 {
-
 	static final _defaultTransState:Class<BaseTransitionState> = SwipeTransition;
 	
-	// change these to change the transition
+	// change these to change the transition //we arent using these in scripted so i dont think these are necessary anymore
 	public static var transitionInState:Class<BaseTransitionState> = null;
 	public static var transitionOutState:Class<BaseTransitionState> = null;
 	public static var scriptedTransClName:Null<String> = null;
@@ -35,7 +35,7 @@ class MusicBeatState extends FlxUIState
 	private var curDecStep:Float = 0;
 	private var curDecBeat:Float = 0;
 	private var controls(get, never):Controls;
-
+	
 	inline function get_controls():Controls return PlayerSettings.player1.controls;
 	
 	override function create()
@@ -45,18 +45,16 @@ class MusicBeatState extends FlxUIState
 		if (!FlxTransitionableState.skipNextTransOut)
 		{
 			#if !display
-			if (scriptedTransClName != null && funkin.scripting.classes.ScriptedBaseTransitionState.listScriptClasses().contains(scriptedTransClName)) 
+			if (scriptedTransClName != null
+				&& funkin.scripting.classes.ScriptedBaseTransitionState.listScriptClasses().contains(scriptedTransClName))
 			{
-				openSubState(funkin.scripting.classes.ScriptedBaseTransitionState.init(scriptedTransClName,OUT_OF));
+				openSubState(funkin.scripting.classes.ScriptedBaseTransitionState.init(scriptedTransClName, TransitionStatus.OUT));
 			#end
 			}
 			else
 			{
-				openSubState(Type.createInstance(transitionOutState ?? _defaultTransState, [OUT_OF]));
+				openSubState(Type.createInstance(transitionOutState ?? _defaultTransState, [TransitionStatus.OUT]));
 			}
-
-			
-
 		}
 	}
 	
@@ -180,23 +178,19 @@ class MusicBeatState extends FlxUIState
 		
 		if (!FlxTransitionableState.skipNextTransIn)
 		{
-
-			//i can clean this up later
 			#if !display
-			if (scriptedTransClName != null && funkin.scripting.classes.ScriptedBaseTransitionState.listScriptClasses().contains(scriptedTransClName)) 
+			if (scriptedTransClName != null
+				&& funkin.scripting.classes.ScriptedBaseTransitionState.listScriptClasses().contains(scriptedTransClName))
 			{
-				openSubState(funkin.scripting.classes.ScriptedBaseTransitionState.init(scriptedTransClName,IN_TO,onOutroComplete));
+				openSubState(funkin.scripting.classes.ScriptedBaseTransitionState.init(scriptedTransClName, TransitionStatus.IN, onOutroComplete));
 			#end
 			}
 			else
 			{
-				openSubState(Type.createInstance(transitionInState ?? _defaultTransState, [IN_TO,onOutroComplete]));
+				openSubState(Type.createInstance(transitionInState ?? _defaultTransState, [TransitionStatus.IN, onOutroComplete]));
 			}
 			return;
 		}
-		
 		FlxTransitionableState.skipNextTransIn = false;
-		
 		super.startOutro(onOutroComplete);
-	}
-}
+}}

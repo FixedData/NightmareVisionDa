@@ -16,9 +16,9 @@ class FadeTransition extends BaseTransitionState
 		sprite.color = FlxColor.BLACK;
 		add(sprite);
 		
-		sprite.alpha = status == IN_TO ? 0 : 1;
-		final desiredAlpha = status == IN_TO ? 1 : 0;
-		final time = status == IN_TO ? 0.48 : 0.8;
+		sprite.alpha = status == IN ? 0 : 1;
+		final desiredAlpha = status == IN ? 1 : 0;
+		final time = status == IN ? 0.48 : 0.8;
 		
 		FlxTween.tween(sprite, {alpha: desiredAlpha}, time, {onComplete: Void -> dispatchFinish()});
 		

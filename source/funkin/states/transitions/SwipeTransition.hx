@@ -1,11 +1,11 @@
 package funkin.states.transitions;
 
+import funkin.utils.CameraUtil;
 import funkin.backend.BaseTransitionState;
 import flixel.util.FlxGradient;
 import flixel.FlxSprite;
 import flixel.FlxCamera;
 import flixel.math.FlxMath;
-import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxTimer;
 import flixel.FlxG;
@@ -20,7 +20,7 @@ class SwipeTransition extends BaseTransitionState
 	public override function destroy():Void
 	{
 		super.destroy();
-
+		
 		gradient?.destroy();
 		gradientFill?.destroy();
 		gradient = null;
@@ -33,9 +33,9 @@ class SwipeTransition extends BaseTransitionState
 		{
 			switch (status)
 			{
-				case IN_TO:
+				case IN:
 					gradientFill.y = gradient.y - gradient.height;
-				case OUT_OF:
+				case OUT:
 					gradientFill.y = gradient.y + gradient.height;
 				default:
 			}
@@ -45,19 +45,17 @@ class SwipeTransition extends BaseTransitionState
 	
 	override function create()
 	{
-		var cam = FlxG.cameras.list[FlxG.cameras.list.length - 1];
+		final cam = CameraUtil.lastCamera;
 		cameras = [cam];
 		
-		var yStart:Float = 0;
-		var yEnd:Float = 0;
-		var duration:Float = status == OUT_OF ? 0.6 : 0.48;
-		var angle:Int = status == OUT_OF ? 270 : 90;
-		var zoom:Float = FlxMath.bound(cam.zoom, 0.001);
-		var width:Int = Math.ceil(cam.width / zoom);
-		var height:Int = Math.ceil(cam.height / zoom);
+		final duration:Float = status == OUT ? 0.6 : 0.48;
+		final angle:Int = status == OUT ? 270 : 90;
+		final zoom:Float = FlxMath.bound(cam.zoom, 0.001);
+		final width:Int = Math.ceil(cam.width / zoom);
+		final height:Int = Math.ceil(cam.height / zoom);
 		
-		yStart = -height;
-		yEnd = height;
+		final yStart:Float = -height;
+		final yEnd:Float = height;
 		
 		gradient = FlxGradient.createGradientFlxSprite(1, height, [FlxColor.BLACK, FlxColor.TRANSPARENT], 1, angle);
 		gradient.scale.x = width;
