@@ -1,160 +1,149 @@
 package funkin.video;
 
-import openfl.Assets;
-import haxe.io.Bytes;
 import hxvlc.flixel.FlxVideoSprite;
-import funkin.states.PlayState;
+import hxvlc.util.Location;
 
+// with hxvlcs improvements this is less needed but still has its values
+
+/**
+ * Handles video playback as a `FlxSprite`. Has additional features for ease
+ * 
+ * If used in `PlayState`, will autopause too
+ * 
+ * General Usage:
+ * ```haxe
+ * 	var video = new FunkinVideoSprite(x,y);
+ * 	add(video);
+ * 	video.onFormat(()->{
+ * 		video.setGraphicSize(0,FlxG.height);
+ * 		video.updateHitbox();
+ * 		video.screenCenter(FlxAxes.X);
+ * 
+ * 	});
+ * 	if (video.load(Paths.video('pathToVideo')))
+ * 	{
+ *		video.delayAndStart();
+ * 	}
+ * ```
+ */
 class FunkinVideoSprite extends FlxVideoSprite
 {
+	/**
+	 * Video loading argument to make the video loop
+	 * 
+	 * Usage:
+	 * ```haxe
+	 * video.load(Paths.video(''),[FunkinVideoSprite.looping]);
+	 * ```
+	 */
+	public static final looping:String = ':input-repeat=65535';
+	
+	/**
+	 * Video loading argument to make the video muted
+	 * Use if your video doesnt require audio
+	 * 
+	 * Usage:
+	 * ```haxe
+	 * video.load(Paths.video(''),[FunkinVideoSprite.muted]);
+	 * ```
+	 */
+	public static final muted:String = ':no-audio';
+	
+	/**
+	 * Manually initiates the Libvlc instance
+	 */
 	public static function init()
 	{
 		hxvlc.util.Handle.init(#if (hxvlc >= "1.8.0") ['--no-lua'] #end);
 	}
 	
-	public static final looping:String = ':input-repeat=65535';
-	public static final muted:String = ':no-audio';
-	
-	public function new(x:Float = 0, y:Float = 0, oneTimeUse:Bool = true, dontAdd:Bool = false)
+	/**
+	 * Creates a new FunkinVideoSprite
+	 * @param x `x` position
+	 * @param y `y` position
+	 * @param oneTimeUse if `true` on video complete, the video will self destroy
+	 */
+	public function new(x:Float = 0, y:Float = 0, oneTimeUse:Bool = true)
 	{
 		super(x, y);
 		
 		if (oneTimeUse) bitmap.onEndReached.add(this.destroy, true);
-		
-		if (!dontAdd) tryAddingToPlayState();
 	}
 	
-	function tryAddingToPlayState()
+	/**
+	 * Starts the video but sets a delay before starting
+	 * 
+	 * Recommended over `this.play`
+	 * @param delay The delay before the video starts. default is 0, which is one update call
+	 */
+	public function delayAndStart(delay:Float = 0)
 	{
-		if (Std.isOfType(FlxG.state, PlayState) && PlayState.instance != null)
-		{
-			PlayState.instance.onPauseSignal.add(this.pause);
-			PlayState.instance.onResumeSignal.add(this.resume);
-		}
+		FlxTimer.wait(delay, play);
 	}
-	
-	// this was gonna be more elaborate but i decided not to
-	function decipherLocation(local:Location)
-	{
-		if (local != null && !(local is Int) && !(local is Bytes) && (local is String))
-		{
-			var local:String = cast(local, String);
-			
-			var modPath:String = Paths.modFolders('videos/$local');
-			var assetPath:String = 'assets/videos/$local';
-			
-			// found bytes. return em
-			if (Assets.exists(modPath, BINARY)) return cast Assets.getBytes(modPath);
-			else if (Assets.exists(assetPath, BINARY)) return cast Assets.getBytes(assetPath);
-			
-			if (FileSystem.exists(modPath)) return cast modPath;
-			else if (FileSystem.exists(assetPath)) return cast assetPath;
-		}
-		
-		return local;
-	}
-	
-	// override function load(location:Location, ?options:Array<String>):Bool
-	// {
-	// 	if (bitmap == null) return false;
-		
-	// 	if (autoPause)
-	// 	{
-	// 		if (!FlxG.signals.focusGained.has(bitmap.resume)) FlxG.signals.focusGained.add(bitmap.resume);
-	// 		if (!FlxG.signals.focusLost.has(bitmap.pause)) FlxG.signals.focusLost.add(bitmap.pause);
-	// 	}
-		
-	// 	final realLocal = decipherLocation(location);
-		
-	// 	if (realLocal != null && !(realLocal is Int) && !(realLocal is Bytes) && (realLocal is String))
-	// 	{
-	// 		final realLocal:String = cast(realLocal, String);
-			
-	// 		if (!realLocal.contains('://'))
-	// 		{
-	// 			final absolutePath:String = FileSystem.absolutePath(realLocal);
-				
-	// 			if (FileSystem.exists(absolutePath)) return bitmap.load(absolutePath, options);
-	// 			else
-	// 			{
-	// 				FlxG.log.warn('Unable to find the video file at location "$absolutePath".');
-					
-	// 				return false;
-	// 			}
-	// 		}
-	// 	}
-		
-	// 	return bitmap.load(realLocal, options);
-	// }
-	
-	// override function pause()
-	// {
-	// 	super.pause();
-		
-	// 	if (autoPause)
-	// 	{
-	// 		if (FlxG.signals.focusGained.has(bitmap.resume)) FlxG.signals.focusGained.remove(bitmap.resume);
-	// 		if (FlxG.signals.focusLost.has(bitmap.pause)) FlxG.signals.focusLost.remove(bitmap.pause);
-	// 	}
-	// }
-	
-	// override function resume()
-	// {
-	// 	super.resume();
-	// 	if (autoPause)
-	// 	{
-	// 		if (!FlxG.signals.focusGained.has(bitmap.resume)) FlxG.signals.focusGained.add(bitmap.resume);
-	// 		if (!FlxG.signals.focusLost.has(bitmap.pause)) FlxG.signals.focusLost.add(bitmap.pause);
-	// 	}
-	// }
-	
+
+	/**
+	 * Adds a event to be dispatched when the video reaches its end
+	 * @param func the event to be called
+	 * @param once if this event should be dispatched once, or every time the video ends.
+	 */
 	public function onEnd(func:Void->Void, once:Bool = false)
 	{
 		bitmap.onEndReached.add(func, once);
 	}
 	
+	/**
+	 * Adds a event to be dispatched when the video starts
+	 * @param func the event to be called
+	 * @param once if this event should be dispatched once, or every time the video ends.
+	 */
 	public function onStart(func:Void->Void, once:Bool = false)
 	{
 		bitmap.onOpening.add(func, once);
 	}
 	
+	/**
+	 * Adds a event to be dispatched when the video has formatted itself 
+	 * 
+	 * Recommended to setup ur video during this event
+	 * example: 
+	 * ```haxe
+	 * 	onFormat(()->{
+	 * 		this.scale.set(3,3);
+	 * 		this.updateHitbox();
+	 * 		this.cameras = [camera];
+	 * 	});
+	 * ```
+	 * @param func the event to be called
+	 * @param once if this event should be dispatched once, or every time the video ends.
+	 */
 	public function onFormat(func:Void->Void, once:Bool = false)
 	{
 		bitmap.onFormatSetup.add(func, once);
 	}
 	
-	@:noCompletion
-	public function addCallback(vidCallBack:VidCallbacks, func:Void->Void, once:Bool = false)
+	@:deprecated('use onEnd,onFormat,onStart or access the bitmap for more functions instead.')
+	public function addCallback(vidCallBack:String, func:Void->Void, once:Bool = false)
 	{
 		switch (vidCallBack)
 		{
-			case ONEND:
-				if (func != null) bitmap.onEndReached.add(func, once);
-			case ONSTART:
-				if (func != null) bitmap.onOpening.add(func, once);
-			case ONFORMAT:
-				if (func != null) bitmap.onFormatSetup.add(func, once);
+			case 'onEnd':
+				bitmap.onEndReached.add(func, once);
+			case 'onStart':
+				bitmap.onOpening.add(func, once);
+			case 'onFormat':
+				bitmap.onFormatSetup.add(func, once);
 		}
 	}
 	
 	public static function cacheVid(path:String)
 	{
-		var video = new FunkinVideoSprite(0, 0, false, true);
-		video.load(path, [muted]);
-		video.addCallback(ONFORMAT, () -> {
-			video.destroy();
-		});
-		video.play();
+		var video = new FunkinVideoSprite(0, 0, false);
+		video.onFormat(video.destroy);
+		if (video.load(path, [muted])) video.delayAndStart();
 	}
 	
 	override function destroy()
 	{
-		if (Std.isOfType(FlxG.state, PlayState) && PlayState.instance != null)
-		{
-			if (PlayState.instance.onPauseSignal.has(this.pause)) PlayState.instance.onPauseSignal.remove(this.pause);
-			if (PlayState.instance.onResumeSignal.has(this.resume)) PlayState.instance.onResumeSignal.remove(this.resume);
-		}
-		
 		if (bitmap != null)
 		{
 			bitmap.stop();
@@ -167,11 +156,3 @@ class FunkinVideoSprite extends FlxVideoSprite
 	}
 }
 
-enum abstract VidCallbacks(String) from String
-{
-	public var ONEND:String = 'onEnd';
-	public var ONSTART:String = 'onStart';
-	public var ONFORMAT:String = 'onFormat';
-}
-
-typedef Location = #if (hxvlc <= "1.5.5") hxvlc.util.OneOfThree<String, Int, Bytes>; #else hxvlc.util.Location; #end

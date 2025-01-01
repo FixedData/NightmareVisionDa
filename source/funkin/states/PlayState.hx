@@ -1,5 +1,6 @@
 package funkin.states;
 
+import funkin.video.FunkinVideoSprite;
 import funkin.backend.Cache;
 import funkin.utils.SortUtil;
 import funkin.utils.DifficultyUtil;
@@ -417,9 +418,6 @@ class PlayState extends MusicBeatState
 	public var keysArray:Array<Dynamic>;
 	
 	public var camCurTarget:Character = null;
-	
-	public var onPauseSignal:FlxSignal = new FlxSignal();
-	public var onResumeSignal:FlxSignal = new FlxSignal();
 	
 	public var playHUD:BaseHUD = null;
 	
@@ -2198,8 +2196,9 @@ class PlayState extends MusicBeatState
 				FlxG.sound.music.pause();
 				vocals.pause();
 			}
+
+			forEachOfType(FunkinVideoSprite,video->video?.pause(),true);
 			
-			onPauseSignal.dispatch();
 			FlxTimer.globalManager.forEach((i:FlxTimer) -> if (!i.finished) i.active = false);
 			FlxTween.globalManager.forEach((i:FlxTween) -> if (!i.finished) i.active = false);
 			
@@ -2231,7 +2230,8 @@ class PlayState extends MusicBeatState
 				resyncVocals();
 			}
 			
-			onResumeSignal.dispatch();
+			forEachOfType(FunkinVideoSprite,video->video?.resume(),true);
+
 			FlxTimer.globalManager.forEach((i:FlxTimer) -> if (!i.finished) i.active = true);
 			FlxTween.globalManager.forEach((i:FlxTween) -> if (!i.finished) i.active = true);
 			
@@ -4506,10 +4506,7 @@ class PlayState extends MusicBeatState
 		#end
 		notetypeScripts.clear();
 		eventScripts.clear();
-		
-		onPauseSignal.removeAll();
-		onResumeSignal.removeAll();
-		
+
 		if (!ClientPrefs.controllerMode)
 		{
 			FlxG.stage.removeEventListener(KeyboardEvent.KEY_DOWN, onKeyPress);
