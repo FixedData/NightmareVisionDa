@@ -18,14 +18,14 @@ class AnimateFrames
 		#if sys if (FileSystem.exists(p)) return true; #end
 		return false;
 	}
-
+	
 	static function getContent(p:String):String
 	{
 		if (Assets.exists(p)) return Assets.getText(p);
 		#if sys if (FileSystem.exists(p)) return File.getContent(p); #end
 		throw 'Cannot retrieve contents of "${p}"';
 	}
-
+	
 	// needed sys first here cuz lime errors prevented the func from continuing in the case of null?
 	static function getBitmapData(id:String)
 	{
@@ -34,7 +34,7 @@ class AnimateFrames
 		if (bitmapData == null) bitmapData = Assets.getBitmapData(id);
 		return bitmapData;
 	}
-
+	
 	/**
 	 * Parses the spritemaps into small sprites to use in the animation.
 	 *
@@ -44,7 +44,7 @@ class AnimateFrames
 	public static function fromTextureAtlas(Path:String):FlxAtlasFrames
 	{
 		var frames:FlxAnimateFrames = null;
-
+		
 		function unpackZip(zip:Null<List<haxe.zip.Entry>>)
 		{
 			#if html5
@@ -83,7 +83,7 @@ class AnimateFrames
 			}
 			zip == null;
 		}
-
+		
 		if (FlxAnimateFrames.zip != null || haxe.io.Path.extension(Path) == "zip") unpackZip(FlxAnimateFrames.zip);
 		else if (pathExists('$Path/spritemap.json'))
 		{
@@ -134,7 +134,7 @@ class AnimateFrames
 			}
 			i++;
 		}
-
+		
 		if (frames.frames == [])
 		{
 			FlxG.log.error("the Frames parsing couldn't parse any of the frames, it's completely empty! \n Maybe you misspelled the Path?");

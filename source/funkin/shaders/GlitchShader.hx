@@ -1,4 +1,4 @@
-package funkin.objects.shader;
+package funkin.shaders;
 
 import flixel.system.FlxAssets.FlxShader;
 
@@ -7,17 +7,17 @@ class GlitchShaderA extends FlxShader
 {
 	@:isVar
 	public var amount(get, set):Float = 0;
-
+	
 	function get_amount()
 	{
 		return GlitchAmount.value[0];
 	}
-
+	
 	function set_amount(val:Float)
 	{
 		return GlitchAmount.value[0] = val;
 	}
-
+	
 	@:glFragmentSource('
         #pragma header
         uniform vec2 iResolution;
@@ -71,17 +71,17 @@ class GlitchShaderB extends FlxShader
 {
 	@:isVar
 	public var amount(get, set):Float = 0;
-
+	
 	function get_amount()
 	{
 		return Amount.value[0];
 	}
-
+	
 	function set_amount(val:Float)
 	{
 		return Amount.value[0] = val;
 	}
-
+	
 	@:glFragmentSource('
     #pragma header
     #define PI 3.14159265
@@ -207,27 +207,27 @@ class Fuck extends FlxShader
 	public var amount(get, set):Float = 0;
 	@:isVar
 	public var speed(get, set):Float = 0;
-
+	
 	function get_amount()
 	{
 		return AMT.value[0];
 	}
-
+	
 	function set_amount(val:Float)
 	{
 		return AMT.value[0] = val;
 	}
-
+	
 	function get_speed()
 	{
 		return SPEED.value[0];
 	}
-
+	
 	function set_speed(val:Float)
 	{
 		return SPEED.value[0] = val;
 	}
-
+	
 	@:glFragmentSource('
     #pragma header
     //inputs

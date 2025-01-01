@@ -10,7 +10,7 @@ typedef Animation =
 	?color:String, // used for playing the note animations. Fuck. this sucks
 	?anim:String,
 	?xmlName:String,
-
+	
 	?offsets:Array<Float>
 }
 
@@ -22,7 +22,7 @@ typedef NoteSkinData =
 	?extraSkin:String,
 	?noteSplashSkin:String,
 	?hasQuants:Bool,
-
+	
 	/*
 		[
 			{ anim: "idle", xmlName: "fuck", offsets: [x, y]},
@@ -31,7 +31,7 @@ typedef NoteSkinData =
 		]
 	 */
 	?noteAnimations:Array<Array<Animation>>,
-
+	
 	/*
 		[
 			{ anim: "idle", xmlName: "fuck", offsets: [x, y]},
@@ -40,14 +40,14 @@ typedef NoteSkinData =
 		]
 	 */
 	?receptorAnimations:Array<Array<Animation>>,
-
+	
 	/*
 		[
 
 		]
 	 */
 	?noteSplashAnimations:Array<Animation>,
-
+	
 	?singAnimations:Array<String>
 }
 
@@ -55,7 +55,7 @@ class NoteSkinHelper
 {
 	static final defaultTexture:String = 'NOTE_assets';
 	static final defaultSplashTexture:String = 'noteSplashes';
-
+	
 	static final defaultNoteAnimations:Array<Array<Animation>> = [
 		[
 			{
@@ -226,7 +226,7 @@ class NoteSkinHelper
 		{anim: "note2", xmlName: "note splash green", offsets: [0, 0]},
 		{anim: "note3", xmlName: "note splash red", offsets: [0, 0]}
 	];
-
+	
 	public static final fallbackReceptorAnims:Array<Animation> = [
 		{
 			color: "",
@@ -247,15 +247,15 @@ class NoteSkinHelper
 			offsets: [0, 0]
 		}
 	];
-
+	
 	static final defaultSingAnimations:Array<String> = ['singLEFT', 'singDOWN', 'singUP', 'singRIGHT'];
-
+	
 	public var data:NoteSkinData;
-
+	
 	public function new(path:String)
 	{
 		var rawJson = null;
-
+		
 		try
 		{
 			rawJson = File.getContent(path).trim();
@@ -268,7 +268,7 @@ class NoteSkinHelper
 		}
 		resolveData(data);
 	}
-
+	
 	public static function resolveData(data:NoteSkinData)
 	{
 		data.globalSkin ??= defaultTexture;
@@ -277,32 +277,32 @@ class NoteSkinHelper
 		data.extraSkin ??= data.globalSkin;
 		data.noteSplashSkin ??= defaultSplashTexture;
 		data.hasQuants ??= false;
-
+		
 		data.noteAnimations ??= defaultNoteAnimations;
 		data.receptorAnimations ??= defaultReceptorAnimations;
 		data.noteSplashAnimations ??= defaultNoteSplashAnimations;
-
+		
 		data.singAnimations ??= defaultSingAnimations;
-
+		
 		// trace('\nNOTESKIN DATA\n\nSKINS\nGlobal: "${data.globalSkin}"\nPlayer: "${data.playerSkin}\nOpponent: "${data.opponentSkin}"\n\nQUANTS? [${data.hasQuants}\n\nNOTE ANIMATIONS\n${data.noteAnimations}\n${data.noteOffsets}\n\nRECEPTOR ANIMATIONS\n${data.receptorAnimations}\n${data.receptorOffsets}\n\nNOTE SPLASHES\n${data.noteSplashSkin}\n${data.noteSplashAnimations}\n${data.noteSplashOffsets}');
 	}
-
+	
 	public static function parseJSON(rawJson:String):NoteSkinData
 	{
 		var data:NoteSkinData = cast Json.parse(rawJson);
 		return data;
 	}
-
+	
 	public static var arrowSkins:Array<String> = [];
-
+	
 	public static function setNoteHelpers(helper:NoteSkinHelper, keys:Int = 4)
 	{
-		trace('set helpers!');
-
+		// trace('set helpers!');
+		
 		Note.handler = helper;
 		StrumNote.handler = helper;
 		NoteSplash.handler = helper;
-
+		
 		Note.keys = keys;
 		StrumNote.keys = keys;
 		NoteSplash.keys = keys;

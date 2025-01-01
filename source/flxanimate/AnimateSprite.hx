@@ -14,11 +14,11 @@ class AnimateSprite extends FlxAnimate
 		if (Path == null) throw new Error('please provide a path.');
 		super(X, Y, Path, Settings);
 	}
-
+	
 	override function loadAtlas(Path:String)
 	{
 		trace('loading... ' + Path);
-
+		
 		if ((!Assets.exists('$Path/Animation.json') #if sys && !FileSystem.exists('$Path/Animation.json') #end)
 			&& haxe.io.Path.extension(Path) != "zip")
 		{
@@ -28,20 +28,20 @@ class AnimateSprite extends FlxAnimate
 		anim._loadAtlas(atlasSetting(Path));
 		frames = AnimateFrames.fromTextureAtlas(Path);
 	}
-
+	
 	override function draw()
 	{
 		if (anim.curInstance == null || anim.curSymbol == null) return;
 		super.draw();
 	}
-
+	
 	override function atlasSetting(Path:String):AnimAtlas
 	{
 		var jsontxt:AnimAtlas = null;
 		if (haxe.io.Path.extension(Path) == "zip")
 		{
 			var thing = Zip.readZip(Assets.getBytes(Path));
-
+			
 			for (list in Zip.unzip(thing))
 			{
 				if (list.fileName.indexOf("Animation.json") != -1)
@@ -60,7 +60,7 @@ class AnimateSprite extends FlxAnimate
 			#if sys if (FileSystem.exists(jsonPath)) jsontxt = haxe.Json.parse(File.getContent(jsonPath));
 			else #end jsontxt = haxe.Json.parse(openfl.Assets.getText(jsonPath));
 		}
-
+		
 		return jsontxt;
 	}
 }

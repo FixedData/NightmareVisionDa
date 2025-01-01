@@ -2,24 +2,25 @@ package funkin.objects.stageobjects;
 
 import funkin.utils.MathUtil;
 import flixel.FlxSprite;
+
 class BackgroundGirls extends FlxSprite
 {
 	var isPissed:Bool = true;
-
+	
 	public function new(x:Float, y:Float)
 	{
 		super(x, y);
-
+		
 		// BG fangirls dissuaded
 		frames = Paths.getSparrowAtlas('weeb/bgFreaks');
-
+		
 		swapDanceType();
-
+		
 		animation.play('danceLeft');
 	}
-
+	
 	var danceDir:Bool = false;
-
+	
 	public function swapDanceType():Void
 	{
 		isPissed = !isPissed;
@@ -35,11 +36,11 @@ class BackgroundGirls extends FlxSprite
 		}
 		dance();
 	}
-
+	
 	public function dance():Void
 	{
 		danceDir = !danceDir;
-
+		
 		if (danceDir) animation.play('danceRight', true);
 		else animation.play('danceLeft', true);
 	}

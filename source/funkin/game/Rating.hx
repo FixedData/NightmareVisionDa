@@ -1,6 +1,6 @@
 package funkin.game;
-// lowkey idk if i like the funckin game folder maybe ill change it
 
+// lowkey idk if i like the funckin game folder maybe ill change it
 import funkin.objects.Note;
 
 class Rating
@@ -20,7 +20,7 @@ class Rating
 		}
 		return data[data.length - 1];
 	}
-
+	
 	/**
 	 * Same as `Rating.judgeNote` but only judges a window of time
 	 *
@@ -33,7 +33,7 @@ class Rating
 			if (time <= data[i].hitWindow) return data[i];
 		return data[data.length - 1];
 	}
-
+	
 	public var name:String = '';
 	public var image:String = '';
 	public var counter:String = '';
@@ -41,7 +41,7 @@ class Rating
 	public var ratingMod:Float = 1;
 	public var score:Int = 350;
 	public var noteSplash:Bool = true;
-
+	
 	public function new(name:String)
 	{
 		this.name = name;
@@ -49,16 +49,15 @@ class Rating
 		this.counter = name + 's';
 		this.hitWindow = Reflect.field(ClientPrefs, name + 'Window');
 		if (hitWindow == null) hitWindow = 0;
-
-
+		
 		setup();
 	}
-
+	
 	public function increase(blah:Int = 1)
 	{
 		Reflect.setField(PlayState.instance, counter, Reflect.field(PlayState.instance, counter) + blah);
 	}
-
+	
 	function setup()
 	{
 		switch (name)
@@ -68,20 +67,20 @@ class Rating
 				score = 500;
 				noteSplash = true;
 			case 'sick':
-				ratingMod = 0.9825;
+				ratingMod = 1;
 				score = 350;
 				noteSplash = true;
-
+				
 			case 'good':
 				ratingMod = 0.7;
 				score = 200;
 				noteSplash = false;
-
+				
 			case 'bad':
 				ratingMod = 0.4;
 				score = 100;
 				noteSplash = false;
-
+				
 			case 'shit':
 				ratingMod = 0;
 				score = 50;

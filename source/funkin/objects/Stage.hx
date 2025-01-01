@@ -1,88 +1,73 @@
 package funkin.objects;
 
-import flixel.FlxBasic;
-import flixel.FlxCamera;
-import flixel.FlxG;
-import flixel.FlxObject;
-import flixel.FlxSprite;
-import flixel.FlxState;
-import flixel.addons.effects.FlxTrail;
-import flixel.addons.effects.chainable.FlxWaveEffect;
-import flixel.group.*;
+import funkin.objects.Note.EventNote;
 import flixel.group.FlxGroup.FlxTypedGroup;
-import flixel.group.FlxSpriteGroup;
-import flixel.math.FlxPoint;
-import flixel.text.FlxText;
-import flixel.tweens.FlxTween;
-import haxe.Json;
-import haxe.format.JsonParser;
-import funkin.data.scripts.*;
-import funkin.data.*;
-import funkin.data.Song.SwagSong;
-import funkin.state.*;
-import funkin.data.StageData.StageFile;
-
-using StringTools;
-
-#if MODS_ALLOWED
-import sys.FileSystem;
-import sys.io.File;
-#else
-import openfl.utils.Assets;
-#end
 
 class Stage extends FlxTypedGroup<FlxBasic>
 {
-	public var curStageScript:FunkinScript;
-
-	public var curStage = "stage";
-	public var stageData:StageFile = funkin.data.StageData.generateDefault();
-
-	public function new(stageName:String = "stage")
+	public function addBehindGF(obj:FlxBasic)
+	{
+		insert(members.indexOf(game.gfGroup), obj);
+	}
+	
+	public function addBehindBF(obj:FlxBasic)
+	{
+		insert(members.indexOf(game.boyfriendGroup), obj);
+	}
+	
+	public function addBehindDad(obj:FlxBasic)
+	{
+		insert(members.indexOf(game.dadGroup), obj);
+	}
+	
+	public function onCreate() {}
+	
+	public function onCreatePost() {}
+	
+	public function onBeatHit() {}
+	
+	public function onStepHit() {}
+	
+	public function onSectionHit() {}
+	
+	public function onCountdownTick(tick:Int) {}
+	
+	public function onEventPushed(ev:EventNote) {}
+	
+	public function onEventTrigger(eventName:String, value1:String, value2:String) {}
+	
+	public function onEventPushedUnique(ev:EventNote) {}
+	
+	public var game(get, never):PlayState;
+	
+	public var boyfriend(get, never):Character;
+	
+	public var dad(get, never):Character;
+	
+	public var gf(get, never):Character;
+	
+	public function new()
 	{
 		super();
-
-		curStage = stageName;
-
-		var newStageData = StageData.getStageFile(curStage);
-		if (newStageData != null) stageData = newStageData;
 	}
-
-	function setupScript(s:FunkinScript)
+	
+	function get_game():PlayState
 	{
-		curStageScript = s;
-
-		switch (s.scriptType)
-		{
-			case HSCRIPT:
-				s.set("add", add);
-				s.set("stage", this);
-				s.call("onLoad");
-
-			#if LUA_ALLOWED
-			case LUA:
-				s.call("onCreate", []);
-			#end
-		}
+		return PlayState.instance;
 	}
-
-	public function buildStage()
+	
+	function get_boyfriend():Character
 	{
-		final baseScriptFile:String = 'stages/' + curStage;
-
-		var scriptFile = FunkinIris.getPath(baseScriptFile);
-		if (FileSystem.exists(scriptFile))
-		{
-			trace('FUCKL');
-			var script = FunkinIris.fromFile(scriptFile);
-			setupScript(script);
-		}
-		#if LUA_ALLOWED
-		else if (Paths.fileExists('$baseScriptFile.lua', TEXT))
-		{
-			var script = new FunkinLua('$baseScriptFile.lua');
-			setupScript(script);
-		}
-		#end
+		return PlayState.instance.boyfriend;
+	}
+	
+	function get_dad():Character
+	{
+		return PlayState.instance.dad;
+	}
+	
+	function get_gf():Character
+	{
+		return PlayState.instance.gf;
 	}
 }

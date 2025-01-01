@@ -34,13 +34,13 @@ class Splash extends FlxState
 				new FlxTimer().start(0.25, (t1:FlxTimer) -> {
 					logo.visible = true;
 					logo.scale.set(0.2, 1.25);
-
+					
 					new FlxTimer().start(0.06125, (t2:FlxTimer) -> {
 						logo.scale.set(1.25, 0.5);
-
+						
 						new FlxTimer().start(0.06125, (t3:FlxTimer) -> {
 							logo.scale.set(1.125, 1.125);
-
+							
 							FlxTween.tween(logo.scale, {x: 1, y: 1}, 0.25,
 								{
 									ease: FlxEase.elasticOut,

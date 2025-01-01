@@ -8,24 +8,24 @@ import funkin.backend.BaseTransitionState;
 class FadeTransition extends BaseTransitionState
 {
 	var sprite:FixedFlxBGSprite;
-
+	
 	override function create()
 	{
 		cameras = [CameraUtil.lastCamera];
-
+		
 		sprite = new FixedFlxBGSprite();
 		sprite.color = FlxColor.BLACK;
 		add(sprite);
-
+		
 		sprite.alpha = status == IN_TO ? 0 : 1;
 		final desiredAlpha = status == IN_TO ? 1 : 0;
 		final time = status == IN_TO ? 0.48 : 0.8;
-
+		
 		FlxTween.tween(sprite, {alpha: desiredAlpha}, time, {onComplete: Void -> onFinish()});
-
+		
 		super.create();
 	}
-
+	
 	override function destroy()
 	{
 		super.destroy();
@@ -45,12 +45,12 @@ class FixedFlxBGSprite extends FlxBGSprite
 			{
 				continue;
 			}
-
+			
 			_matrix.identity();
 			_matrix.scale(camera.viewWidth, camera.viewHeight);
 			_matrix.translate(camera.viewMarginLeft, camera.viewMarginTop);
 			camera.drawPixels(frame, _matrix, colorTransform);
-
+			
 			#if FLX_DEBUG
 			FlxBasic.visibleCount++;
 			#end

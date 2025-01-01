@@ -19,19 +19,19 @@ class Modcharts
 			index += interval;
 		}
 	}
-
+	
 	static var songs = [];
-
+	
 	public static function isModcharted(songName:String)
 	{
 		if (songs.contains(songName.toLowerCase())) return true;
-
+		
 		// add other conditionals if needed
-
+		
 		// return true; // turns modchart system on for all songs, only use for like.. debugging
 		return false;
 	}
-
+	
 	public static function loadModchart(modManager:ModManager, songName:String)
 	{
 		switch (songName.toLowerCase())

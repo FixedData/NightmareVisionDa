@@ -12,16 +12,16 @@ import flixel.util.FlxTimer;
 class FlashingState extends MusicBeatState
 {
 	public static var leftState:Bool = false;
-
+	
 	var warnText:FlxText;
-
+	
 	override function create()
 	{
 		super.create();
-
+		
 		var bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
 		add(bg);
-
+		
 		warnText = new FlxText(0, 0, FlxG.width, "Hey, watch out!\n
 			This Mod contains some flashing lights!\n
 			Press ENTER to disable them now or go to Options Menu.\n
@@ -31,7 +31,7 @@ class FlashingState extends MusicBeatState
 		warnText.screenCenter(Y);
 		add(warnText);
 	}
-
+	
 	override function update(elapsed:Float)
 	{
 		if (!leftState)

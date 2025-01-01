@@ -1,4 +1,4 @@
-package funkin.objects.shader;
+package funkin.shaders;
 
 import flixel.system.FlxAssets.FlxShader;
 
@@ -10,7 +10,7 @@ class ColorSwap
 	public var brightness(default, set):Float = 0;
 	public var daAlpha(default, set):Float = 1;
 	public var flash(default, set):Float = 0;
-
+	
 	private function set_daAlpha(value:Float)
 	{
 		daAlpha = value;
@@ -19,35 +19,35 @@ class ColorSwap
 		// what
 		return daAlpha;
 	}
-
+	
 	private function set_flash(value:Float)
 	{
 		flash = value;
 		shader.flash.value[0] = flash;
 		return flash;
 	}
-
+	
 	private function set_hue(value:Float)
 	{
 		hue = value;
 		shader.uTime.value[0] = hue;
 		return hue;
 	}
-
+	
 	private function set_saturation(value:Float)
 	{
 		saturation = value;
 		shader.uTime.value[1] = saturation;
 		return saturation;
 	}
-
+	
 	private function set_brightness(value:Float)
 	{
 		brightness = value;
 		shader.uTime.value[2] = brightness;
 		return brightness;
 	}
-
+	
 	public function new()
 	{
 		shader.uTime.value = [0, 0, 0];

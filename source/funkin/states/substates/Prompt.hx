@@ -20,10 +20,10 @@ import funkin.backend.MusicBeatSubstate;
 class Prompt extends MusicBeatSubstate
 {
 	var selected = 0;
-
+	
 	public var okc:Void->Void;
 	public var cancelc:Void->Void;
-
+	
 	var buttons:FlxSprite = new FlxSprite(473.3, 450);
 	var theText:String = '';
 	var goAnyway:Bool = false;
@@ -33,19 +33,18 @@ class Prompt extends MusicBeatSubstate
 	var buttonAccept:FlxButton;
 	var buttonNo:FlxButton;
 	var cornerSize:Int = 10;
-
-	public function new(promptText:String = '', defaultSelected:Int = 0, okCallback:Void->Void, cancelCallback:Void->Void, acceptOnDefault:Bool = false,
-			option1:String = null, option2:String = null)
+	
+	public function new(promptText:String = '', defaultSelected:Int = 0, okCallback:Void->Void, cancelCallback:Void->Void, acceptOnDefault:Bool = false, option1:String = null, option2:String = null)
 	{
 		selected = defaultSelected;
 		okc = okCallback;
 		cancelc = cancelCallback;
 		theText = promptText;
 		goAnyway = acceptOnDefault;
-
+		
 		var op1 = 'OK';
 		var op2 = 'CANCEL';
-
+		
 		if (option1 != null) op1 = option1;
 		if (option2 != null) op2 = option2;
 		buttonAccept = new FlxButton(473.3, 450, op1, function() {
@@ -58,7 +57,7 @@ class Prompt extends MusicBeatSubstate
 		});
 		super();
 	}
-
+	
 	override public function create():Void
 	{
 		super.create();
@@ -85,7 +84,7 @@ class Prompt extends MusicBeatSubstate
 			panel.screenCenter();
 			panelbg.scrollFactor.set();
 			panelbg.screenCenter();
-
+			
 			add(panelbg);
 			add(panel);
 			add(buttonAccept);
@@ -104,7 +103,7 @@ class Prompt extends MusicBeatSubstate
 			textshit.scrollFactor.set();
 		}
 	}
-
+	
 	/*
 		override public function update(elapsed:Float):Void 
 		{
@@ -147,7 +146,7 @@ class Prompt extends MusicBeatSubstate
 	{
 		panel.makeGraphic(w, h, color);
 		panel.pixels.fillRect(new Rectangle(0, 190, panel.width, 5), 0x0);
-
+		
 		// Why did i do this? Because i'm a lmao stupid, of course
 		// also i wanted to understand better how fillRect works so i did this shit lol???
 		panel.pixels.fillRect(new Rectangle(0, 0, cornerSize, cornerSize), 0x0); // top left
@@ -159,7 +158,7 @@ class Prompt extends MusicBeatSubstate
 		panel.pixels.fillRect(new Rectangle(panel.width - cornerSize, panel.height - cornerSize, cornerSize, cornerSize), 0x0); // bottom right
 		drawCircleCornerOnSelector(panel, true, true, color);
 	}
-
+	
 	function drawCircleCornerOnSelector(panel:FlxSprite, flipX:Bool, flipY:Bool, color:FlxColor)
 	{
 		var antiX:Float = (panel.width - cornerSize);

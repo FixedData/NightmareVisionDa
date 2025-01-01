@@ -1,4 +1,5 @@
 {
+	"wrapping": {"maxLineLength": 200},
 	"lineEnds": {
 		"anonFunctionCurly": {
 		  "emptyCurly": "break",

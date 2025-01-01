@@ -8,7 +8,10 @@ class MathUtil
 	public static inline function fpsLerp(v1:Float, v2:Float, ratio:Float) return FlxMath.lerp(v1, v2, ratio * 60 * FlxG.elapsed);
 	
 	/**
-		crude version of FlxMath.wrap. supports floats though
+		Alternative to `FlxMath.wrap`. key difference is it supports floats
+		@param min lowest bound
+		@param max highest bound
+		@return The input bounded to the `min` and `max`
 	**/
 	public static function wrap(value:Float, min:Float, max:Float):Float
 	{
@@ -17,12 +20,18 @@ class MathUtil
 		else return value;
 	}
 	
-	public static function floorDecimal(value:Float, decimals:Int):Float
+	/**
+	 * Alternative to `FlxMath.roundDecimal` but floors the value rather than rounding it
+	 * @param value The number 
+	 * @param precision The number of decimals
+	 * @return The floored value
+	 */
+	public static function floorDecimal(value:Float, precision:Int):Float
 	{
-		if (decimals < 1) return Math.floor(value);
+		if (precision < 1) return Math.floor(value);
 		
 		var tempMult:Float = 1;
-		for (i in 0...decimals)
+		for (i in 0...precision)
 			tempMult *= 10;
 			
 		var newValue:Float = Math.floor(value * tempMult);

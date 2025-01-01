@@ -2,7 +2,7 @@ package funkin.scripting;
 
 import funkin.scripting.classes.ScriptedFunkinScript;
 
-//based on base games implementation!!! love yall
+// based on base games implementation!!! love yall
 class ScriptManager
 {
 	public static final loadedScripts:Map<String, FunkinScript> = [];
@@ -12,19 +12,20 @@ class ScriptManager
 		clear();
 		
 		var scripts = ScriptedFunkinScript.listScriptClasses();
+		
 		for (id in scripts)
 		{
 			var newScript:ScriptedFunkinScript = ScriptedFunkinScript.init(id, id);
 			if (newScript != null)
 			{
 				loadedScripts.set(newScript.name, newScript);
-				newScript.onLoad(); //first time load 
+				newScript.onLoad(); // first time load
 			}
 		}
-
+		
 		setSignals();
 	}
-
+	
 	static function setSignals()
 	{
 		if (FlxG.signals.postStateSwitch.has(onStateChangePost)) FlxG.signals.postStateSwitch.remove(onStateChangePost);
@@ -47,10 +48,9 @@ class ScriptManager
 			if (i != null) event(i);
 		}
 	}
-
+	
 	public static function onStateChangePost()
 	{
-		dispatchEvent(f->f.onStateChangePost());
+		dispatchEvent(f -> f.onStateChangePost());
 	}
-
 }

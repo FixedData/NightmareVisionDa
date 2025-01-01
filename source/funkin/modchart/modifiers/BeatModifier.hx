@@ -9,7 +9,7 @@ import funkin.states.*;
 class BeatModifier extends NoteModifier
 {
 	override function getName() return 'beat';
-
+	
 	override function getPos(time:Float, visualDiff:Float, timeDiff:Float, beat:Float, pos:Vector3, data:Int, player:Int, obj:FlxSprite)
 	{
 		if (getValue(player) == 0) return pos;
@@ -18,14 +18,14 @@ class BeatModifier extends NoteModifier
 		@:privateAccess
 		var beat = PlayState.instance.curDecBeat + accelTime;
 		var evenBeat = beat % 2 != 0;
-
+		
 		if (beat < 0) return pos;
-
+		
 		beat -= Math.floor(beat);
 		beat += 1;
 		beat -= Math.floor(beat);
 		if (beat >= totalTime) return pos;
-
+		
 		var amount:Float = 0;
 		if (beat < accelTime)
 		{
@@ -38,7 +38,7 @@ class BeatModifier extends NoteModifier
 			amount = 1 - (1 - amount) * (1 - amount);
 		}
 		if (evenBeat) amount *= -1;
-
+		
 		var shift = 40 * amount * FlxMath.fastSin((visualDiff / 30) + Math.PI / 2);
 		pos.x += getValue(player) * shift;
 		return pos;

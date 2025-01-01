@@ -6,18 +6,18 @@ class FunkinRatioScaleMode extends RatioScaleMode
 {
 	@:isVar public var width(get, set):Null<Int> = null;
 	@:isVar public var height(get, set):Null<Int> = null;
-
+	
 	public override function updateGameSize(Width:Int, Height:Int):Void
 	{
 		var ratio:Float = width / height;
 		var realRatio:Float = Width / Height;
-
+		
 		var scaleY:Bool = realRatio < ratio;
 		if (fillScreen)
 		{
 			scaleY = !scaleY;
 		}
-
+		
 		if (scaleY)
 		{
 			gameSize.x = Width;
@@ -28,7 +28,7 @@ class FunkinRatioScaleMode extends RatioScaleMode
 			gameSize.y = Height;
 			gameSize.x = Math.floor(gameSize.y * ratio);
 		}
-
+		
 		@:privateAccess {
 			for (c in FlxG.cameras.list)
 			{
@@ -38,22 +38,22 @@ class FunkinRatioScaleMode extends RatioScaleMode
 					c.height = height;
 				}
 			}
-
+			
 			FlxG.width = width;
 			FlxG.height = height;
 		}
 	}
-
+	
 	public function resetSize()
 	{
 		width = null;
 		height = null;
 	}
-
+	
 	private inline function get_width():Null<Int> return this.width == null ? FlxG.initialWidth : this.width;
-
+	
 	private inline function get_height():Null<Int> return this.height == null ? FlxG.initialHeight : this.height;
-
+	
 	private inline function set_width(v:Null<Int>):Null<Int>
 	{
 		this.width = v;
@@ -61,7 +61,7 @@ class FunkinRatioScaleMode extends RatioScaleMode
 		FlxG.game.onResize(null);
 		return v;
 	}
-
+	
 	private inline function set_height(v:Null<Int>):Null<Int>
 	{
 		this.height = v;

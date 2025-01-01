@@ -15,11 +15,11 @@ class ReverseModifier extends NoteModifier
 	{
 		return a + (b - a) * c;
 	}
-
+	
 	override function getOrder() return REVERSE;
-
+	
 	override function getName() return 'reverse';
-
+	
 	public function getReverseValue(dir:Int, player:Int, ?scrolling = false)
 	{
 		var suffix = '';
@@ -28,34 +28,34 @@ class ReverseModifier extends NoteModifier
 		var kNum = receptors.length;
 		var val:Float = 0;
 		if (dir >= kNum / 2) val += getSubmodValue("split" + suffix, player);
-
+		
 		if ((dir % 2) == 1) val += getSubmodValue("alternate" + suffix, player);
-
+		
 		var first = kNum / 4;
 		var last = kNum - 1 - first;
-
+		
 		if (dir >= first && dir <= last) val += getSubmodValue("cross" + suffix, player);
-
+		
 		if (suffix == '') val += getValue(player) + getSubmodValue("reverse" + Std.string(dir), player);
 		else val += getSubmodValue("reverse" + suffix, player);
-
+		
 		if (getSubmodValue("unboundedReverse", player) == 0)
 		{
 			val %= 2;
 			if (val > 1) val = 2 - val;
 		}
-
+		
 		if (ClientPrefs.downScroll) val = 1 - val;
-
+		
 		return val;
 	}
-
+	
 	public function getScrollReversePerc(dir:Int, player:Int) return getReverseValue(dir, player) * 100;
-
+	
 	override function shouldExecute(player:Int, val:Float) return true;
-
+	
 	override function ignoreUpdateNote() return false;
-
+	
 	override function updateNote(beat:Float, daNote:Note, pos:Vector3, player:Int)
 	{
 		if (daNote.isSustainNote)
@@ -77,7 +77,7 @@ class ReverseModifier extends NoteModifier
 						var swagRect = new FlxRect(0, 0, daNote.frameWidth, daNote.frameHeight);
 						swagRect.height = (center - y) / daNote.scale.y;
 						swagRect.y = daNote.frameHeight - swagRect.height;
-
+						
 						daNote.clipRect = swagRect;
 					}
 				}
@@ -88,23 +88,23 @@ class ReverseModifier extends NoteModifier
 						var swagRect = new FlxRect(0, 0, daNote.frameWidth, daNote.frameHeight);
 						swagRect.y = (center - y) / daNote.scale.y;
 						swagRect.height -= swagRect.y;
-
+						
 						daNote.clipRect = swagRect;
 					}
 				}
 			}
 		}
 	}
-
+	
 	override function getPos(time:Float, visualDiff:Float, timeDiff:Float, beat:Float, pos:Vector3, data:Int, player:Int, obj:FlxSprite)
 	{
 		var perc = getReverseValue(data, player);
 		var shift = CoolUtil.scale(perc, 0, 1, 50, FlxG.height - 150);
 		var mult = CoolUtil.scale(perc, 0, 1, 1, -1);
 		shift = CoolUtil.scale(getSubmodValue("centered", player), 0, 1, shift, (FlxG.height / 2) - 56);
-
+		
 		pos.y = shift + (visualDiff * mult);
-
+		
 		// TODO: rewrite this, I don't like this and I feel it could be solved better by changing the note's origin instead -neb
 		// also move it to Reverse modifier
 		if ((obj is Note))
@@ -126,14 +126,14 @@ class ReverseModifier extends NoteModifier
 				}
 				daY += (Note.swagWidth * 0.5) - (60.5 * (songSpeed - 1));
 				daY += 27.5 * ((PlayState.SONG.bpm * 0.01) - 1) * (songSpeed - 1);
-
+				
 				pos.y = lerp(pos.y, daY, perc);
 			}
 		}
-
+		
 		return pos;
 	}
-
+	
 	override function getSubmods()
 	{
 		var subMods:Array<String> = [
@@ -147,7 +147,7 @@ class ReverseModifier extends NoteModifier
 			"centered",
 			"unboundedReverse"
 		];
-
+		
 		var receptors = modMgr.receptors[0];
 		for (i in 0...PlayState.SONG.keys)
 		{

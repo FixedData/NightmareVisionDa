@@ -6,13 +6,13 @@ import flixel.FlxSprite;
 class TankmenBG extends FlxSprite
 {
 	public static var animationNotes:Array<Dynamic> = [];
-
+	
 	private var tankSpeed:Float;
 	private var endingOffset:Float;
 	private var goingRight:Bool;
-
+	
 	public var strumTime:Float;
-
+	
 	public function new(x:Float, y:Float, facingRight:Bool)
 	{
 		tankSpeed = 0.7;
@@ -20,19 +20,19 @@ class TankmenBG extends FlxSprite
 		strumTime = 0;
 		goingRight = facingRight;
 		super(x, y);
-
+		
 		frames = Paths.getSparrowAtlas('tankmanKilled1');
 		animation.addByPrefix('run', 'tankman running', 24, true);
 		animation.addByPrefix('shot', 'John Shot ' + FlxG.random.int(1, 2), 24, false);
 		animation.play('run');
 		animation.curAnim.curFrame = FlxG.random.int(0, animation.curAnim.frames.length - 1);
 		antialiasing = ClientPrefs.globalAntialiasing;
-
+		
 		updateHitbox();
 		setGraphicSize(Std.int(0.8 * width));
 		updateHitbox();
 	}
-
+	
 	public function resetShit(x:Float, y:Float, goingRight:Bool):Void
 	{
 		this.x = x;
@@ -42,13 +42,13 @@ class TankmenBG extends FlxSprite
 		tankSpeed = FlxG.random.float(0.6, 1);
 		flipX = goingRight;
 	}
-
+	
 	override function update(elapsed:Float)
 	{
 		super.update(elapsed);
-
+		
 		visible = (x > -0.5 * FlxG.width && x < 1.2 * FlxG.width);
-
+		
 		if (animation.curAnim.name == "run")
 		{
 			var speed:Float = (Conductor.songPosition - strumTime) * tankSpeed;
@@ -59,7 +59,7 @@ class TankmenBG extends FlxSprite
 		{
 			kill();
 		}
-
+		
 		if (Conductor.songPosition > strumTime)
 		{
 			animation.play('shot');

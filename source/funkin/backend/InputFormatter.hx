@@ -98,7 +98,7 @@ class InputFormatter
 				return '' + label.charAt(0).toUpperCase() + label.substr(1).toLowerCase();
 		}
 	}
-
+	
 	/**
 		helper to format keys for typing text
 	**/
@@ -129,10 +129,10 @@ class InputFormatter
 			case NUMPADMULTIPLY: '*';
 			case GRAVEACCENT: '`';
 			case QUOTE: '"';
-
+			
 			// clear invalids
-			case ANY | NONE | PRINTSCREEN | PAGEUP | PAGEDOWN | HOME | END | INSERT | ESCAPE | DELETE | BACKSPACE | CAPSLOCK | ENTER | SHIFT | CONTROL | ALT |
-				F1 | F2 | F3 | F4 | F5 | F6 | F7 | F8 | F9 | TAB | UP | DOWN | LEFT | RIGHT: '';
+			case ANY | NONE | PRINTSCREEN | PAGEUP | PAGEDOWN | HOME | END | INSERT | ESCAPE | DELETE | BACKSPACE | CAPSLOCK | ENTER | SHIFT | CONTROL | ALT | F1 | F2 | F3 | F4 | F5 | F6 | F7 | F8 |
+				F9 | TAB | UP | DOWN | LEFT | RIGHT: '';
 			default: getKeyName(key);
 		}
 	}

@@ -12,29 +12,42 @@ import openfl.display.StageScaleMode;
 
 class Main extends Sprite
 {
-
+	/**
+	 * The version of Psych this engine is forked from
+	 */
 	public static final PSYCH_VERSION:String = '0.6.3';
+	
+	/**
+	 * The version of Nightmare Vision
+	 */
 	public static final NM_VERSION:String = '0.2';
-
-	public static var FUNKIN_VERSION(get,never):String;
-	@:noCompletion static function get_FUNKIN_VERSION() return lime.app.Application.current.meta.get('version');
-
+	
+	/**
+	 * The version of Funkin  do we need this tbh
+	 */
+	public static var FUNKIN_VERSION(get, never):String;
+	
+	@:noCompletion
+	static function get_FUNKIN_VERSION() return lime.app.Application.current.meta.get('version');
+	
+	/**
+	 * The Initial state the FlxGame is initiated with
+	 */
+	static final initialState:Class<FlxState> = Init;
 	
 	var gameWidth:Int = 1280; // Width of the game in pixels (might be less / more in actual pixels depending on your zoom).
 	var gameHeight:Int = 720; // Height of the game in pixels (might be less / more in actual pixels depending on your zoom).
-
-	static var initialState:Class<FlxState> = Init; // The FlxState the game starts with.
-
+	
 	var zoom:Float = -1; // If -1, zoom is automatically calculated to fit the window dimensions.
 	var framerate:Int = 60; // How many frames per second the game should run at.
 	var skipSplash:Bool = false; // Whether to skip the flixel splash screen that appears in release mode.
 	var startFullscreen:Bool = false; // Whether to start the game in fullscreen on desktop targets
-
+	
 	// You can pretty much ignore everything from here on - your code should go in your states.
 	public static var fpsVar:DebugDisplay;
-
+	
 	public static var scaleMode:FunkinRatioScaleMode;
-
+	
 	static function __init__() // haxe thing that runs before ANYTHING has attempted in the project
 	{
 		funkin.utils.MacroUtil.haxeVersionEnforcement();
@@ -42,16 +55,16 @@ class Main extends Sprite
 		funkin.utils.MacroUtil.warnHaxelibs();
 		#end
 	}
-
+	
 	public static function main():Void
 	{
 		Lib.current.addChild(new Main());
 	}
-
+	
 	public function new()
 	{
 		super();
-
+		
 		if (stage != null)
 		{
 			init();
@@ -61,22 +74,22 @@ class Main extends Sprite
 			addEventListener(Event.ADDED_TO_STAGE, init);
 		}
 	}
-
+	
 	private function init(?E:Event):Void
 	{
 		if (hasEventListener(Event.ADDED_TO_STAGE))
 		{
 			removeEventListener(Event.ADDED_TO_STAGE, init);
 		}
-
+		
 		setupGame();
 	}
-
+	
 	private function setupGame():Void
 	{
 		var stageWidth:Int = Lib.current.stage.stageWidth;
 		var stageHeight:Int = Lib.current.stage.stageHeight;
-
+		
 		if (zoom == -1)
 		{
 			var ratioX:Float = stageWidth / gameWidth;
@@ -85,27 +98,27 @@ class Main extends Sprite
 			gameWidth = Math.ceil(stageWidth / zoom);
 			gameHeight = Math.ceil(stageHeight / zoom);
 		}
-
+		
 		ClientPrefs.loadDefaultKeys();
-
+		
 		var game = new
 			#if CRASH_HANDLER
 			FNFGame
 			#else
 			FlxGame
 			#end(gameWidth, gameHeight, #if !debug Splash #else initialState #end, framerate, framerate, skipSplash, startFullscreen);
-
+			
 		// FlxG.game._customSoundTray wants just the class, it calls new from
 		// create() in there, which gets called when it's added to stage
 		// which is why it needs to be added before addChild(game) here
-
+		
 		// Also btw game has to be a variable for this to work ig - Orbyy
-
+		
 		@:privateAccess
 		game._customSoundTray = funkin.objects.FunkinSoundTray;
-
+		
 		addChild(game);
-
+		
 		#if !mobile
 		fpsVar = new DebugDisplay(10, 3, 0xFFFFFF);
 		addChild(fpsVar);
@@ -116,21 +129,21 @@ class Main extends Sprite
 			fpsVar.visible = ClientPrefs.showFPS;
 		}
 		#end
-
+		
 		#if html5
 		FlxG.autoPause = false;
 		FlxG.mouse.visible = false;
 		#end
-
+		
 		FlxG.signals.gameResized.add(onResize);
 		FlxG.signals.preStateSwitch.add(() -> scaleMode.resetSize());
 		FlxG.scaleMode = scaleMode = new FunkinRatioScaleMode();
-
+		
 		#if DISABLE_TRACES
 		haxe.Log.trace = (v:Dynamic, ?infos:haxe.PosInfos) -> {}
 		#end
 	}
-
+	
 	static function onResize(w:Int, h:Int)
 	{
 		final scale:Float = Math.max(1, Math.min(w / FlxG.width, h / FlxG.height));
@@ -142,7 +155,7 @@ class Main extends Sprite
 			if (i != null && i.filters != null) resetSpriteCache(i.flashSprite);
 		if (FlxG.game != null) resetSpriteCache(FlxG.game);
 	}
-
+	
 	public static function resetSpriteCache(sprite:Sprite):Void
 	{
 		@:privateAccess
@@ -158,9 +171,10 @@ class FNFGame extends FlxGame
 {
 	private static function crashGame()
 	{
-		null.draw();
+		null
+		.draw();
 	}
-
+	
 	/**
 	 * Used to instantiate the guts of the flixel game object once we have a valid reference to the root.
 	 */
@@ -176,7 +190,7 @@ class FNFGame extends FlxGame
 			onCrash(e);
 		}
 	}
-
+	
 	override function onFocus(_):Void
 	{
 		try
@@ -187,9 +201,8 @@ class FNFGame extends FlxGame
 		{
 			onCrash(e);
 		}
-
 	}
-
+	
 	override function onFocusLost(_):Void
 	{
 		try
@@ -200,9 +213,8 @@ class FNFGame extends FlxGame
 		{
 			onCrash(e);
 		}
-
 	}
-
+	
 	/**
 	 * Handles the `onEnterFrame` call and figures out how many updates and draw calls to do.
 	 */
@@ -216,9 +228,8 @@ class FNFGame extends FlxGame
 		{
 			onCrash(e);
 		}
-
 	}
-
+	
 	/**
 	 * This function is called by `step()` and updates the actual game state.
 	 * May be called multiple times per "frame" or draw call.
@@ -236,9 +247,8 @@ class FNFGame extends FlxGame
 		{
 			onCrash(e);
 		}
-
 	}
-
+	
 	/**
 	 * Goes through the game state and draws all the game objects and special effects.
 	 */
@@ -252,9 +262,8 @@ class FNFGame extends FlxGame
 		{
 			onCrash(e);
 		}
-
 	}
-
+	
 	private final function onCrash(e:haxe.Exception):Void
 	{
 		var emsg:String = "";
@@ -269,11 +278,10 @@ class FNFGame extends FlxGame
 					trace(stackItem);
 			}
 		}
-
-
+		
 		final crashReport = 'Error caught:' + e.message + '\nCallstack:\n' + emsg;
-
-		FlxG.switchState(new funkin.backend.FallbackState(crashReport,()->FlxG.switchState(()->new MainMenuState())));
+		
+		FlxG.switchState(new funkin.backend.FallbackState(crashReport, () -> FlxG.switchState(() -> new MainMenuState())));
 	}
 }
 #end

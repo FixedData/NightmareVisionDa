@@ -1,19 +1,29 @@
 package funkin.api;
 
+import funkin.backend.Cache;
+import funkin.scripting.ScriptClasses.ScriptFlxTextAlign;
+import funkin.scripting.ScriptClasses.ScriptBlendMode;
+import funkin.scripting.ScriptClasses.ScriptFlxColor;
+import funkin.scripting.ScriptClasses.ScriptFlxAxes;
 import funkin.scripting.ScriptManager;
 import polymod.Polymod;
 
+// needs docs
 class PolyClient
 {
 	/**
 	 * The set mod directory for polymod to search through
 	 */
-	public static final MOD_DIR:String = 'test';
+	public static final MOD_DIR:String = 'mods';
+	
+	public static var loadedModMetas:Array<ModMetadata> = [];
+	
+	public static var activeMods:Array<String> = [];
 	
 	/**
 	 * List of the ids of all loaded mods
 	 */
-	public static var modDirectories:Array<String> = [];
+	public static final modDirectories:Array<String> = [];
 	
 	/**
 	 * Prepares and starts polymod functionality
@@ -28,7 +38,7 @@ class PolyClient
 	}
 	
 	/**
-	 * Resets the loaded state and re initializes Polymod
+	 * Resets the loaded state and re initializes Polymod //TODO add a fix related to doing this inside scriptedStates
 	 */
 	public static function refresh()
 	{
@@ -36,9 +46,12 @@ class PolyClient
 		
 		Polymod.clearScripts();
 		refreshDirectories();
+		// Polymod.clearCache();
 		
 		Polymod.reload();
 		ScriptManager.build();
+		
+		Cache.resetSafeKeys();
 		
 		FlxG.resetState();
 	}
@@ -59,8 +72,10 @@ class PolyClient
 		ensureModDirExists();
 		
 		modDirectories.splice(0, modDirectories.length);
-	
-		for (i in Polymod.scan({modRoot: MOD_DIR}))
+		
+		loadedModMetas = Polymod.scan({modRoot: MOD_DIR});
+		
+		for (i in loadedModMetas)
 		{
 			modDirectories.push(i.id);
 		}
@@ -77,20 +92,43 @@ class PolyClient
 				errorCallback: onError,
 				useScriptedClasses: true
 			});
-
 	}
 	
 	static function onError(error:PolymodError)
 	{
-		switch (error.severity)
+		switch (error.code)
 		{
-			case NOTICE:
+			case SCRIPT_CLASS_MODULE_NOT_FOUND:
+				doPopUp('Script Import Failed.', error.message);
+				
+			case SCRIPT_CLASS_MODULE_ALREADY_IMPORTED: // this isnt much of a real warning stop.
 			
-			case WARNING:
-				trace(error.message);
-			case ERROR:
-				trace(error.message);
+			case SCRIPT_CLASS_ALREADY_REGISTERED: // u have 2 scripts with the same class name
+				doPopUp('Two Registered Script Classes Contain The Same Name.', error.message);
+				
+			case SCRIPT_PARSE_ERROR:
+				doPopUp('Script Parsing Failed.', error.message);
+				
+			case SCRIPT_RUNTIME_EXCEPTION:
+				doPopUp('Script Exception Caught.', error.message);
+				
+			default:
+				switch (error.severity)
+				{
+					case NOTICE:
+					
+					case WARNING:
+						trace('WARNING: [${error.message}]');
+					case ERROR:
+						trace('ERROR: [${error.message}]');
+				}
 		}
+	}
+	
+	public static function doPopUp(title:String, desc:String)
+	{
+		FlxG.stage.window.alert(desc, title);
+		trace(desc);
 	}
 	
 	static function setImports()
@@ -107,11 +145,22 @@ class PolyClient
 		Polymod.addDefaultImport(flixel.tweens.FlxEase);
 		Polymod.addDefaultImport(flixel.tweens.FlxTween);
 		Polymod.addDefaultImport(flixel.math.FlxPoint.FlxBasePoint, 'FlxPoint');
+		Polymod.addDefaultImport(flixel.util.FlxTimer);
 		
+		// funkin specfic
+		Polymod.addDefaultImport(funkin.Paths);
+		Polymod.addDefaultImport(funkin.objects.BGSprite);
+		Polymod.addDefaultImport(funkin.data.ClientPrefs);
 		Polymod.addDefaultImport(funkin.states.PlayState);
 		
-		Polymod.addDefaultImport(PathsReal, 'Paths');
-		Polymod.addDefaultImport(FlxAxes);
+		// alternatives to some abstracted shit
+		Polymod.addDefaultImport(ScriptFlxAxes, 'FlxAxes');
+		Polymod.addDefaultImport(ScriptFlxColor, 'FlxColor');
+		Polymod.addDefaultImport(ScriptBlendMode, 'BlendMode');
+		Polymod.addDefaultImport(ScriptFlxTextAlign, 'FlxTextAlign');
+
+
+		//todo get smth like compile time to import ALL scripting classes
 	}
 	
 	static function getFrameworkParams():Null<FrameworkParams>
@@ -128,12 +177,4 @@ class PolyClient
 			]
 		}
 	}
-}
-
-// test?
-class FlxAxes
-{
-	public static var X:Int = cast flixel.util.FlxAxes.X;
-	public static var Y:Int = cast flixel.util.FlxAxes.Y;
-	public static var XY:Int = cast flixel.util.FlxAxes.XY;
 }

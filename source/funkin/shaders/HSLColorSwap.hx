@@ -1,4 +1,4 @@
-package funkin.objects.shader;
+package funkin.shaders;
 
 import flixel.FlxG;
 import flixel.system.FlxAssets.FlxShader;
@@ -9,25 +9,25 @@ class HSLColorSwap
 	public var hue(default, set):Float = 0;
 	public var saturation(default, set):Float = 0;
 	public var lightness(default, set):Float = 0;
-
+	
 	private function set_hue(value:Float)
 	{
 		shader.hue.value[0] = value;
 		return hue = value;
 	}
-
+	
 	private function set_saturation(value:Float)
 	{
 		shader.saturation.value[0] = value;
 		return saturation = value;
 	}
-
+	
 	private function set_lightness(value:Float)
 	{
 		shader.lightness.value[0] = value;
 		return lightness = value;
 	}
-
+	
 	public function new()
 	{
 		// all values are set in the shader so like

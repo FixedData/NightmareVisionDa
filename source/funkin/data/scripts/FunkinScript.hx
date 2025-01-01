@@ -12,7 +12,7 @@ class FunkinScript
 {
 	public var scriptName:String = '';
 	public var scriptType:ScriptType = '';
-
+	
 	/**
 		Called when the script should be stopped
 	**/
@@ -20,7 +20,7 @@ class FunkinScript
 	{
 		throw new haxe.exceptions.NotImplementedException();
 	}
-
+	
 	/**
 		Called to output debug information
 	**/
@@ -28,7 +28,7 @@ class FunkinScript
 	{
 		trace(text); // wow for once its not NotImplementedException
 	}
-
+	
 	/**
 		Called to set a variable defined in the script
 	**/
@@ -36,7 +36,7 @@ class FunkinScript
 	{
 		throw new haxe.exceptions.NotImplementedException();
 	}
-
+	
 	/**
 		Called to get a variable defined in the script
 	**/
@@ -44,7 +44,7 @@ class FunkinScript
 	{
 		throw new haxe.exceptions.NotImplementedException();
 	}
-
+	
 	/**
 		Called to call a function within the script
 	**/
@@ -52,7 +52,7 @@ class FunkinScript
 	{
 		throw new haxe.exceptions.NotImplementedException();
 	}
-
+	
 	/**
 		Helper function
 		Sets a bunch of basic variables for the script depending on the state
@@ -79,14 +79,14 @@ class FunkinScript
 			set('botPlay', PlayState.instance.cpuControlled);
 			set('practice', PlayState.instance.practiceMode);
 			set('startedCountdown', false);
-
+			
 			// call('onCreate');
 		}
 		else
 		{
 			set("inPlaystate", false);
 		}
-
+		
 		set('inGameOver', false);
 		set('downscroll', ClientPrefs.downScroll);
 		set('middlescroll', ClientPrefs.middleScroll);
@@ -102,7 +102,7 @@ class FunkinScript
 		set('noResetButton', ClientPrefs.noReset);
 		set('lowQuality', ClientPrefs.lowQuality);
 		set("scriptName", scriptName);
-
+		
 		set('curBpm', Conductor.bpm);
 		set('crotchet', Conductor.crotchet);
 		set('stepCrotchet', Conductor.stepCrotchet);
@@ -115,16 +115,6 @@ class FunkinScript
 		set('curDecStep', 0);
 		set('version', Main.NM_VERSION.trim());
 	}
-}
-
-interface IFunkinScript
-{
-	public var scriptName:String;
-	public var scriptType:ScriptType;
-	public function set(variable:String, data:Dynamic):Void;
-	public function get(key:String):Dynamic;
-	public function call(func:String, ?args:Array<Dynamic>):Dynamic;
-	public function stop():Void;
 }
 
 enum abstract ScriptType(String) to String from String

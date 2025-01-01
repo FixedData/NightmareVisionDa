@@ -12,11 +12,13 @@ class ClientPrefs
 {
 	//-----------------------------------------//
 	public static var gpuCaching:Bool = true;
-
+	
+	public static var useEpicRankings:Bool = true;
+	
 	// we need to rethink the loading cuz the current setup does not work the best
 	public static var loadingThreads:Int = Math.floor(Std.parseInt(Sys.getEnv("NUMBER_OF_PROCESSORS")) / 2);
 	public static var multicoreLoading:Bool = false;
-
+	
 	public static var downScroll:Bool = false;
 	public static var middleScroll:Bool = false;
 	public static var opponentStrums:Bool = true;
@@ -86,7 +88,7 @@ class ClientPrefs
 		'botplay' => false,
 		'opponentplay' => false
 	];
-
+	
 	public static var comboOffset:Array<Int> = [0, 0, 0, 0];
 	public static var ratingOffset:Int = 0;
 	public static var epicWindow:Float = 22.5;
@@ -94,7 +96,7 @@ class ClientPrefs
 	public static var goodWindow:Float = 90.0;
 	public static var badWindow:Float = 135.0;
 	public static var safeFrames:Float = 10.0;
-
+	
 	// Every key has two binds, add your key bind down here and then add your control on options/ControlsSubState.hx and Controls.hx
 	public static var keyBinds:Map<String, Array<FlxKey>> = [
 		// Key Bind, Name for ControlsSubState
@@ -121,7 +123,7 @@ class ClientPrefs
 	public static var editorGradColors:Array<FlxColor> = [FlxColor.fromRGB(83, 21, 78), FlxColor.fromRGB(21, 62, 83)];
 	public static var editorBoxColors:Array<FlxColor> = [FlxColor.fromRGB(58, 112, 159), FlxColor.fromRGB(138, 173, 202)];
 	public static var editorGradVis:Bool = true;
-
+	
 	public static var chartPresetList:Array<String> = ["Default"];
 	public static var chartPresets:Map<String, Array<Dynamic>> = [
 		"Default" => [
@@ -131,15 +133,15 @@ class ClientPrefs
 			FlxColor.fromRGB(250, 250, 250)
 		]
 	];
-
+	
 	public static var defaultKeys:Map<String, Array<FlxKey>> = null;
-
+	
 	public static function loadDefaultKeys()
 	{
 		defaultKeys = keyBinds.copy();
 		// trace(defaultKeys);
 	}
-
+	
 	public static function saveSettings()
 	{
 		FlxG.save.data.gpuCaching = gpuCaching;
@@ -147,10 +149,10 @@ class ClientPrefs
 		FlxG.save.data.editorBoxColors = editorBoxColors;
 		FlxG.save.data.editorUIColor = editorUIColor;
 		FlxG.save.data.editorGradVis = editorGradVis;
-
+		
 		FlxG.save.data.chartPresetList = chartPresetList;
 		FlxG.save.data.chartPresets = chartPresets;
-
+		
 		FlxG.save.data.downScroll = downScroll;
 		FlxG.save.data.middleScroll = middleScroll;
 		FlxG.save.data.opponentStrums = opponentStrums;
@@ -177,7 +179,7 @@ class ClientPrefs
 		FlxG.save.data.comboOffset = comboOffset;
 		FlxG.save.data.achievementsMap = Achievements.achievementsMap;
 		FlxG.save.data.henchmenDeath = Achievements.henchmenDeath;
-
+		
 		FlxG.save.data.ratingOffset = ratingOffset;
 		FlxG.save.data.epicWindow = epicWindow;
 		FlxG.save.data.sickWindow = sickWindow;
@@ -188,20 +190,20 @@ class ClientPrefs
 		FlxG.save.data.controllerMode = controllerMode;
 		FlxG.save.data.hitsoundVolume = hitsoundVolume;
 		FlxG.save.data.pauseMusic = pauseMusic;
-
+		
 		FlxG.save.flush();
-
+		
 		var save:FlxSave = new FlxSave();
 		save.bind('controls_v2', 'ninjamuffin99'); // Placing this in a separate save so that it can be manually deleted without removing your Score and stuff
 		save.data.customControls = keyBinds;
 		save.flush();
 		FlxG.log.add("Settings saved!");
 	}
-
+	
 	public static function loadPrefs()
 	{
-		if (FlxG.save.data.gpuCaching != null) FlxG.save.data.gpuCaching = gpuCaching;
-
+		if (FlxG.save.data.gpuCaching != null) gpuCaching = FlxG.save.data.gpuCaching;
+		
 		if (FlxG.save.data.editorGradColors != null)
 		{
 			editorGradColors = FlxG.save.data.editorGradColors;
@@ -280,7 +282,7 @@ class ClientPrefs
 				FlxG.updateFramerate = framerate;
 			}
 		}
-
+		
 		if (FlxG.save.data.camZooms != null)
 		{
 			camZooms = FlxG.save.data.camZooms;
@@ -346,7 +348,7 @@ class ClientPrefs
 		{
 			comboOffset = FlxG.save.data.comboOffset;
 		}
-
+		
 		if (FlxG.save.data.ratingOffset != null)
 		{
 			ratingOffset = FlxG.save.data.ratingOffset;
@@ -391,7 +393,7 @@ class ClientPrefs
 				gameplaySettings.set(name, value);
 			}
 		}
-
+		
 		// flixel automatically saves your volume!
 		if (FlxG.save.data.volume != null)
 		{
@@ -401,7 +403,7 @@ class ClientPrefs
 		{
 			FlxG.sound.muted = FlxG.save.data.mute;
 		}
-
+		
 		var save:FlxSave = new FlxSave();
 		save.bind('controls_v2', 'ninjamuffin99');
 		if (save != null && save.data.customControls != null)
@@ -414,16 +416,16 @@ class ClientPrefs
 			reloadControls();
 		}
 	}
-
+	
 	inline public static function getGameplaySetting(name:String, defaultValue:Dynamic):Dynamic
 	{
 		return /*PlayState.isStoryMode ? defaultValue : */ (gameplaySettings.exists(name) ? gameplaySettings.get(name) : defaultValue);
 	}
-
+	
 	public static function reloadControls()
 	{
 		PlayerSettings.player1.controls.setKeyboardScheme(KeyboardScheme.Solo);
-
+		
 		FlxG.sound.muteKeys = Init.muteKeys;
 		FlxG.sound.volumeDownKeys = Init.volumeDownKeys;
 		FlxG.sound.volumeUpKeys = Init.volumeUpKeys;
@@ -431,13 +433,13 @@ class ClientPrefs
 		Init.volumeDownKeys = copyKey(keyBinds.get('volume_down'));
 		Init.volumeUpKeys = copyKey(keyBinds.get('volume_up'));
 	}
-
+	
 	public static function copyKey(arrayToCopy:Array<FlxKey>):Array<FlxKey>
 	{
 		var copiedArray:Array<FlxKey> = arrayToCopy.copy();
 		var i:Int = 0;
 		var len:Int = copiedArray.length;
-
+		
 		while (i < len)
 		{
 			if (copiedArray[i] == NONE)

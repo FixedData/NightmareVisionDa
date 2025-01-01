@@ -34,11 +34,11 @@ class ControlsSubState extends MusicBeatSubstate
 {
 	private static var curSelected:Int = -1;
 	private static var curAlt:Bool = false;
-
+	
 	private static var defaultKey:String = 'Reset to Default Keys';
-
+	
 	private var bindLength:Int = 0;
-
+	
 	var optionShit:Array<Dynamic> = [
 		['NOTES'],
 		['Left', 'note_left'],
@@ -66,29 +66,29 @@ class ControlsSubState extends MusicBeatSubstate
 		['Key 1', 'debug_1'],
 		['Key 2', 'debug_2']
 	];
-
+	
 	private var grpOptions:FlxTypedGroup<Alphabet>;
 	private var grpInputs:Array<AttachedText> = [];
 	private var grpInputsAlt:Array<AttachedText> = [];
 	var rebindingKey:Bool = false;
 	var nextAccept:Int = 5;
-
+	
 	public function new()
 	{
 		super();
-
+		
 		var bg:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
 		bg.color = 0xFFea71fd;
 		bg.screenCenter();
 		bg.antialiasing = ClientPrefs.globalAntialiasing;
 		add(bg);
-
+		
 		grpOptions = new FlxTypedGroup<Alphabet>();
 		add(grpOptions);
-
+		
 		optionShit.push(['']);
 		optionShit.push([defaultKey]);
-
+		
 		for (i in 0...optionShit.length)
 		{
 			var isCentered:Bool = false;
@@ -97,7 +97,7 @@ class ControlsSubState extends MusicBeatSubstate
 			{
 				isCentered = true;
 			}
-
+			
 			var optionText:Alphabet = new Alphabet(0, (10 * i), optionShit[i][0], (!isCentered || isDefaultKey), false);
 			optionText.isMenuItem = true;
 			if (isCentered)
@@ -113,7 +113,7 @@ class ControlsSubState extends MusicBeatSubstate
 			optionText.yMult = 60;
 			optionText.targetY = i;
 			grpOptions.add(optionText);
-
+			
 			if (!isCentered)
 			{
 				addBindTexts(optionText, i);
@@ -123,10 +123,10 @@ class ControlsSubState extends MusicBeatSubstate
 		}
 		changeSelection();
 	}
-
+	
 	var leaving:Bool = false;
 	var bindingTime:Float = 0;
-
+	
 	override function update(elapsed:Float)
 	{
 		if (!rebindingKey)
@@ -143,14 +143,14 @@ class ControlsSubState extends MusicBeatSubstate
 			{
 				changeAlt();
 			}
-
+			
 			if (controls.BACK)
 			{
 				ClientPrefs.reloadControls();
 				close();
 				FlxG.sound.play(Paths.sound('cancelMenu'));
 			}
-
+			
 			if (controls.ACCEPT && nextAccept <= 0)
 			{
 				if (optionShit[curSelected][0] == defaultKey)
@@ -183,19 +183,19 @@ class ControlsSubState extends MusicBeatSubstate
 			{
 				var keysArray:Array<FlxKey> = ClientPrefs.keyBinds.get(optionShit[curSelected][1]);
 				keysArray[curAlt ? 1 : 0] = keyPressed;
-
+				
 				var opposite:Int = (curAlt ? 0 : 1);
 				if (keysArray[opposite] == keysArray[1 - opposite])
 				{
 					keysArray[opposite] = NONE;
 				}
 				ClientPrefs.keyBinds.set(optionShit[curSelected][1], keysArray);
-
+				
 				reloadKeys();
 				FlxG.sound.play(Paths.sound('confirmMenu'));
 				rebindingKey = false;
 			}
-
+			
 			bindingTime += elapsed;
 			if (bindingTime > 5)
 			{
@@ -212,14 +212,14 @@ class ControlsSubState extends MusicBeatSubstate
 				bindingTime = 0;
 			}
 		}
-
+		
 		if (nextAccept > 0)
 		{
 			nextAccept -= 1;
 		}
 		super.update(elapsed);
 	}
-
+	
 	function getInputTextNum()
 	{
 		var num:Int = 0;
@@ -232,7 +232,7 @@ class ControlsSubState extends MusicBeatSubstate
 		}
 		return num;
 	}
-
+	
 	function changeSelection(change:Int = 0)
 	{
 		do
@@ -242,9 +242,9 @@ class ControlsSubState extends MusicBeatSubstate
 			if (curSelected >= optionShit.length) curSelected = 0;
 		}
 		while (unselectableCheck(curSelected));
-
+		
 		var bullShit:Int = 0;
-
+		
 		for (i in 0...grpInputs.length)
 		{
 			grpInputs[i].alpha = 0.6;
@@ -253,12 +253,12 @@ class ControlsSubState extends MusicBeatSubstate
 		{
 			grpInputsAlt[i].alpha = 0.6;
 		}
-
+		
 		for (item in grpOptions.members)
 		{
 			item.targetY = bullShit - curSelected;
 			bullShit++;
-
+			
 			if (!unselectableCheck(bullShit - 1))
 			{
 				item.alpha = 0.6;
@@ -292,7 +292,7 @@ class ControlsSubState extends MusicBeatSubstate
 		}
 		FlxG.sound.play(Paths.sound('scrollMenu'));
 	}
-
+	
 	function changeAlt()
 	{
 		curAlt = !curAlt;
@@ -322,7 +322,7 @@ class ControlsSubState extends MusicBeatSubstate
 		}
 		FlxG.sound.play(Paths.sound('scrollMenu'));
 	}
-
+	
 	private function unselectableCheck(num:Int, ?checkDefaultKey:Bool = false):Bool
 	{
 		if (optionShit[num][0] == defaultKey)
@@ -331,7 +331,7 @@ class ControlsSubState extends MusicBeatSubstate
 		}
 		return optionShit[num].length < 2 && optionShit[num][0] != defaultKey;
 	}
-
+	
 	private function addBindTexts(optionText:Alphabet, num:Int)
 	{
 		var keys:Array<Dynamic> = ClientPrefs.keyBinds.get(optionShit[num][1]);
@@ -340,14 +340,14 @@ class ControlsSubState extends MusicBeatSubstate
 		text1.sprTracker = optionText;
 		grpInputs.push(text1);
 		add(text1);
-
+		
 		var text2 = new AttachedText(InputFormatter.getKeyName(keys[1]), 650, -55);
 		text2.setPosition(optionText.x + 650, optionText.y - 55);
 		text2.sprTracker = optionText;
 		grpInputsAlt.push(text2);
 		add(text2);
 	}
-
+	
 	function reloadKeys()
 	{
 		while (grpInputs.length > 0)
@@ -364,9 +364,9 @@ class ControlsSubState extends MusicBeatSubstate
 			grpInputsAlt.remove(item);
 			item.destroy();
 		}
-
+		
 		trace('Reloaded keys: ' + ClientPrefs.keyBinds);
-
+		
 		for (i in 0...grpOptions.length)
 		{
 			if (!unselectableCheck(i, true))
@@ -374,7 +374,7 @@ class ControlsSubState extends MusicBeatSubstate
 				addBindTexts(grpOptions.members[i], i);
 			}
 		}
-
+		
 		var bullShit:Int = 0;
 		for (i in 0...grpInputs.length)
 		{
@@ -384,12 +384,12 @@ class ControlsSubState extends MusicBeatSubstate
 		{
 			grpInputsAlt[i].alpha = 0.6;
 		}
-
+		
 		for (item in grpOptions.members)
 		{
 			item.targetY = bullShit - curSelected;
 			bullShit++;
-
+			
 			if (!unselectableCheck(bullShit - 1))
 			{
 				item.alpha = 0.6;

@@ -33,61 +33,61 @@ class BaseOptionsMenu extends MusicBeatSubstate
 	private var curOption:Option = null;
 	private var curSelected:Int = 0;
 	private var optionsArray:Array<Option>;
-
+	
 	private var grpOptions:FlxTypedGroup<Alphabet>;
 	private var checkboxGroup:FlxTypedGroup<CheckboxThingie>;
 	private var grpTexts:FlxTypedGroup<AttachedText>;
-
+	
 	private var boyfriend:Character = null;
 	private var descBox:FlxSprite;
 	private var descText:FlxText;
-
+	
 	public var title:String;
 	public var rpcTitle:String;
-
+	
 	public function new()
 	{
 		super();
-
+		
 		if (title == null) title = 'Options';
 		if (rpcTitle == null) rpcTitle = 'Options Menu';
-
+		
 		#if desktop
 		DiscordClient.changePresence(rpcTitle, null);
 		#end
-
+		
 		var bg:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
 		bg.color = 0xFFea71fd;
 		bg.screenCenter();
 		bg.antialiasing = ClientPrefs.globalAntialiasing;
 		add(bg);
-
+		
 		// avoids lagspikes while scrolling through menus!
 		grpOptions = new FlxTypedGroup<Alphabet>();
 		add(grpOptions);
-
+		
 		grpTexts = new FlxTypedGroup<AttachedText>();
 		add(grpTexts);
-
+		
 		checkboxGroup = new FlxTypedGroup<CheckboxThingie>();
 		add(checkboxGroup);
-
+		
 		descBox = new FlxSprite().makeGraphic(1, 1, FlxColor.BLACK);
 		descBox.alpha = 0.6;
 		add(descBox);
-
+		
 		var titleText:Alphabet = new Alphabet(0, 0, title, true, false, 0, 0.6);
 		titleText.x += 60;
 		titleText.y += 40;
 		titleText.alpha = 0.4;
 		add(titleText);
-
+		
 		descText = new FlxText(50, 600, 1180, "", 32);
 		descText.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		descText.scrollFactor.set();
 		descText.borderSize = 2.4;
 		add(descText);
-
+		
 		for (i in 0...optionsArray.length)
 		{
 			var optionText:Alphabet = new Alphabet(0, 70 * i, optionsArray[i].name, false, false);
@@ -98,7 +98,7 @@ class BaseOptionsMenu extends MusicBeatSubstate
 			optionText.xAdd = 200;
 			optionText.targetY = i;
 			grpOptions.add(optionText);
-
+			
 			if (optionsArray[i].type == 'bool')
 			{
 				var checkbox:CheckboxThingie = new CheckboxThingie(optionText.x - 105, optionText.y, optionsArray[i].getValue() == true);
@@ -117,28 +117,28 @@ class BaseOptionsMenu extends MusicBeatSubstate
 				grpTexts.add(valueText);
 				optionsArray[i].setChild(valueText);
 			}
-
+			
 			if (optionsArray[i].showBoyfriend && boyfriend == null)
 			{
 				reloadBoyfriend();
 			}
 			updateTextFrom(optionsArray[i]);
 		}
-
+		
 		changeSelection();
 		reloadCheckboxes();
 	}
-
+	
 	public function addOption(option:Option)
 	{
 		if (optionsArray == null || optionsArray.length < 1) optionsArray = [];
 		optionsArray.push(option);
 	}
-
+	
 	var nextAccept:Int = 5;
 	var holdTime:Float = 0;
 	var holdValue:Float = 0;
-
+	
 	override function update(elapsed:Float)
 	{
 		if (controls.UI_UP_P)
@@ -149,13 +149,13 @@ class BaseOptionsMenu extends MusicBeatSubstate
 		{
 			changeSelection(1);
 		}
-
+		
 		if (controls.BACK)
 		{
 			close();
 			FlxG.sound.play(Paths.sound('cancelMenu'));
 		}
-
+		
 		if (nextAccept <= 0)
 		{
 			var usesCheckbox = true;
@@ -163,7 +163,7 @@ class BaseOptionsMenu extends MusicBeatSubstate
 			{
 				usesCheckbox = false;
 			}
-
+			
 			if (usesCheckbox)
 			{
 				if (controls.ACCEPT)
@@ -192,30 +192,30 @@ class BaseOptionsMenu extends MusicBeatSubstate
 							{
 								add = controls.UI_LEFT ? -curOption.changeValue : curOption.changeValue;
 							}
-
+							
 							switch (curOption.type)
 							{
 								case 'int' | 'float' | 'percent':
 									holdValue = curOption.getValue() + add;
 									if (holdValue < curOption.minValue) holdValue = curOption.minValue;
 									else if (holdValue > curOption.maxValue) holdValue = curOption.maxValue;
-
+									
 									switch (curOption.type)
 									{
 										case 'int':
 											holdValue = Math.round(holdValue);
 											curOption.setValue(holdValue);
-
+											
 										case 'float' | 'percent':
 											holdValue = FlxMath.roundDecimal(holdValue, curOption.decimals);
 											curOption.setValue(holdValue);
 									}
-
+									
 								case 'string':
 									var num:Int = curOption.curOption; // lol
 									if (controls.UI_LEFT_P) --num;
 									else num++;
-
+									
 									if (num < 0)
 									{
 										num = curOption.options.length - 1;
@@ -224,7 +224,7 @@ class BaseOptionsMenu extends MusicBeatSubstate
 									{
 										num = 0;
 									}
-
+									
 									curOption.curOption = num;
 									curOption.setValue(curOption.options[num]); // lol
 									// trace(curOption.options[num]);
@@ -238,12 +238,12 @@ class BaseOptionsMenu extends MusicBeatSubstate
 							holdValue += curOption.scrollSpeed * elapsed * (controls.UI_LEFT ? -1 : 1);
 							if (holdValue < curOption.minValue) holdValue = curOption.minValue;
 							else if (holdValue > curOption.maxValue) holdValue = curOption.maxValue;
-
+							
 							switch (curOption.type)
 							{
 								case 'int':
 									curOption.setValue(Math.round(holdValue));
-
+									
 								case 'float' | 'percent':
 									curOption.setValue(FlxMath.roundDecimal(holdValue, curOption.decimals));
 							}
@@ -251,7 +251,7 @@ class BaseOptionsMenu extends MusicBeatSubstate
 							curOption.change();
 						}
 					}
-
+					
 					if (curOption.type != 'string')
 					{
 						holdTime += elapsed;
@@ -262,7 +262,7 @@ class BaseOptionsMenu extends MusicBeatSubstate
 					clearHold();
 				}
 			}
-
+			
 			if (controls.RESET)
 			{
 				for (i in 0...optionsArray.length)
@@ -286,19 +286,19 @@ class BaseOptionsMenu extends MusicBeatSubstate
 				reloadCheckboxes();
 			}
 		}
-
+		
 		if (boyfriend != null && boyfriend.animation.curAnim.finished)
 		{
 			boyfriend.dance();
 		}
-
+		
 		if (nextAccept > 0)
 		{
 			nextAccept -= 1;
 		}
 		super.update(elapsed);
 	}
-
+	
 	function updateTextFrom(option:Option)
 	{
 		var text:String = option.displayFormat;
@@ -307,7 +307,7 @@ class BaseOptionsMenu extends MusicBeatSubstate
 		var def:Dynamic = option.defaultValue;
 		option.text = text.replace('%v', val).replace('%d', def);
 	}
-
+	
 	function clearHold()
 	{
 		if (holdTime > 0.5)
@@ -316,24 +316,24 @@ class BaseOptionsMenu extends MusicBeatSubstate
 		}
 		holdTime = 0;
 	}
-
+	
 	function changeSelection(change:Int = 0)
 	{
 		curSelected += change;
 		if (curSelected < 0) curSelected = optionsArray.length - 1;
 		if (curSelected >= optionsArray.length) curSelected = 0;
-
+		
 		descText.text = optionsArray[curSelected].description;
 		descText.screenCenter(Y);
 		descText.y += 270;
-
+		
 		var bullShit:Int = 0;
-
+		
 		for (item in grpOptions.members)
 		{
 			item.targetY = bullShit - curSelected;
 			bullShit++;
-
+			
 			item.alpha = 0.6;
 			if (item.targetY == 0)
 			{
@@ -348,11 +348,11 @@ class BaseOptionsMenu extends MusicBeatSubstate
 				text.alpha = 1;
 			}
 		}
-
+		
 		descBox.setPosition(descText.x - 10, descText.y - 10);
 		descBox.setGraphicSize(Std.int(descText.width + 20), Std.int(descText.height + 25));
 		descBox.updateHitbox();
-
+		
 		if (boyfriend != null)
 		{
 			boyfriend.visible = optionsArray[curSelected].showBoyfriend;
@@ -360,7 +360,7 @@ class BaseOptionsMenu extends MusicBeatSubstate
 		curOption = optionsArray[curSelected]; // shorter lol
 		FlxG.sound.play(Paths.sound('scrollMenu'));
 	}
-
+	
 	public function reloadBoyfriend()
 	{
 		var wasVisible:Bool = false;
@@ -371,7 +371,7 @@ class BaseOptionsMenu extends MusicBeatSubstate
 			remove(boyfriend);
 			boyfriend.destroy();
 		}
-
+		
 		boyfriend = new Character(840, 170, 'bf', true);
 		boyfriend.setGraphicSize(Std.int(boyfriend.width * 0.75));
 		boyfriend.updateHitbox();
@@ -379,7 +379,7 @@ class BaseOptionsMenu extends MusicBeatSubstate
 		insert(1, boyfriend);
 		boyfriend.visible = wasVisible;
 	}
-
+	
 	function reloadCheckboxes()
 	{
 		for (checkbox in checkboxGroup)

@@ -38,7 +38,7 @@ class ModManager
 		];
 		for (mod in quickRegs)
 			quickRegister(Type.createInstance(mod, [this]));
-
+			
 		quickRegister(new RotateModifier(this));
 		quickRegister(new RotateModifier(this, 'center', new Vector3((FlxG.width * 0.5) - (Note.swagWidth / 2), (FlxG.height * 0.5) - Note.swagWidth / 2)));
 		quickRegister(new LocalRotateModifier(this, 'local'));
@@ -48,27 +48,27 @@ class ModManager
 		for (i in 0...PlayState.SONG.keys)
 			setValue('xmod$i', 1);
 	}
-
+	
 	private var state:PlayState;
-
+	
 	public var lanes:Int = 2;
 	public var receptors:Array<Array<StrumNote>> = []; // for modifiers to be able to access receptors directly if they need to
 	public var timeline:EventTimeline = new EventTimeline();
-
+	
 	public var notemodRegister:Map<String, Modifier> = [];
 	public var miscmodRegister:Map<String, Modifier> = [];
-
+	
 	@:deprecated("Unused in place of notemodRegister and miscModRegister")
 	public var registerByType:Map<ModifierType, Map<String, Modifier>> = [NOTE_MOD => [], MISC_MOD => []];
-
+	
 	public var register:Map<String, Modifier> = [];
-
+	
 	public var modArray:Array<Modifier> = [];
-
+	
 	public var activeMods:Array<Array<String>> = [[], []]; // by player
-
+	
 	inline public function quickRegister(mod:Modifier) registerMod(mod.getName(), mod);
-
+	
 	public function registerMod(modName:String, mod:Modifier, ?registerSubmods = true)
 	{
 		register.set(modName, mod);
@@ -82,7 +82,7 @@ class ModManager
 		}
 		timeline.addMod(modName);
 		modArray.push(mod);
-
+		
 		if (registerSubmods)
 		{
 			for (name in mod.submods.keys())
@@ -91,20 +91,20 @@ class ModManager
 				quickRegister(submod);
 			}
 		}
-
+		
 		setValue(modName, 0); // so if it should execute it gets added Automagically
 		modArray.sort((a, b) -> Std.int(a.getOrder() - b.getOrder()));
 		// TODO: sort by mod.getOrder()
 	}
-
+	
 	inline public function get(modName:String) return register.get(modName);
-
+	
 	inline public function getPercent(modName:String, player:Int) return register.get(modName).getPercent(player);
-
+	
 	inline public function getValue(modName:String, player:Int) return register.get(modName).getValue(player);
-
+	
 	inline public function setPercent(modName:String, val:Float, player:Int = -1) setValue(modName, val / 100, player);
-
+	
 	public function setValue(modName:String, val:Float, player:Int = -1)
 	{
 		if (player == -1)
@@ -121,17 +121,17 @@ class ModManager
 			// thanks 4mbr0s3 for giving an alternative way to do all of this cus andromeda has smth similar in Flexy but like
 			// this is a better way to do it
 			// (ofc its not EXACTLY what 4mbr0s3 did but.. y'know, it's close to it)
-
+			
 			// so this actually has an issue
 			// this doesnt take into account any other submods
 			// so if you turn a submod off
 			// it turns the parent mod off, too, when it shouldnt
 			// so what I need to do is like, check other submods before removing the parent
-
+			
 			if (activeMods[player] == null) activeMods[player] = [];
-
+			
 			register.get(modName).setValue(val, player);
-
+			
 			if (!activeMods[player].contains(name) && mod.shouldExecute(player, val))
 			{
 				if (daMod.getName() != name) activeMods[player].push(daMod.getName());
@@ -170,16 +170,16 @@ class ModManager
 				}
 				else activeMods[player].remove(daMod.getName());
 			}
-
+			
 			activeMods[player].sort((a, b) -> Std.int(register.get(a).getOrder() - register.get(b).getOrder()));
 		}
 	}
-
+	
 	public function new(state:PlayState)
 	{
 		this.state = state;
 	}
-
+	
 	public function update(elapsed:Float)
 	{
 		for (mod in modArray)
@@ -187,9 +187,9 @@ class ModManager
 			if (mod.active && mod.doesUpdate()) mod.update(elapsed);
 		}
 	}
-
+	
 	public function updateTimeline(curStep:Float) timeline.update(curStep);
-
+	
 	public function getBaseX(direction:Int, player:Int):Float
 	{
 		var x:Float = (FlxG.width * 0.5) - Note.swagWidth - 54 + Note.swagWidth * direction;
@@ -200,12 +200,12 @@ class ModManager
 			case 1:
 				x -= FlxG.width * 0.5 - Note.swagWidth * 2 - 100;
 		}
-
+		
 		x -= 56;
-
+		
 		return x;
 	}
-
+	
 	public function updateObject(beat:Float, obj:FlxSprite, pos:Vector3, player:Int)
 	{
 		for (name in activeMods[player])
@@ -224,12 +224,12 @@ class ModManager
 				mod.updateReceptor(beat, o, pos, player);
 			}
 		}
-
+		
 		if ((obj is Note)) obj.updateHitbox();
-
+		
 		obj.centerOrigin();
 		obj.centerOffsets();
-
+		
 		if (obj is StrumNote)
 		{ // oh ok
 			var strum = cast(obj, StrumNote);
@@ -240,7 +240,7 @@ class ModManager
 				strum.offset.y += strum.animOffsets.get(strumAnim)[1];
 			}
 		}
-
+		
 		if ((obj is Note))
 		{
 			var cum:Note = cast obj;
@@ -248,32 +248,30 @@ class ModManager
 			cum.offset.y += cum.typeOffsetY;
 		}
 	}
-
+	
 	public inline function getBaseVisPosD(diff:Float, songSpeed:Float = 1)
 	{
 		return (0.45 * (diff) * songSpeed);
 	}
-
+	
 	public inline function getVisPos(songPos:Float = 0, strumTime:Float = 0, songSpeed:Float = 1)
 	{
 		return -getBaseVisPosD(songPos - strumTime, 1);
 	}
-
-	public function getPos(time:Float, diff:Float, tDiff:Float, beat:Float, data:Int, player:Int, obj:FlxSprite, ?exclusions:Array<String>,
-			?pos:Vector3):Vector3
+	
+	public function getPos(time:Float, diff:Float, tDiff:Float, beat:Float, data:Int, player:Int, obj:FlxSprite, ?exclusions:Array<String>, ?pos:Vector3):Vector3
 	{
 		if (exclusions == null) exclusions = []; // since [] cant be a default value for.. some reason?? "its not constant!!" kys haxe
 		if (pos == null) pos = new Vector3();
-
+		
 		if (!obj.active) return pos;
-
+		
 		pos.x = getBaseX(data, player);
 		pos.y = 50 + diff;
 		pos.z = 0;
 		for (name in activeMods[player])
 		{
-			if (exclusions.contains(name))
-				continue; // because some modifiers may want the path without reverse, for example. (which is actually more common than you'd think!)
+			if (exclusions.contains(name)) continue; // because some modifiers may want the path without reverse, for example. (which is actually more common than you'd think!)
 			var mod:Modifier = notemodRegister.get(name);
 			if (mod == null) continue;
 			if (!obj.active) continue;
@@ -281,12 +279,12 @@ class ModManager
 		}
 		return pos;
 	}
-
+	
 	public function queueEaseP(step:Float, endStep:Float, modName:String, percent:Float, style:String = 'linear', player:Int = -1,
 			?startVal:Float) queueEase(step, endStep, modName, percent * 0.01, style, player, startVal * 0.01);
-
+			
 	public function queueSetP(step:Float, modName:String, percent:Float, player:Int = -1) queueSet(step, modName, percent * 0.01, player);
-
+	
 	public function queueEase(step:Float, endStep:Float, modName:String, target:Float, style:String = 'linear', player:Int = -1, ?startVal:Float)
 	{
 		if (player == -1)
@@ -299,17 +297,17 @@ class ModManager
 		else
 		{
 			var easeFunc = FlxEase.linear;
-
+			
 			try
 			{
 				var newEase = Reflect.getProperty(FlxEase, style);
 				if (newEase != null) easeFunc = newEase;
 			}
-
+			
 			timeline.addEvent(new EaseEvent(step, endStep, modName, target, easeFunc, player, this));
 		}
 	}
-
+	
 	public function queueSet(step:Float, modName:String, target:Float, player:Int = -1)
 	{
 		if (player == -1)
@@ -321,11 +319,11 @@ class ModManager
 		}
 		else timeline.addEvent(new SetEvent(step, modName, target, player, this));
 	}
-
+	
 	public function queueFunc(step:Float, endStep:Float, callback:(CallbackEvent, Float) -> Void)
 	{
 		timeline.addEvent(new StepCallbackEvent(step, endStep, callback, this));
 	}
-
+	
 	public function queueFuncOnce(step:Float, callback:(CallbackEvent, Float) -> Void) timeline.addEvent(new CallbackEvent(step, callback, this));
 }

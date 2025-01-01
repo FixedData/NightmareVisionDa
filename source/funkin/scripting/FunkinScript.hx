@@ -25,8 +25,8 @@ class FunkinScript
 	public function onBeatHit() {}
 	
 	public function onSectionHit() {}
-
-    public function onStateChangePost() {}
+	
+	public function onStateChangePost() {}
 	
 	public function add(basic:FlxBasic) return FlxG.state.add(basic);
 	
@@ -35,5 +35,4 @@ class FunkinScript
 	public function insert(idx:Int, basic:FlxBasic) return FlxG.state.insert(idx, basic);
 	
 	public function toString() return 'FunkinScript - NAME[$name]';
-
 }

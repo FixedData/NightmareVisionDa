@@ -1,4 +1,4 @@
-package funkin.objects.shader;
+package funkin.shaders;
 
 import flixel.system.FlxAssets.FlxShader;
 
@@ -207,51 +207,51 @@ void main()
 }
 ')
 	var topPrefix:String = "";
-
+	
 	public function new()
 	{
 		topPrefix = "#version 120\n\n";
 		__glSourceDirty = true;
-
+		
 		super();
-
+		
 		this.uFrame.value = [0];
 		this.uInterlace.value = [1];
 	}
-
+	
 	public var interlace(get, set):Bool;
-
+	
 	function get_interlace()
 	{
 		return this.uInterlace.value[0] == 1.0;
 	}
-
+	
 	function set_interlace(val:Bool)
 	{
 		this.uInterlace.value[0] = val ? 1.0 : 0.0;
 		return val;
 	}
-
+	
 	override function __updateGL()
 	{
 		// this.uFrame.value[0]++;
 		this.uFrame.value[0] = (this.uFrame.value[0] + 1) % 2;
-
+		
 		super.__updateGL();
 	}
-
+	
 	@:noCompletion private override function __initGL():Void
 	{
 		if (__glSourceDirty || __paramBool == null)
 		{
 			__glSourceDirty = false;
 			program = null;
-
+			
 			__inputBitmapData = new Array();
 			__paramBool = new Array();
 			__paramFloat = new Array();
 			__paramInt = new Array();
-
+			
 			__processGLData(glVertexSource, "attribute");
 			__processGLData(glVertexSource, "uniform");
 			__processGLData(glFragmentSource, "uniform");
@@ -259,7 +259,7 @@ void main()
 		@:privateAccess if (__context != null && program == null)
 		{
 			var gl = __context.gl;
-
+			
 			#if (js && html5)
 			var prefix = (precisionHint == FULL ? "precision mediump float;\n" : "precision lowp float;\n");
 			#else
@@ -271,12 +271,12 @@ void main()
 					+ "#endif\n" : "precision lowp float;\n")
 				+ "#endif\n\n";
 			#end
-
+			
 			var vertex = topPrefix + prefix + glVertexSource;
 			var fragment = topPrefix + prefix + glFragmentSource;
-
+			
 			var id = vertex + fragment;
-
+			
 			if (__context.__programs.exists(id))
 			{
 				program = __context.__programs.get(id);
@@ -284,18 +284,18 @@ void main()
 			else
 			{
 				program = __context.createProgram(GLSL);
-
+				
 				// TODO
 				// program.uploadSources (vertex, fragment);
 				program.__glProgram = __createGLProgram(vertex, fragment);
-
+				
 				__context.__programs.set(id, program);
 			}
-
+			
 			if (program != null)
 			{
 				glProgram = program.__glProgram;
-
+				
 				for (input in __inputBitmapData)
 				{
 					if (input.__isUniform)
@@ -307,7 +307,7 @@ void main()
 						input.index = gl.getAttribLocation(glProgram, input.name);
 					}
 				}
-
+				
 				for (parameter in __paramBool)
 				{
 					if (parameter.__isUniform)
@@ -319,7 +319,7 @@ void main()
 						parameter.index = gl.getAttribLocation(glProgram, parameter.name);
 					}
 				}
-
+				
 				for (parameter in __paramFloat)
 				{
 					if (parameter.__isUniform)
@@ -331,7 +331,7 @@ void main()
 						parameter.index = gl.getAttribLocation(glProgram, parameter.name);
 					}
 				}
-
+				
 				for (parameter in __paramInt)
 				{
 					if (parameter.__isUniform)

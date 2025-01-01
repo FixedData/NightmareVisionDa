@@ -21,11 +21,6 @@
             "version": null
         },
         {
-            "name": "polymod",
-            "type": "haxelib",
-            "version": null
-        },
-        {
             "name": "jsonpatch",
             "type": "git",
             "dir": null,
@@ -38,10 +33,25 @@
             "url": "https://github.com/EliteMasterEric/jsonpath.git"
         },
         {
+            "name": "polymod",
+            "type": "git",
+            "dir": null,
+            "ref": "0fbdf27fe124549730accd540cec8a183f8652c0",
+            "url": "https://github.com/larsiusprime/polymod"
+        },
+        {
             "name": "thx.core",
             "type": "git",
             "dir": null,
-            "url": "https://github.com/fponticelli/thx.core.git"
+            "ref": "76d87418fadd92eb8e1b61f004cff27d656e53dd",
+            "url": "https://github.com/fponticelli/thx.core"
+        },
+        {
+            "name": "thx.semver",
+            "type": "git",
+            "dir": null,
+            "ref": "bdb191fe7cf745c02a980749906dbf22719e200b",
+            "url": "https://github.com/fponticelli/thx.semver"
         },
         {
             "name": "hscript",

@@ -17,17 +17,17 @@ class MiscSubState extends BaseOptionsMenu
 				'bool', // Variable type
 				true); // Default value
 			addOption(option);
-
+			
 			var option:Option = new Option('Loading Threads', // Name
 				'--INCOMPLETE-- How many threads the game can use to load graphics when using Multi-thread Loading.\nThe maximum amount of threads depends on your processor', // Description
 				'loadingThreads', // Save data variable name
 				'int', // Variable type
 				Math.floor(maxThreads / 2)); // Default value
-
+				
 			option.minValue = 1;
 			option.maxValue = Std.parseInt(Sys.getEnv("NUMBER_OF_PROCESSORS"));
 			option.displayFormat = '%v';
-
+			
 			addOption(option);
 		}
 		else
@@ -40,10 +40,10 @@ class MiscSubState extends BaseOptionsMenu
 				true); // Default value
 			addOption(option);
 		}
-
+		
 		var option:Option = new Option('GPU Caching', 'If checked, GPU caching will be enabled.', 'gpuCaching', 'bool', false);
 		addOption(option);
-
+		
 		super();
 	}
 }

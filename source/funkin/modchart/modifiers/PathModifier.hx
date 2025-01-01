@@ -25,19 +25,19 @@ class PathModifier extends NoteModifier
 	var moveSpeed:Float;
 	var pathData:Array<Array<PathInfo>> = [];
 	var totalDists:Array<Float> = [];
-
+	
 	override function getName() return 'basePath';
-
+	
 	public function getMoveSpeed()
 	{
 		return 5000;
 	}
-
+	
 	public function getPath():Array<Array<Vector3>>
 	{
 		return [];
 	}
-
+	
 	public function new(modMgr:ModManager, ?parent:Modifier)
 	{
 		super(modMgr, parent);
@@ -45,15 +45,15 @@ class PathModifier extends NoteModifier
 		var path:Array<Array<Vector3>> = getPath();
 		var dir:Int = 0;
 		// ridiculous that haxe doesnt have a numeric for loop
-
+		
 		// neb from the future here
 		// .. it fucking does
 		// I forgot about (for start...end)
 		// You just can't set the interval.
 		// how did i forget it fucking has a numeric for loop im gonna kms.
-
+		
 		// TODO: rewrite this.
-
+		
 		while (dir < path.length)
 		{
 			var idx = 0;
@@ -62,7 +62,7 @@ class PathModifier extends NoteModifier
 			while (idx < path[dir].length)
 			{
 				var pos = path[dir][idx];
-
+				
 				if (idx != 0)
 				{
 					var last = pathData[dir][idx - 1];
@@ -72,7 +72,7 @@ class PathModifier extends NoteModifier
 					last.end = totalDist;
 					last.dist = last.start - totalDist; // used for interpolation
 				}
-
+				
 				pathData[dir].push(
 					{
 						position: pos.add(new Vector3(-Note.swagWidth / 2, -Note.swagWidth / 2)),
@@ -84,13 +84,13 @@ class PathModifier extends NoteModifier
 			}
 			dir++;
 		}
-
+		
 		for (dir in 0...totalDists.length)
 		{
 			trace(dir, totalDists[dir]);
 		}
 	}
-
+	
 	override function getPos(time:Float, visualDiff:Float, timeDiff:Float, beat:Float, pos:Vector3, data:Int, player:Int, obj:FlxSprite)
 	{
 		if (getValue(player) == 0) return pos;
@@ -98,16 +98,16 @@ class PathModifier extends NoteModifier
 		var vDiff = -timeDiff;
 		// tried to use visualDiff but didnt work :(
 		// will get it working later
-
+		
 		var progress = (vDiff / -moveSpeed) * totalDists[data];
 		var outPos = pos.clone();
 		var daPath = pathData[data];
 		if (progress <= 0) return pos.lerp(daPath[0].position, getValue(player));
-
+		
 		var idx:Int = 0;
 		// STILL ridiculous
 		// no its not im just dumb
-
+		
 		while (idx < daPath.length)
 		{
 			var cData = daPath[idx];
@@ -125,7 +125,7 @@ class PathModifier extends NoteModifier
 		}
 		return outPos;
 	}
-
+	
 	override function getSubmods()
 	{
 		return [];

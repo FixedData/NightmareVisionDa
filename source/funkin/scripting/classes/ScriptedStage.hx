@@ -1,6 +1,4 @@
 package funkin.scripting.classes;
 
-import funkin.objects.StageNew;
-
 @:hscriptClass
-class ScriptedStage extends StageNew implements HScriptedClass {}
+class ScriptedStage extends funkin.objects.Stage implements polymod.hscript.HScriptedClass {}

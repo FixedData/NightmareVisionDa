@@ -15,7 +15,7 @@ import funkin.states.*;
 import openfl.utils.AssetType;
 import openfl.utils.Assets;
 import funkin.data.scripts.*;
-import funkin.objects.shader.*;
+import funkin.shaders.*;
 import funkin.objects.Character;
 import math.Vector3;
 #if sys
@@ -36,26 +36,26 @@ class Note extends FlxSprite
 {
 	public static var handler:NoteSkinHelper;
 	public static var keys:Int = 4;
-
+	
 	public var row:Int = 0;
 	public var lane:Int = 0;
-
+	
 	public var noteScript:FunkinScript;
-
+	
 	public static var quants:Array<Int> = [4, // quarter note
 		8, // eight
 		12, // etc
 		16, 20, 24, 32, 48, 64, 96, 192];
-
+		
 	public var vec3Cache:Vector3 = new Vector3(); // for vector3 operations in modchart code
 	public var defScale:FlxPoint = FlxPoint.get(); // for modcharts to keep the scaling
-
+	
 	public var mAngle:Float = 0;
 	public var bAngle:Float = 0;
 	public var visualTime:Float = 0;
 	public var typeOffsetX:Float = 0; // used to offset notes, mainly for note types. use in place of offset.x and offset.y when offsetting notetypes
 	public var typeOffsetY:Float = 0;
-
+	
 	public static function getQuant(beat:Float)
 	{
 		var row = Conductor.beatToNoteRow(beat);
@@ -68,10 +68,10 @@ class Note extends FlxSprite
 		}
 		return quants[quants.length - 1]; // invalid
 	}
-
+	
 	public var noteDiff:Float = 1000;
 	public var quant:Int = 4;
-
+	
 	// i did nnot find these genuinely used?
 	// public var zIndex:Float = 0;
 	// public var desiredZIndex:Float = 0;
@@ -79,13 +79,13 @@ class Note extends FlxSprite
 	public var garbage:Bool = false; // if this is true, the note will be removed in the next update cycle
 	public var alphaMod:Float = 1;
 	public var alphaMod2:Float = 1; // TODO: unhardcode this shit lmao
-
+	
 	public var extraData:Map<String, Dynamic> = [];
 	public var hitbox:Float = Conductor.safeZoneOffset;
 	public var isQuant:Bool = false; // mainly for color swapping, so it changes color depending on which set (quants or regular notes)
 	public var canQuant:Bool = true;
 	public var strumTime:Float = 0;
-
+	
 	public var mustPress:Bool = false;
 	public var noteData:Int = 0;
 	public var canBeHit:Bool = false;
@@ -96,96 +96,96 @@ class Note extends FlxSprite
 	public var noteWasHit:Bool = false;
 	public var prevNote:Note;
 	public var nextNote:Note;
-
+	
 	public var spawned:Bool = false;
-
+	
 	public var tail:Array<Note> = []; // for sustains
 	public var parent:Note;
-
+	
 	public var sustainLength:Float = 0;
 	public var isSustainNote:Bool = false;
 	public var noteType(default, set):String = null;
-
+	
 	public var alreadyShifted:Bool = false;
-
+	
 	public var eventName:String = '';
 	public var eventLength:Int = 0;
 	public var eventVal1:String = '';
 	public var eventVal2:String = '';
-
+	
 	public var colorSwap:ColorSwap;
 	public var inEditor:Bool = false;
 	public var gfNote:Bool = false;
 	public var baseScaleX:Float = 1;
 	public var baseScaleY:Float = 1;
-
+	
 	private var earlyHitMult:Float = 0.5;
-
+	
 	@:isVar
 	public var daWidth(get, never):Float;
-
+	
 	public function get_daWidth()
 	{
 		return playField == null ? Note.swagWidth : playField.swagWidth;
 	}
-
+	
 	public static var swagWidth:Float = 160 * 0.7;
-
+	
 	// Lua shit
 	public var noteSplashDisabled:Bool = false;
 	public var noteSplashTexture:String = null;
 	public var noteSplashHue:Float = 0;
 	public var noteSplashSat:Float = 0;
 	public var noteSplashBrt:Float = 0;
-
+	
 	public var offsetX:Float = 0;
 	public var offsetY:Float = 0;
 	public var offsetAngle:Float = 0;
 	public var multAlpha:Float = 1;
 	public var multSpeed(default, set):Float = 1;
-
+	
 	public var copyX:Bool = true;
 	public var copyY:Bool = true;
 	public var copyAngle:Bool = true;
 	public var copyAlpha:Bool = true;
-
+	
 	public var doAutoSustain:Bool = false;
-
+	
 	public var hitHealth:Float = 0.023;
 	public var missHealth:Float = 0.0475;
 	public var rating:String = 'unknown';
 	public var ratingMod:Float = 0; // 9 = unknown, 0.25 = shit, 0.5 = bad, 0.75 = good, 1 = sick
 	public var ratingDisabled:Bool = false;
-
+	
 	public var texture(default, set):String = null;
-
+	
 	public var noAnimation:Bool = false;
 	public var noMissAnimation:Bool = false;
 	public var hitCausesMiss:Bool = false;
 	public var canMiss:Bool = false;
 	public var distance:Float = 2000; // plan on doing scroll directions soon -bb
-
+	
 	public var hitsoundDisabled:Bool = false;
-
+	
 	public var player:Int = 0;
-
+	
 	public var owner:Character = null;
 	public var playField(default, set):PlayField;
 	public var desiredPlayfield:PlayField; // incase a note should be put into a specific playfield
-
+	
 	public static var defaultNotes = ['No Animation', 'GF Sing', ''];
-
+	
 	public function set_playField(field:PlayField)
 	{
 		if (playField != field)
 		{
 			if (playField != null && playField.notes.contains(this)) playField.remNote(this);
-
+			
 			if (field != null && !field.notes.contains(this)) field.addNote(this);
 		}
 		return playField = field;
 	}
-
+	
 	private function set_multSpeed(value:Float):Float
 	{
 		resizeByRatio(value / multSpeed);
@@ -193,7 +193,7 @@ class Note extends FlxSprite
 		// trace('fuck cock');
 		return value;
 	}
-
+	
 	public function resizeByRatio(ratio:Float) // haha funny twitter shit
 	{
 		if (isSustainNote && !animation.curAnim.name.endsWith('end') && noteData < keys)
@@ -202,7 +202,7 @@ class Note extends FlxSprite
 			baseScaleY = scale.y;
 			updateHitbox();
 		}
-
+		
 		if (isSustainNote && !animation.curAnim.name.endsWith('end') && noteData > keys)
 		{
 			scale.y *= ratio / 1.6;
@@ -210,7 +210,7 @@ class Note extends FlxSprite
 			updateHitbox();
 		}
 	}
-
+	
 	private function set_texture(value:String):String
 	{
 		if (texture != value)
@@ -220,7 +220,7 @@ class Note extends FlxSprite
 		texture = value;
 		return value;
 	}
-
+	
 	private function set_noteType(value:String):String
 	{
 		noteSplashTexture = PlayState.SONG.splashSkin;
@@ -230,8 +230,7 @@ class Note extends FlxSprite
 			colorSwap.hue = ClientPrefs.quantHSV[idx][0] / 360;
 			colorSwap.saturation = ClientPrefs.quantHSV[idx][1] / 100;
 			colorSwap.brightness = ClientPrefs.quantHSV[idx][2] / 100;
-			if (noteSplashTexture == 'noteSplashes' || noteSplashTexture.length <= 0 || PlayState.SONG.splashSkin == null)
-				noteSplashTexture = 'QUANTnoteSplashes'; // give it da quant notesplashes!!
+			if (noteSplashTexture == 'noteSplashes' || noteSplashTexture.length <= 0 || PlayState.SONG.splashSkin == null) noteSplashTexture = 'QUANTnoteSplashes'; // give it da quant notesplashes!!
 		}
 		else if (isQuant && ClientPrefs.noteSkin == "QuantStep")
 		{
@@ -239,8 +238,7 @@ class Note extends FlxSprite
 			colorSwap.hue = ClientPrefs.quantStepmania[idx][0] / 360;
 			colorSwap.saturation = ClientPrefs.quantStepmania[idx][1] / 100;
 			colorSwap.brightness = ClientPrefs.quantStepmania[idx][2] / 100;
-			if (noteSplashTexture == 'noteSplashes' || noteSplashTexture.length <= 0 || PlayState.SONG.splashSkin == null)
-				noteSplashTexture = 'QUANTnoteSplashes'; // give it da quant notesplashes!!
+			if (noteSplashTexture == 'noteSplashes' || noteSplashTexture.length <= 0 || PlayState.SONG.splashSkin == null) noteSplashTexture = 'QUANTnoteSplashes'; // give it da quant notesplashes!!
 		}
 		else
 		{
@@ -248,9 +246,9 @@ class Note extends FlxSprite
 			colorSwap.saturation = ClientPrefs.arrowHSV[noteData % 4][1] / 100;
 			colorSwap.brightness = ClientPrefs.arrowHSV[noteData % 4][2] / 100;
 		}
-
+		
 		noteScript = null;
-
+		
 		if (noteData > -1 && noteType != value)
 		{
 			switch (value)
@@ -284,7 +282,7 @@ class Note extends FlxSprite
 				default:
 					if (!inEditor) noteScript = PlayState.instance.notetypeScripts.get(value);
 					else noteScript = ChartingState.instance.notetypeScripts.get(value);
-
+					
 					if (noteScript != null && noteScript.scriptType == HSCRIPT)
 					{
 						var noteScript:FunkinIris = cast noteScript;
@@ -297,22 +295,22 @@ class Note extends FlxSprite
 		noteSplashSat = colorSwap.saturation;
 		noteSplashBrt = colorSwap.brightness;
 		if (hitCausesMiss) canMiss = true;
-
+		
 		return value;
 	}
-
+	
 	public function new(strumTime:Float, noteData:Int, ?prevNote:Note, ?sustainNote:Bool = false, ?inEditor:Bool = false, ?player:Int = 0)
 	{
 		super();
-
+		
 		// handler = PlayState.noteSkin;
-
+		
 		if (prevNote == null) prevNote = this;
-
+		
 		this.prevNote = prevNote;
 		this.player = player;
 		isSustainNote = sustainNote;
-
+		
 		if ((ClientPrefs.noteSkin == 'Quants' || ClientPrefs.noteSkin == "QuantStep") && canQuant)
 		{
 			var beat = Conductor.getBeatInMeasure(strumTime);
@@ -320,7 +318,7 @@ class Note extends FlxSprite
 			else quant = getQuant(beat);
 		}
 		this.inEditor = inEditor;
-
+		
 		x += (ClientPrefs.middleScroll ? PlayState.STRUM_X_MIDDLESCROLL : PlayState.STRUM_X) + 50;
 		// MAKE SURE ITS DEFINITELY OFF SCREEN?
 		y -= 2000;
@@ -330,20 +328,20 @@ class Note extends FlxSprite
 			this.strumTime += ClientPrefs.noteOffset;
 			visualTime = PlayState.instance.getNoteInitialTime(this.strumTime);
 		}
-
+		
 		this.noteData = noteData;
-
+		
 		/*if(noteData > 4 && !isSustainNote)
 			{
 				visible = false;
 		}*/
-
+		
 		if (noteData > -1)
 		{
 			texture = '';
 			colorSwap = new ColorSwap();
 			shader = colorSwap.shader;
-
+			
 			x += swagWidth * (noteData % keys);
 			if (!isSustainNote)
 			{ // Doing this 'if' check to fix the warnings on Senpai songs
@@ -351,28 +349,28 @@ class Note extends FlxSprite
 				animation.play(animToPlay);
 			}
 		}
-
+		
 		// trace(prevNote);
-
+		
 		if (prevNote != null) prevNote.nextNote = this;
-
+		
 		if (isSustainNote && prevNote != null)
 		{
 			alpha = 0.6;
 			multAlpha = 0.6;
 			hitsoundDisabled = true;
 			// if(ClientPrefs.downScroll) flipY = true;
-
+			
 			offsetX += width / 2;
 			copyAngle = false;
-
+			
 			animation.play(handler.data.noteAnimations[noteData][0].color + "holdend");
 			updateHitbox();
-
+			
 			offsetX -= width / 2;
-
+			
 			if (PlayState.isPixelStage) offsetX += 30;
-
+			
 			if (prevNote.isSustainNote)
 			{
 				prevNote.animation.play(handler.data.noteAnimations[noteData][0].color + "hold");
@@ -381,7 +379,7 @@ class Note extends FlxSprite
 				{
 					prevNote.scale.y *= PlayState.instance.songSpeed;
 				}
-
+				
 				if (PlayState.isPixelStage)
 				{
 					prevNote.scale.y *= 1.19;
@@ -392,7 +390,7 @@ class Note extends FlxSprite
 				prevNote.baseScaleY = prevNote.scale.y;
 				// prevNote.setGraphicSize();
 			}
-
+			
 			if (PlayState.isPixelStage)
 			{
 				scale.y *= PlayState.daPixelZoom;
@@ -407,24 +405,24 @@ class Note extends FlxSprite
 		baseScaleX = scale.x;
 		baseScaleY = scale.y;
 	}
-
+	
 	var lastNoteOffsetXForPixelAutoAdjusting:Float = 0;
 	var lastNoteScaleToo:Float = 1;
-
+	
 	public var originalHeightForCalcs:Float = 6;
-
+	
 	public function reloadNote(?prefix:String = '', ?texture:String = '', ?suffix:String = '')
 	{
 		if (prefix == null) prefix = '';
 		if (texture == null) texture = '';
 		if (suffix == null) suffix = '';
-
+		
 		if (noteScript != null && noteScript.scriptType == HSCRIPT)
 		{
 			var noteScript:FunkinIris = cast noteScript;
 			if (noteScript.executeFunc("onReloadNote", [this, prefix, texture, suffix], this) == Globals.Function_Stop) return;
 		}
-
+		
 		var skin:String = texture;
 		if (texture.length < 1)
 		{
@@ -434,16 +432,16 @@ class Note extends FlxSprite
 				skin = 'NOTE_assets';
 			}
 		}
-
+		
 		var animName:String = null;
 		if (animation.curAnim != null)
 		{
 			animName = animation.curAnim.name;
 		}
-
+		
 		var arraySkin:Array<String> = skin.split('/');
 		arraySkin[arraySkin.length - 1] = prefix + arraySkin[arraySkin.length - 1] + suffix;
-
+		
 		var lastScaleY:Float = scale.y;
 		var blahblah:String = arraySkin.join('/');
 		isQuant = false;
@@ -485,13 +483,13 @@ class Note extends FlxSprite
 			setGraphicSize(Std.int(width * PlayState.daPixelZoom));
 			loadPixelNoteAnims();
 			antialiasing = false;
-
+			
 			if (isSustainNote)
 			{
 				offsetX += lastNoteOffsetXForPixelAutoAdjusting;
 				lastNoteOffsetXForPixelAutoAdjusting = (width - 7) * (PlayState.daPixelZoom / 2);
 				offsetX -= lastNoteOffsetXForPixelAutoAdjusting;
-
+				
 				/*if(animName != null && !animName.endsWith('end'))
 					{
 						lastScaleY /= lastNoteScaleToo;
@@ -524,9 +522,9 @@ class Note extends FlxSprite
 		updateHitbox();
 		baseScaleX = scale.x;
 		baseScaleY = scale.y;
-
+		
 		if (animName != null) animation.play(animName, true);
-
+		
 		if (inEditor)
 		{
 			setGraphicSize(ChartingState.GRID_SIZE, ChartingState.GRID_SIZE);
@@ -534,14 +532,14 @@ class Note extends FlxSprite
 			baseScaleX = scale.x;
 			baseScaleY = scale.y;
 		}
-
+		
 		if (noteScript != null && noteScript.scriptType == HSCRIPT)
 		{
 			var noteScript:FunkinIris = cast noteScript;
 			noteScript.executeFunc("postReloadNote", [this, prefix, texture, suffix], this);
 		}
 	}
-
+	
 	public function loadNoteAnims()
 	{
 		if (noteScript != null && noteScript.scriptType == HSCRIPT)
@@ -555,7 +553,7 @@ class Note extends FlxSprite
 		}
 		_loadNoteAnims();
 	}
-
+	
 	public function loadPixelNoteAnims()
 	{
 		if (noteScript != null && noteScript.scriptType == HSCRIPT)
@@ -569,7 +567,7 @@ class Note extends FlxSprite
 		}
 		_loadPixelNoteAnims();
 	}
-
+	
 	function _loadNoteAnims()
 	{
 		for (note in 0...keys)
@@ -579,19 +577,19 @@ class Note extends FlxSprite
 				animation.addByPrefix(handler.data.noteAnimations[note][i].anim, '${handler.data.noteAnimations[note][i].xmlName}0');
 			}
 		}
-
+		
 		setGraphicSize(Std.int(width * 0.7));
 		updateHitbox();
 		baseScaleX = scale.x;
 		baseScaleY = scale.y;
 	}
-
+	
 	function _loadPixelNoteAnims()
 	{
 		for (note in 0...keys)
 		{
 			var color = handler.data.noteAnimations[note][0].xmlName;
-
+			
 			if (isSustainNote)
 			{
 				animation.add('${color}holdend', [note + 4]);
@@ -600,11 +598,11 @@ class Note extends FlxSprite
 			else animation.add('${color}Scroll', [note + 4]);
 		}
 	}
-
+	
 	override function update(elapsed:Float)
 	{
 		super.update(elapsed);
-
+		
 		if (!inEditor)
 		{
 			if (noteScript != null && noteScript.scriptType == HSCRIPT)
@@ -613,9 +611,9 @@ class Note extends FlxSprite
 				noteScript.executeFunc("update", [this, elapsed], this);
 			}
 		}
-
+		
 		colorSwap.daAlpha = (alphaMod * alphaMod2) * (playField?.baseAlpha ?? 1);
-
+		
 		var actualHitbox:Float = hitbox * earlyHitMult;
 		/*if(mustPress){
 				var diff = (strumTime-Conductor.songPosition);
@@ -628,21 +626,21 @@ class Note extends FlxSprite
 				var diff = (strumTime-Conductor.songPosition);
 				canBeHit = isSustainNote && prevNote.wasGoodHit && prevNote!=null && diff<=actualHitbox || diff<=0;
 		}*/
-
+		
 		var diff = (strumTime - Conductor.songPosition);
 		noteDiff = diff;
 		var absDiff = Math.abs(diff);
 		canBeHit = absDiff <= actualHitbox;
 		if (hitByOpponent) wasGoodHit = true;
-
+		
 		if (strumTime < Conductor.songPosition - Conductor.safeZoneOffset && !wasGoodHit) tooLate = true;
-
+		
 		if (tooLate && !inEditor)
 		{
 			if (alpha > 0.3) alpha = 0.3;
 		}
 	}
-
+	
 	override public function destroy()
 	{
 		if (playField != null) playField.remNote(this);
@@ -651,8 +649,8 @@ class Note extends FlxSprite
 		defScale.put();
 		return super.destroy();
 	}
-
-	// for some reason flixel decides to round the rect? im not sure why you would want that behavior that should be something you do if u want
+	
+	// for some reason flixel decides to round the rect? im not sure why you would want that behavior
 	override function set_clipRect(rect:FlxRect)
 	{
 		clipRect = rect;

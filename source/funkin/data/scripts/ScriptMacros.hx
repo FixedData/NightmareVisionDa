@@ -12,18 +12,18 @@ using Lambda;
 
 class ScriptMacros
 {
-	//NOT DONE
+	// NOT DONE
 	// this will be cool
 	// this has helped
 	// https://community.openfl.org/t/append-an-expr-in-haxe-macro-context/10311/2
 	public macro static function buildScriptedState():Array<haxe.macro.Expr.Field>
 	{
 		var curClass:haxe.macro.Type.ClassType = haxe.macro.Context.getLocalClass().get();
-
+		
 		var position = Context.currentPos();
-
+		
 		var fields:Array<haxe.macro.Expr.Field> = Context.getBuildFields();
-
+		
 		function specificBodyInjections(funcName:String, expr:Array<Expr>):Array<Expr>
 		{
 			switch (funcName)
@@ -42,7 +42,7 @@ class ScriptMacros
 						{
 							tryInitiatingStateScript();
 						});
-
+						
 				case 'destroy':
 					expr.push(macro // so we dont just have an instance lying around aha..
 						{
@@ -54,7 +54,7 @@ class ScriptMacros
 			}
 			return expr;
 		}
-
+		
 		fields.push(
 			{
 				name: "shouldBuildHardcoded",
@@ -67,13 +67,13 @@ class ScriptMacros
 							var isHardcoded:Bool = true;
 							@:privateAccess
 							if (this.__script != null && this.__script._script.interp.locals.exists('isCleanState')) isHardcoded = false;
-
+							
 							return isHardcoded;
 						}
 					}),
 				pos: position,
 			});
-
+			
 		// injecting script var
 		fields.push(
 			{
@@ -82,7 +82,7 @@ class ScriptMacros
 				kind: FVar(macro :funkin.data.scripts.FunkinIris, macro $v{null}),
 				pos: position,
 			});
-
+			
 		// injecting the actual function which loads a script
 		fields.push(
 			{
@@ -95,25 +95,25 @@ class ScriptMacros
 						{
 							var clName = Type.getClassName(Type.getClass(this));
 							if (clName.contains('.')) clName = clName.substr(clName.lastIndexOf('.') + 1, clName.length);
-
+							
 							var scriptFile = funkin.data.scripts.FunkinIris.getPath('scripts/menus/' + clName, false);
-
+							
 							var found = sys.FileSystem.exists(scriptFile);
-
+							
 							if (found)
 							{
 								this.__script = funkin.data.scripts.FunkinIris.fromFile(scriptFile);
 								this.__script.set('game', FlxG.state);
 							}
-
+							
 							return found;
 						}
 					}),
 				pos: position,
 			});
-
+			
 		var fieldsToRemove:Array<Field> = [];
-
+		
 		var copied:Array<
 			{
 				name:String,
@@ -122,7 +122,7 @@ class ScriptMacros
 				access:Array<Access>,
 				funcData:Function
 			}> = [];
-
+			
 		// okay so the issue with this currently is we dont have the inherited fields workaround is overriding them // to do figure that out
 		for (i in fields)
 		{
@@ -130,33 +130,33 @@ class ScriptMacros
 			{
 				case FFun(f):
 					var body:Array<Expr> = null;
-
+					
 					switch (f.expr.expr)
 					{
 						case EBlock(exprs):
 							body = exprs;
-
+							
 						default:
 							body = [f.expr];
 					}
 					if (body == null) body = [];
-
+					
 					var funcName:String = i.name.toString();
 					funcName = funcName.charAt(0).toUpperCase() + funcName.substr(1);
-
+					
 					// place at the beginning of the body
-
+					
 					var funcArgs = [for (i in f.args) macro $i{i.name}];
-
+					
 					body.insert(0, macro
 						{
 							var finalFuncName = 'on' + $v{funcName};
-
+							
 							// trace('inserted ' + finalFuncName);
-
+							
 							if (this.__script != null) this.__script.call(finalFuncName, $a{funcArgs});
 						});
-
+						
 					// and then at the end
 					body.push(macro
 						{
@@ -164,11 +164,11 @@ class ScriptMacros
 							// trace('on' + finalFuncName + 'Post');
 							if (this.__script != null) this.__script.call(finalFuncName, $a{funcArgs});
 						});
-
+						
 					var functionName:String = i.name.toString();
-
+					
 					body = specificBodyInjections(functionName, body);
-
+					
 					copied.push(
 						{
 							name: i.name,
@@ -177,18 +177,18 @@ class ScriptMacros
 							access: i.access,
 							funcData: f
 						});
-
+						
 					fieldsToRemove.push(i);
-
+					
 				default:
 			}
 		}
-
+		
 		for (i in fieldsToRemove)
 		{
 			fields.remove(i);
 		}
-
+		
 		for (i in copied)
 		{
 			// trace(i.name);
@@ -206,7 +206,7 @@ class ScriptMacros
 						})
 				});
 		}
-
+		
 		return fields;
 	}
 }

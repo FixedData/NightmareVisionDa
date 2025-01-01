@@ -25,7 +25,7 @@ class MenuCharacterEditorState extends MusicBeatState
 	var characterFile:MenuCharacterFile = null;
 	var txtOffsets:FlxText;
 	var defaultCharacters:Array<String> = ['dad', 'bf', 'gf'];
-
+	
 	override function create()
 	{
 		characterFile =
@@ -41,7 +41,7 @@ class MenuCharacterEditorState extends MusicBeatState
 		// Updating Discord Rich Presence
 		DiscordClient.changePresence("Menu Character Editor", "Editting: " + characterFile.image);
 		#end
-
+		
 		grpWeekCharacters = new FlxTypedGroup<MenuCharacter>();
 		for (char in 0...3)
 		{
@@ -50,32 +50,32 @@ class MenuCharacterEditorState extends MusicBeatState
 			weekCharacterThing.alpha = 0.2;
 			grpWeekCharacters.add(weekCharacterThing);
 		}
-
+		
 		add(new FlxSprite(0, 56).makeGraphic(FlxG.width, 386, 0xFFF9CF51));
 		add(grpWeekCharacters);
-
+		
 		txtOffsets = new FlxText(20, 10, 0, "[0, 0]", 32);
 		txtOffsets.setFormat("VCR OSD Mono", 32, FlxColor.WHITE, CENTER);
 		txtOffsets.alpha = 0.7;
 		add(txtOffsets);
-
+		
 		var tipText:FlxText = new FlxText(0, 540, FlxG.width, "Arrow Keys - Change Offset (Hold shift for 10x speed)
 			\nSpace - Play \"Start Press\" animation (Boyfriend Character Type)", 16);
 		tipText.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, CENTER);
 		tipText.scrollFactor.set();
 		add(tipText);
-
+		
 		addEditorBox();
 		FlxG.mouse.visible = true;
 		updateCharTypeBox();
-
+		
 		super.create();
 	}
-
+	
 	var UI_typebox:FlxUITabMenu;
 	var UI_mainbox:FlxUITabMenu;
 	var blockPressWhileTypingOn:Array<FlxUIInputText> = [];
-
+	
 	function addEditorBox()
 	{
 		var tabs = [
@@ -87,7 +87,7 @@ class MenuCharacterEditorState extends MusicBeatState
 		UI_typebox.scrollFactor.set();
 		addTypeUI();
 		add(UI_typebox);
-
+		
 		var tabs = [
 			{name: 'Character', label: 'Character'},];
 		UI_mainbox = new FlxUITabMenu(null, tabs, true);
@@ -97,14 +97,14 @@ class MenuCharacterEditorState extends MusicBeatState
 		UI_mainbox.scrollFactor.set();
 		addCharacterUI();
 		add(UI_mainbox);
-
+		
 		var loadButton:FlxButton = new FlxButton(0, 480, "Load Character", function() {
 			loadCharacter();
 		});
 		loadButton.screenCenter(X);
 		loadButton.x -= 60;
 		add(loadButton);
-
+		
 		var saveButton:FlxButton = new FlxButton(0, 480, "Save Character", function() {
 			saveCharacter();
 		});
@@ -112,72 +112,72 @@ class MenuCharacterEditorState extends MusicBeatState
 		saveButton.x += 60;
 		add(saveButton);
 	}
-
+	
 	var opponentCheckbox:FlxUICheckBox;
 	var boyfriendCheckbox:FlxUICheckBox;
 	var girlfriendCheckbox:FlxUICheckBox;
 	var curTypeSelected:Int = 0; // 0 = Dad, 1 = BF, 2 = GF
-
+	
 	function addTypeUI()
 	{
 		var tab_group = new FlxUI(null, UI_typebox);
 		tab_group.name = "Character Type";
-
+		
 		opponentCheckbox = new FlxUICheckBox(10, 20, null, null, "Opponent", 100);
 		opponentCheckbox.callback = function() {
 			curTypeSelected = 0;
 			updateCharTypeBox();
 		};
-
+		
 		boyfriendCheckbox = new FlxUICheckBox(opponentCheckbox.x, opponentCheckbox.y + 40, null, null, "Boyfriend", 100);
 		boyfriendCheckbox.callback = function() {
 			curTypeSelected = 1;
 			updateCharTypeBox();
 		};
-
+		
 		girlfriendCheckbox = new FlxUICheckBox(boyfriendCheckbox.x, boyfriendCheckbox.y + 40, null, null, "Girlfriend", 100);
 		girlfriendCheckbox.callback = function() {
 			curTypeSelected = 2;
 			updateCharTypeBox();
 		};
-
+		
 		tab_group.add(opponentCheckbox);
 		tab_group.add(boyfriendCheckbox);
 		tab_group.add(girlfriendCheckbox);
 		UI_typebox.addGroup(tab_group);
 	}
-
+	
 	var imageInputText:FlxUIInputText;
 	var idleInputText:FlxUIInputText;
 	var confirmInputText:FlxUIInputText;
 	var confirmDescText:FlxText;
 	var scaleStepper:FlxUINumericStepper;
 	var flipXCheckbox:FlxUICheckBox;
-
+	
 	function addCharacterUI()
 	{
 		var tab_group = new FlxUI(null, UI_mainbox);
 		tab_group.name = "Character";
-
+		
 		imageInputText = new FlxUIInputText(10, 20, 80, characterFile.image, 8);
 		blockPressWhileTypingOn.push(imageInputText);
 		idleInputText = new FlxUIInputText(10, imageInputText.y + 35, 100, characterFile.idle_anim, 8);
 		blockPressWhileTypingOn.push(idleInputText);
 		confirmInputText = new FlxUIInputText(10, idleInputText.y + 35, 100, characterFile.confirm_anim, 8);
 		blockPressWhileTypingOn.push(confirmInputText);
-
+		
 		flipXCheckbox = new FlxUICheckBox(10, confirmInputText.y + 30, null, null, "Flip X", 100);
 		flipXCheckbox.callback = function() {
 			grpWeekCharacters.members[curTypeSelected].flipX = flipXCheckbox.checked;
 			characterFile.flipX = flipXCheckbox.checked;
 		};
-
+		
 		var reloadImageButton:FlxButton = new FlxButton(140, confirmInputText.y + 30, "Reload Char", function() {
 			reloadSelectedCharacter();
 		});
-
+		
 		scaleStepper = new FlxUINumericStepper(140, imageInputText.y, 0.05, 1, 0.1, 30, 2);
-
+		
 		confirmDescText = new FlxText(10, confirmInputText.y - 18, 0, 'Start Press animation on the .XML:');
 		tab_group.add(new FlxText(10, imageInputText.y - 18, 0, 'Image file name:'));
 		tab_group.add(new FlxText(10, idleInputText.y - 18, 0, 'Idle animation on the .XML:'));
@@ -191,13 +191,13 @@ class MenuCharacterEditorState extends MusicBeatState
 		tab_group.add(scaleStepper);
 		UI_mainbox.addGroup(tab_group);
 	}
-
+	
 	function updateCharTypeBox()
 	{
 		opponentCheckbox.checked = false;
 		boyfriendCheckbox.checked = false;
 		girlfriendCheckbox.checked = false;
-
+		
 		switch (curTypeSelected)
 		{
 			case 0:
@@ -207,10 +207,10 @@ class MenuCharacterEditorState extends MusicBeatState
 			case 2:
 				girlfriendCheckbox.checked = true;
 		}
-
+		
 		updateCharacters();
 	}
-
+	
 	function updateCharacters()
 	{
 		for (i in 0...3)
@@ -222,31 +222,31 @@ class MenuCharacterEditorState extends MusicBeatState
 		}
 		reloadSelectedCharacter();
 	}
-
+	
 	function reloadSelectedCharacter()
 	{
 		var char:MenuCharacter = grpWeekCharacters.members[curTypeSelected];
-
+		
 		char.alpha = 1;
 		char.frames = Paths.getSparrowAtlas('menucharacters/' + characterFile.image);
 		char.animation.addByPrefix('idle', characterFile.idle_anim, 24);
 		if (curTypeSelected == 1) char.animation.addByPrefix('confirm', characterFile.confirm_anim, 24, false);
 		char.flipX = (characterFile.flipX == true);
-
+		
 		char.scale.set(characterFile.scale, characterFile.scale);
 		char.updateHitbox();
 		char.animation.play('idle');
-
+		
 		confirmDescText.visible = (curTypeSelected == 1);
 		confirmInputText.visible = (curTypeSelected == 1);
 		updateOffset();
-
+		
 		#if desktop
 		// Updating Discord Rich Presence
 		DiscordClient.changePresence("Menu Character Editor", "Editting: " + characterFile.image);
 		#end
 	}
-
+	
 	override function getEvent(id:String, sender:Dynamic, data:Dynamic, ?params:Array<Dynamic>)
 	{
 		if (id == FlxUIInputText.CHANGE_EVENT && (sender is FlxUIInputText))
@@ -273,7 +273,7 @@ class MenuCharacterEditorState extends MusicBeatState
 			}
 		}
 	}
-
+	
 	override function update(elapsed:Float)
 	{
 		var blockInput:Bool = false;
@@ -285,12 +285,12 @@ class MenuCharacterEditorState extends MusicBeatState
 				FlxG.sound.volumeDownKeys = [];
 				FlxG.sound.volumeUpKeys = [];
 				blockInput = true;
-
+				
 				if (FlxG.keys.justPressed.ENTER) inputText.hasFocus = false;
 				break;
 			}
 		}
-
+		
 		if (!blockInput)
 		{
 			FlxG.sound.muteKeys = Init.muteKeys;
@@ -301,10 +301,10 @@ class MenuCharacterEditorState extends MusicBeatState
 				FlxG.switchState(new funkin.states.editors.MasterEditorMenu());
 				FlxG.sound.playMusic(Paths.music('freakyMenu'));
 			}
-
+			
 			var shiftMult:Int = 1;
 			if (FlxG.keys.pressed.SHIFT) shiftMult = 10;
-
+			
 			if (FlxG.keys.justPressed.LEFT)
 			{
 				characterFile.position[0] += shiftMult;
@@ -325,31 +325,31 @@ class MenuCharacterEditorState extends MusicBeatState
 				characterFile.position[1] -= shiftMult;
 				updateOffset();
 			}
-
+			
 			if (FlxG.keys.justPressed.SPACE && curTypeSelected == 1)
 			{
 				grpWeekCharacters.members[curTypeSelected].animation.play('confirm', true);
 			}
 		}
-
+		
 		var char:MenuCharacter = grpWeekCharacters.members[1];
 		if (char.animation.curAnim != null && char.animation.curAnim.name == 'confirm' && char.animation.curAnim.finished)
 		{
 			char.animation.play('idle', true);
 		}
-
+		
 		super.update(elapsed);
 	}
-
+	
 	function updateOffset()
 	{
 		var char:MenuCharacter = grpWeekCharacters.members[curTypeSelected];
 		char.offset.set(characterFile.position[0], characterFile.position[1]);
 		txtOffsets.text = '' + characterFile.position;
 	}
-
+	
 	var _file:FileReference = null;
-
+	
 	function loadCharacter()
 	{
 		var jsonFilter:FileFilter = new FileFilter('JSON', 'json');
@@ -359,18 +359,18 @@ class MenuCharacterEditorState extends MusicBeatState
 		_file.addEventListener(IOErrorEvent.IO_ERROR, onLoadError);
 		_file.browse([jsonFilter]);
 	}
-
+	
 	function onLoadComplete(_):Void
 	{
 		_file.removeEventListener(Event.SELECT, onLoadComplete);
 		_file.removeEventListener(Event.CANCEL, onLoadCancel);
 		_file.removeEventListener(IOErrorEvent.IO_ERROR, onLoadError);
-
+		
 		#if sys
 		var fullPath:String = null;
 		@:privateAccess
 		if (_file.__path != null) fullPath = _file.__path;
-
+		
 		if (fullPath != null)
 		{
 			var rawJson:String = File.getContent(fullPath);
@@ -398,7 +398,7 @@ class MenuCharacterEditorState extends MusicBeatState
 		trace("File couldn't be loaded! You aren't on Desktop, are you?");
 		#end
 	}
-
+	
 	/**
 	 * Called when the save file dialog is cancelled.
 	 */
@@ -410,7 +410,7 @@ class MenuCharacterEditorState extends MusicBeatState
 		_file = null;
 		trace("Cancelled file loading.");
 	}
-
+	
 	/**
 	 * Called if there is an error while saving the gameplay recording.
 	 */
@@ -422,7 +422,7 @@ class MenuCharacterEditorState extends MusicBeatState
 		_file = null;
 		trace("Problem loading file");
 	}
-
+	
 	function saveCharacter()
 	{
 		var data:String = Json.stringify(characterFile, "\t");
@@ -430,7 +430,7 @@ class MenuCharacterEditorState extends MusicBeatState
 		{
 			var splittedImage:Array<String> = imageInputText.text.trim().split('_');
 			var characterName:String = splittedImage[splittedImage.length - 1].toLowerCase().replace(' ', '');
-
+			
 			_file = new FileReference();
 			_file.addEventListener(Event.COMPLETE, onSaveComplete);
 			_file.addEventListener(Event.CANCEL, onSaveCancel);
@@ -438,7 +438,7 @@ class MenuCharacterEditorState extends MusicBeatState
 			_file.save(data, characterName + ".json");
 		}
 	}
-
+	
 	function onSaveComplete(_):Void
 	{
 		_file.removeEventListener(Event.COMPLETE, onSaveComplete);
@@ -447,7 +447,7 @@ class MenuCharacterEditorState extends MusicBeatState
 		_file = null;
 		FlxG.log.notice("Successfully saved file.");
 	}
-
+	
 	/**
 	 * Called when the save file dialog is cancelled.
 	 */
@@ -458,7 +458,7 @@ class MenuCharacterEditorState extends MusicBeatState
 		_file.removeEventListener(IOErrorEvent.IO_ERROR, onSaveError);
 		_file = null;
 	}
-
+	
 	/**
 	 * Called if there is an error while saving the gameplay recording.
 	 */

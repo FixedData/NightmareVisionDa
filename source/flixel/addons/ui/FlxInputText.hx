@@ -36,11 +36,11 @@ class FlxInputText extends FlxText
 	public static inline var ONLY_NUMERIC:Int = 2;
 	public static inline var ONLY_ALPHANUMERIC:Int = 3;
 	public static inline var CUSTOM_FILTER:Int = 4;
-
+	
 	public static inline var ALL_CASES:Int = 0;
 	public static inline var UPPER_CASE:Int = 1;
 	public static inline var LOWER_CASE:Int = 2;
-
+	
 	public static inline var BACKSPACE_ACTION:String = "backspace"; // press backspace
 	public static inline var DELETE_ACTION:String = "delete"; // press delete
 	public static inline var ENTER_ACTION:String = "enter"; // press enter
@@ -48,150 +48,150 @@ class FlxInputText extends FlxText
 	public static inline var PASTE_ACTION:String = "paste"; // text paste
 	public static inline var COPY_ACTION:String = "copy"; // text copy
 	public static inline var CUT_ACTION:String = "cut"; // text copy
-
+	
 	/**
 	 * This regular expression will filter out (remove) everything that matches.
 	 * Automatically sets filterMode = FlxInputText.CUSTOM_FILTER.
 	 */
 	public var customFilterPattern(default, set):EReg;
-
+	
 	function set_customFilterPattern(cfp:EReg)
 	{
 		customFilterPattern = cfp;
 		filterMode = CUSTOM_FILTER;
 		return customFilterPattern;
 	}
-
+	
 	/**
 	 * A function called whenever the value changes from user input, or enter is pressed
 	 */
 	public var callback:String->String->Void;
-
+	
 	/**
 	 * Whether or not the textbox has a background
 	 */
 	public var background:Bool = false;
-
+	
 	/**
 	 * The caret's color. Has the same color as the text by default.
 	 */
 	public var caretColor(default, set):Int;
-
+	
 	function set_caretColor(i:Int):Int
 	{
 		caretColor = i;
 		dirty = true;
 		return caretColor;
 	}
-
+	
 	public var caretWidth(default, set):Int = 1;
-
+	
 	function set_caretWidth(i:Int):Int
 	{
 		caretWidth = i;
 		dirty = true;
 		return caretWidth;
 	}
-
+	
 	public var params(default, set):Array<Dynamic>;
-
+	
 	/**
 	 * Whether or not the textfield is a password textfield
 	 */
 	public var passwordMode(get, set):Bool;
-
+	
 	/**
 	 * Whether or not the text box is the active object on the screen.
 	 */
 	public var hasFocus(default, set):Bool = false;
-
+	
 	/**
 	 * The position of the selection cursor. An index of 0 means the carat is before the character at index 0.
 	 */
 	public var caretIndex(default, set):Int = 0;
-
+	
 	/**
 	 * callback that is triggered when this text field gets focus
 	 * @since 2.2.0
 	 */
 	public var focusGained:Void->Void;
-
+	
 	/**
 	 * callback that is triggered when this text field loses focus
 	 * @since 2.2.0
 	 */
 	public var focusLost:Void->Void;
-
+	
 	/**
 	 * The Case that's being enforced. Either ALL_CASES, UPPER_CASE or LOWER_CASE.
 	 */
 	public var forceCase(default, set):Int = ALL_CASES;
-
+	
 	/**
 	 * Set the maximum length for the field (e.g. "3"
 	 * for Arcade type hi-score initials). 0 means unlimited.
 	 */
 	public var maxLength(default, set):Int = 0;
-
+	
 	/**
 	 * Change the amount of lines that are allowed.
 	 */
 	public var lines(default, set):Int;
-
+	
 	/**
 	 * Defines what text to filter. It can be NO_FILTER, ONLY_ALPHA, ONLY_NUMERIC, ONLY_ALPHA_NUMERIC or CUSTOM_FILTER
 	 * (Remember to append "FlxInputText." as a prefix to those constants)
 	 */
 	public var filterMode(default, set):Int = NO_FILTER;
-
+	
 	/**
 	 * The color of the fieldBorders
 	 */
 	public var fieldBorderColor(default, set):Int = FlxColor.BLACK;
-
+	
 	/**
 	 * The thickness of the fieldBorders
 	 */
 	public var fieldBorderThickness(default, set):Int = 1;
-
+	
 	/**
 	 * The color of the background of the textbox.
 	 */
 	public var backgroundColor(default, set):Int = FlxColor.WHITE;
-
+	
 	/**
 	 * A FlxSprite representing the background sprite
 	 */
 	private var backgroundSprite:FlxSprite;
-
+	
 	/**
 	 * A timer for the flashing caret effect.
 	 */
 	private var _caretTimer:FlxTimer;
-
+	
 	/**
 	 * A FlxSprite representing the flashing caret when editing text.
 	 */
 	private var caret:FlxSprite;
-
+	
 	/**
 	 * A FlxSprite representing the fieldBorders.
 	 */
 	private var fieldBorderSprite:FlxSprite;
-
+	
 	/**
 	 * The left- and right- most fully visible character indeces
 	 */
 	private var _scrollBoundIndeces:{left:Int, right:Int} = {left: 0, right: 0};
-
+	
 	// workaround to deal with non-availability of getCharIndexAtPoint or getCharBoundaries on cpp/neko targets
 	private var _charBoundaries:Array<FlxRect>;
-
+	
 	/**
 	 * Stores last input text scroll.
 	 */
 	private var lastScroll:Int;
-
+	
 	/**
 	 * @param	X				The X position of the text.
 	 * @param	Y				The Y position of the text.
@@ -202,24 +202,23 @@ class FlxInputText extends FlxText
 	 * @param	BackgroundColor	The color of the background (FlxColor.TRANSPARENT for no background color)
 	 * @param	EmbeddedFont	Whether this text field uses embedded fonts or not
 	 */
-	public function new(X:Float = 0, Y:Float = 0, Width:Int = 150, ?Text:String, size:Int = 8, TextColor:Int = FlxColor.BLACK,
-			BackgroundColor:Int = FlxColor.WHITE, EmbeddedFont:Bool = true)
+	public function new(X:Float = 0, Y:Float = 0, Width:Int = 150, ?Text:String, size:Int = 8, TextColor:Int = FlxColor.BLACK, BackgroundColor:Int = FlxColor.WHITE, EmbeddedFont:Bool = true)
 	{
 		super(X, Y, Width, Text, size, EmbeddedFont);
 		backgroundColor = BackgroundColor;
-
+		
 		if (BackgroundColor != FlxColor.TRANSPARENT)
 		{
 			background = true;
 		}
-
+		
 		color = TextColor;
 		caretColor = TextColor;
-
+		
 		caret = new FlxSprite();
 		caret.makeGraphic(caretWidth, Std.int(size + 2));
 		_caretTimer = new FlxTimer();
-
+		
 		caretIndex = 0;
 		hasFocus = false;
 		if (background)
@@ -227,31 +226,31 @@ class FlxInputText extends FlxText
 			fieldBorderSprite = new FlxSprite(X, Y);
 			backgroundSprite = new FlxSprite(X, Y);
 		}
-
+		
 		lines = 1;
 		FlxG.stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
-
+		
 		if (Text == null)
 		{
 			Text = "";
 		}
-
+		
 		text = Text; // ensure set_text is called to avoid bugs (like not preparing _charBoundaries on sys target, making it impossible to click)
-
+		
 		calcFrame();
 	}
-
+	
 	/**
 	 * Clean up memory
 	 */
 	override public function destroy():Void
 	{
 		FlxG.stage.removeEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
-
+		
 		backgroundSprite = FlxDestroyUtil.destroy(backgroundSprite);
 		fieldBorderSprite = FlxDestroyUtil.destroy(fieldBorderSprite);
 		callback = null;
-
+		
 		#if sys
 		if (_charBoundaries != null)
 		{
@@ -262,10 +261,10 @@ class FlxInputText extends FlxText
 			_charBoundaries = null;
 		}
 		#end
-
+		
 		super.destroy();
 	}
-
+	
 	/**
 	 * Draw the caret in addition to the text.
 	 */
@@ -273,18 +272,18 @@ class FlxInputText extends FlxText
 	{
 		drawSprite(fieldBorderSprite);
 		drawSprite(backgroundSprite);
-
+		
 		super.draw();
-
+		
 		// In case caretColor was changed
 		if (caretColor != caret.color || caret.height != size + 2)
 		{
 			caret.color = caretColor;
 		}
-
+		
 		drawSprite(caret);
 	}
-
+	
 	/**
 	 * Helper function that makes sure sprites are drawn up even though they haven't been added.
 	 * @param	Sprite		The Sprite to be drawn.
@@ -298,14 +297,14 @@ class FlxInputText extends FlxText
 			Sprite.draw();
 		}
 	}
-
+	
 	/**
 	 * Check for mouse input every tick.
 	 */
 	override public function update(elapsed:Float):Void
 	{
 		super.update(elapsed);
-
+		
 		#if FLX_MOUSE
 		// Set focus and caretIndex as a response to mouse press
 		if (FlxG.mouse.justPressed)
@@ -325,7 +324,7 @@ class FlxInputText extends FlxText
 		}
 		#end
 	}
-
+	
 	function mouseOverlapping()
 	{
 		var mousePoint = FlxG.mouse.getScreenPosition(camera);
@@ -339,19 +338,19 @@ class FlxInputText extends FlxText
 		}
 		return false;
 	}
-
+	
 	/**
 	 * Handles keypresses generated on the stage.
 	 */
 	private function onKeyDown(e:KeyboardEvent):Void
 	{
 		var key:Int = e.keyCode;
-
+		
 		if (hasFocus)
 		{
 			//// Crtl/Cmd + C to copy text to the clipboard
 			// This copies the entire input, because i'm too lazy to do caret selection, and if i did it i whoud probabbly make it a pr in flixel-ui.
-
+			
 			#if (macos)
 			if (key == 67 && e.commandKey)
 			{
@@ -360,13 +359,13 @@ class FlxInputText extends FlxText
 			{
 			#end
 				Clipboard.text = text;
-
+				
 				onChange(COPY_ACTION);
-
+				
 				// Stops the function to go further, because it whoud type in a c to the input
 				return;
 			}
-
+			
 			//// Crtl/Cmd + V to paste in the clipboard text to the input
 			#if (macos)
 			if (key == 86 && e.commandKey)
@@ -376,7 +375,7 @@ class FlxInputText extends FlxText
 			{
 			#end
 				var newText:String = filter(Clipboard.text);
-
+				
 				if (newText.length > 0 && (maxLength == 0 || (text.length + newText.length) < maxLength))
 				{
 					text = insertSubstring(text, newText, caretIndex);
@@ -384,11 +383,11 @@ class FlxInputText extends FlxText
 					onChange(INPUT_ACTION);
 					onChange(PASTE_ACTION);
 				}
-
+				
 				// Same as before, but prevents typing out a v
 				return;
 			}
-
+			
 			//// Crtl/Cmd + X to cut the text from the input to the clipboard
 			// Again, this copies the entire input text because there is no caret selection.
 			#if (macos)
@@ -406,7 +405,7 @@ class FlxInputText extends FlxText
 				// Same as before, but prevents typing out a x
 				return;
 			}
-
+			
 			// Do nothing for Shift, Ctrl, Esc, and flixel console hotkey
 			if (key == 16 || key == 17 || key == 220 || key == 27)
 			{
@@ -552,25 +551,25 @@ private override function set_text(Text:String):String
 	}
 	#end
 	var return_text:String = super.set_text(Text);
-
+	
 	if (textField == null)
 	{
 		return return_text;
 	}
-
+	
 	var numChars:Int = Text.length;
 	prepareCharBoundaries(numChars);
 	textField.text = "";
 	var textH:Float = 0;
 	var textW:Float = 0;
 	var lastW:Float = 0;
-
+	
 	// Flash textFields have a "magic number" 2 pixel gutter all around
 	// It does not seem to vary with font, size, border, etc, and does not seem to be customizable.
 	// We simply reproduce this behavior here
 	var magicX:Float = 2;
 	var magicY:Float = 2;
-
+	
 	for (i in 0...numChars)
 	{
 		textField.appendText(Text.substr(i, 1)); // add a character
@@ -596,7 +595,7 @@ private function getCharIndexAtPoint(X:Float, Y:Float):Int
 	#if !js
 	X += textField.scrollH + 2;
 	#end
-
+	
 	// offset X according to text alignment when there is no scroll.
 	if (_charBoundaries != null && _charBoundaries.length > 0)
 	{
@@ -612,7 +611,7 @@ private function getCharIndexAtPoint(X:Float, Y:Float):Int
 			}
 		}
 	}
-
+	
 	// place caret at matching char position
 	if (_charBoundaries != null)
 	{
@@ -625,7 +624,7 @@ private function getCharIndexAtPoint(X:Float, Y:Float):Int
 			i++;
 		}
 	}
-
+	
 	// place caret at rightmost position
 	if (_charBoundaries != null && _charBoundaries.length > 0)
 	{
@@ -634,7 +633,7 @@ private function getCharIndexAtPoint(X:Float, Y:Float):Int
 			return _charBoundaries.length;
 		}
 	}
-
+	
 	// place caret at leftmost position
 	return 0;
 }
@@ -645,7 +644,7 @@ private function prepareCharBoundaries(numChars:Int):Void
 	{
 		_charBoundaries = [];
 	}
-
+	
 	if (_charBoundaries.length > numChars)
 	{
 		var diff:Int = _charBoundaries.length - numChars;
@@ -654,7 +653,7 @@ private function prepareCharBoundaries(numChars:Int):Void
 			_charBoundaries.pop();
 		}
 	}
-
+	
 	for (i in 0...numChars)
 	{
 		if (_charBoundaries.length - 1 < i)
@@ -679,7 +678,7 @@ private function onSetTextCheck():Void
 	{
 		boundary = getCharBoundaries(caretIndex);
 	}
-
+	
 	if (boundary != null)
 	{
 		// Checks if carret is out of textfield bounds
@@ -697,7 +696,7 @@ private function onSetTextCheck():Void
 		{
 			diffW = lastScroll; // no scroll change
 		}
-
+		
 		#if !js
 		textField.scrollH = diffW;
 		#end
@@ -714,7 +713,7 @@ private function onSetTextCheck():Void
 private override function calcFrame(RunOnCpp:Bool = false):Void
 {
 	super.calcFrame(RunOnCpp);
-
+	
 	if (fieldBorderSprite != null)
 	{
 		if (fieldBorderThickness > 0)
@@ -728,7 +727,7 @@ private override function calcFrame(RunOnCpp:Bool = false):Void
 			fieldBorderSprite.visible = false;
 		}
 	}
-
+	
 	if (backgroundSprite != null)
 	{
 		if (background)
@@ -742,7 +741,7 @@ private override function calcFrame(RunOnCpp:Bool = false):Void
 			backgroundSprite.visible = false;
 		}
 	}
-
+	
 	if (caret != null)
 	{
 		// Generate the properly sized caret and also draw a border that matches that of the textfield (if a border style is set)
@@ -751,11 +750,11 @@ private override function calcFrame(RunOnCpp:Bool = false):Void
 		final caretHeight = Std.int(size + 2);
 		var cw:Int = caretWidth; // Basic size of the caret
 		var ch:Int = Std.int(size + 2);
-
+		
 		// Make sure alpha channels are correctly set
 		var borderC:Int = (0xff000000 | (borderColor & 0x00ffffff));
 		var caretC:Int = (0xff000000 | (caretColor & 0x00ffffff));
-
+		
 		// Generate unique key for the caret so we don't cause weird bugs if someone makes some random flxsprite of this size and color
 		var caretKey:String = "caret" + cw + "x" + ch + "c:" + caretC + "b:" + borderStyle + "," + borderSize + "," + borderC;
 		switch (borderStyle)
@@ -764,7 +763,7 @@ private override function calcFrame(RunOnCpp:Bool = false):Void
 				// No border, just make the caret
 				caret.makeGraphic(cw, ch, caretC, false, caretKey);
 				caret.offset.x = caret.offset.y = 0;
-
+				
 			case SHADOW:
 				// Shadow offset to the lower-right
 				cw += Std.int(borderSize);
@@ -775,7 +774,7 @@ private override function calcFrame(RunOnCpp:Bool = false):Void
 				r.x = r.y = 0;
 				caret.pixels.fillRect(r, caretC); // draw caret
 				caret.offset.x = caret.offset.y = 0;
-
+				
 			#if (flixel > "5.8.0")
 			case SHADOW_XY(shadowX, shadowY):
 				// Shadow offset to the lower-right
@@ -790,7 +789,7 @@ private override function calcFrame(RunOnCpp:Bool = false):Void
 				caret.offset.x = shadowX < 0 ? -shadowX : 0;
 				caret.offset.y = shadowY < 0 ? -shadowY : 0;
 			#end
-
+			
 			case OUTLINE_FAST, OUTLINE:
 				// Border all around it
 				cw += Std.int(borderSize * 2);
@@ -804,7 +803,7 @@ private override function calcFrame(RunOnCpp:Bool = false):Void
 		// Update width/height so caret's dimensions match its pixels
 		caret.width = cw;
 		caret.height = ch;
-
+		
 		caretIndex = caretIndex; // force this to update
 	}
 }
@@ -831,7 +830,7 @@ private function filter(text:String):String
 	{
 		text = text.toLowerCase();
 	}
-
+	
 	if (filterMode != NO_FILTER)
 	{
 		var pattern:EReg;
@@ -911,7 +910,7 @@ private function set_hasFocus(newFocus:Bool):Bool
 			_caretTimer.cancel();
 		}
 	}
-
+	
 	if (newFocus != hasFocus)
 	{
 		calcFrame();
@@ -932,38 +931,38 @@ private function getAlignStr():FlxTextAlign
 private function set_caretIndex(newCaretIndex:Int):Int
 {
 	var offx:Float = 0;
-
+	
 	var alignStr:FlxTextAlign = getAlignStr();
-
+	
 	switch (alignStr)
 	{
 		case RIGHT:
 			offx = textField.width - 2 - textField.textWidth - 2;
 			if (offx < 0) offx = 0; // hack, fix negative offset.
-
+			
 		case CENTER:
 			#if !js
 			offx = (textField.width - 2 - textField.textWidth) / 2 + textField.scrollH / 2;
 			#end
 			if (offx <= 1) offx = 0; // hack, fix ofset rounding alignment.
-
+			
 		default:
 			offx = 0;
 	}
-
+	
 	caretIndex = newCaretIndex;
-
+	
 	// If caret is too far to the right something is wrong
 	if (caretIndex > (text.length + 1))
 	{
 		caretIndex = -1;
 	}
-
+	
 	// Caret is OK, proceed to position
 	if (caretIndex != -1)
 	{
 		var boundaries:Rectangle = null;
-
+		
 		// Caret is not to the right of text
 		if (caretIndex < text.length)
 		{
@@ -992,17 +991,17 @@ private function set_caretIndex(newCaretIndex:Int):Int
 			}
 		}
 	}
-
+	
 	#if !js
 	caret.x -= textField.scrollH;
 	#end
-
+	
 	// Make sure the caret doesn't leave the textfield on single-line input texts
 	if ((lines == 1) && (caret.x + caret.width) > (x + width))
 	{
 		caret.x = x + width - 2;
 	}
-
+	
 	return caretIndex;
 }
 
@@ -1033,7 +1032,7 @@ private function set_maxLength(Value:Int):Int
 private function set_lines(Value:Int):Int
 {
 	if (Value == 0) return 0;
-
+	
 	if (Value > 1)
 	{
 		textField.wordWrap = true;
@@ -1044,7 +1043,7 @@ private function set_lines(Value:Int):Int
 		textField.wordWrap = false;
 		textField.multiline = false;
 	}
-
+	
 	lines = Value;
 	calcFrame();
 	return lines;

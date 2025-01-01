@@ -23,7 +23,7 @@ class DebugDisplay extends Sprite
 		the actual TextField of the counter
 	**/
 	public var text:TextField;
-
+	
 	var underlay:Bitmap;
 	
 	/**
@@ -90,7 +90,7 @@ class DebugDisplay extends Sprite
 		deltaTimeout = 0.0;
 	}
 	
-	dynamic function updateText():Void
+	public dynamic function updateText():Void
 	{
 		__updateTxt();
 	}

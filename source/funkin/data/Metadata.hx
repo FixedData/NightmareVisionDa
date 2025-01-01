@@ -18,12 +18,12 @@ typedef MetaVariables =
 @:structInit class Metadata
 {
 	public static var seperator:String = ',';
-
+	
 	public var composers:String = null;
 	public var charters:String = null;
 	public var artists:String = null;
 	public var coders:String = null;
-
+	
 	/**
 	 * returns a metadata from the loaded playstate
 	 */
@@ -31,7 +31,7 @@ typedef MetaVariables =
 	{
 		var json:MetaVariables = null;
 		final formattedSong = Paths.formatToSongPath(PlayState.SONG.song);
-
+		
 		var jsonExists:Bool = false;
 		var path:String = Paths.modsJson('$formattedSong/meta');
 		if (FileSystem.exists(path))
@@ -39,7 +39,7 @@ typedef MetaVariables =
 			jsonExists = true;
 			json = haxe.Json.parse(File.getContent(path));
 		}
-
+		
 		// try asset dir
 		if (!jsonExists)
 		{
@@ -47,24 +47,24 @@ typedef MetaVariables =
 			if (FileSystem.exists(path)) json = haxe.Json.parse(File.getContent(path));
 			else if (Assets.exists(path, TEXT)) json = haxe.Json.parse(Assets.getText(path));
 		}
-
+		
 		if (json != null)
 		{
 			var data:Metadata = {};
 			data.populate(json);
 			return data;
 		}
-
+		
 		return null;
 	}
-
+	
 	/**
 	 * returns a metadata from your provided path
 	 */
 	public static function getDirect(filePath:String):Null<Metadata>
 	{
 		var json:MetaVariables = null;
-
+		
 		var jsonExists:Bool = false;
 		var path:String = Paths.modFolders('$filePath.json');
 		if (FileSystem.exists(path))
@@ -72,7 +72,7 @@ typedef MetaVariables =
 			jsonExists = true;
 			json = haxe.Json.parse(File.getContent(path));
 		}
-
+		
 		// try asset dir
 		if (!jsonExists)
 		{
@@ -80,17 +80,17 @@ typedef MetaVariables =
 			if (FileSystem.exists(path)) json = haxe.Json.parse(File.getContent(path));
 			else if (Assets.exists(path, TEXT)) json = haxe.Json.parse(Assets.getText(path));
 		}
-
+		
 		if (json != null)
 		{
 			var data:Metadata = {};
 			data.populate(json);
 			return data;
 		}
-
+		
 		return null;
 	}
-
+	
 	/**
 	 * converts and sets the json vars to the metadata
 	 * 
@@ -107,9 +107,9 @@ typedef MetaVariables =
 			}
 		}
 	}
-
+	
 	// specific functions to maintain consistency
 	public static function join(arg:Array<String>):String return arg.join('$seperator ');
-
+	
 	public static function seperate(arg:String):Array<String> return arg.split('$seperator ');
 }

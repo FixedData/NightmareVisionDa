@@ -5,17 +5,17 @@ package funkin.backend;
 class BaseTransitionState extends MusicBeatSubstate
 {
 	var finishCallback:Void->Void = null;
-
+	
 	public function setCallback(func:Void->Void) finishCallback = func;
-
+	
 	var status:TransStatus;
-
+	
 	public function new(status:TransStatus)
 	{
 		this.status = status;
 		super();
 	}
-
+	
 	// ensure u call this to end!!
 	public function onFinish()
 	{

@@ -31,7 +31,7 @@ using StringTools;
 class OptionsState extends MusicBeatState
 {
 	public static var onPlayState:Bool = false;
-
+	
 	var options:Array<String> = [
 		'Notes',
 		'Controls',
@@ -42,10 +42,10 @@ class OptionsState extends MusicBeatState
 		"Loading"
 	];
 	private var grpOptions:FlxTypedGroup<Alphabet>;
-
+	
 	private static var curSelected:Int = 0;
 	public static var menuBG:FlxSprite;
-
+	
 	function openSelectedSubstate(label:String)
 	{
 		switch (label)
@@ -66,27 +66,27 @@ class OptionsState extends MusicBeatState
 				LoadingState.loadAndSwitchState(new funkin.data.options.NoteOffsetState());
 		}
 	}
-
+	
 	var selectorLeft:Alphabet;
 	var selectorRight:Alphabet;
-
+	
 	override function create()
 	{
 		#if desktop
 		DiscordClient.changePresence("Options Menu", null);
 		#end
-
+		
 		var bg:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
 		bg.color = 0xFFea71fd;
 		bg.updateHitbox();
-
+		
 		bg.screenCenter();
 		bg.antialiasing = ClientPrefs.globalAntialiasing;
 		add(bg);
-
+		
 		grpOptions = new FlxTypedGroup<Alphabet>();
 		add(grpOptions);
-
+		
 		for (i in 0...options.length)
 		{
 			var optionText:Alphabet = new Alphabet(0, 0, options[i], true, false);
@@ -94,28 +94,28 @@ class OptionsState extends MusicBeatState
 			optionText.y += (100 * (i - (options.length / 2))) + 50;
 			grpOptions.add(optionText);
 		}
-
+		
 		selectorLeft = new Alphabet(0, 0, '>', true, false);
 		add(selectorLeft);
 		selectorRight = new Alphabet(0, 0, '<', true, false);
 		add(selectorRight);
-
+		
 		changeSelection();
 		ClientPrefs.saveSettings();
-
+		
 		super.create();
 	}
-
+	
 	override function closeSubState()
 	{
 		super.closeSubState();
 		ClientPrefs.saveSettings();
 	}
-
+	
 	override function update(elapsed:Float)
 	{
 		super.update(elapsed);
-
+		
 		if (controls.UI_UP_P)
 		{
 			changeSelection(-1);
@@ -124,7 +124,7 @@ class OptionsState extends MusicBeatState
 		{
 			changeSelection(1);
 		}
-
+		
 		if (controls.BACK)
 		{
 			FlxG.sound.play(Paths.sound('cancelMenu'));
@@ -136,26 +136,26 @@ class OptionsState extends MusicBeatState
 			}
 			else FlxG.switchState(new MainMenuState());
 		}
-
+		
 		if (controls.ACCEPT)
 		{
 			openSelectedSubstate(options[curSelected]);
 		}
 	}
-
+	
 	function changeSelection(change:Int = 0)
 	{
 		curSelected += change;
 		if (curSelected < 0) curSelected = options.length - 1;
 		if (curSelected >= options.length) curSelected = 0;
-
+		
 		var bullShit:Int = 0;
-
+		
 		for (item in grpOptions.members)
 		{
 			item.targetY = bullShit - curSelected;
 			bullShit++;
-
+			
 			item.alpha = 0.6;
 			if (item.targetY == 0)
 			{

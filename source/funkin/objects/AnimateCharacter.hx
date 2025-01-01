@@ -19,11 +19,11 @@ import flxanimate.FlxAnimate;
 class AnimateCharacter extends flxanimate.AnimateSprite implements Icharacter
 {
 	public var offsets:Map<String, Array<Dynamic>> = new Map();
-
+	
 	public function addOffset() {}
-
+	
 	public function loadJson() {}
-
+	
 	public function playAnim(name:String, Force:Bool = false, Reversed:Bool = false, Frame:Int = 0):Void
 	{
 		anim.play(name, Force, Reversed, Frame);

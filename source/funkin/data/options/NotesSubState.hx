@@ -25,7 +25,7 @@ import funkin.data.*;
 import funkin.states.*;
 import funkin.objects.*;
 import funkin.states.substates.*;
-import funkin.objects.shader.*;
+import funkin.shaders.*;
 import funkin.backend.MusicBeatSubstate;
 
 using StringTools;
@@ -34,38 +34,38 @@ class NotesSubState extends MusicBeatSubstate
 {
 	private static var curSelected:Int = 0;
 	private static var typeSelected:Int = 0;
-
+	
 	private var grpNumbers:FlxTypedGroup<Alphabet>;
 	private var grpNotes:FlxTypedGroup<FlxSprite>;
 	private var shaderArray:Array<HSLColorSwap> = [];
 	var curValue:Float = 0;
 	var holdTime:Float = 0;
 	var nextAccept:Int = 5;
-
+	
 	var blackBG:FlxSprite;
 	var hsbText:Alphabet;
-
+	
 	var posX = 230;
-
+	
 	public function new()
 	{
 		super();
-
+		
 		var bg:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
 		bg.color = 0xFFea71fd;
 		bg.screenCenter();
 		bg.antialiasing = ClientPrefs.globalAntialiasing;
 		add(bg);
-
+		
 		blackBG = new FlxSprite(posX - 25).makeGraphic(870, 200, FlxColor.BLACK);
 		blackBG.alpha = 0.4;
 		add(blackBG);
-
+		
 		grpNotes = new FlxTypedGroup<FlxSprite>();
 		add(grpNotes);
 		grpNumbers = new FlxTypedGroup<Alphabet>();
 		add(grpNumbers);
-
+		
 		for (i in 0...ClientPrefs.arrowHSV.length)
 		{
 			var yPos:Float = (165 * i) + 35;
@@ -75,7 +75,7 @@ class NotesSubState extends MusicBeatSubstate
 				optionText.x = posX + (225 * j) + 250;
 				grpNumbers.add(optionText);
 			}
-
+			
 			var note:FlxSprite = new FlxSprite(posX, yPos);
 			note.frames = Paths.getSparrowAtlas('NOTE_assets');
 			var animations:Array<String> = ['purple0', 'blue0', 'green0', 'red0'];
@@ -83,7 +83,7 @@ class NotesSubState extends MusicBeatSubstate
 			note.animation.play('idle');
 			note.antialiasing = ClientPrefs.globalAntialiasing;
 			grpNotes.add(note);
-
+			
 			var newShader:HSLColorSwap = new HSLColorSwap();
 			note.shader = newShader.shader;
 			newShader.hue = ClientPrefs.arrowHSV[i][0] / 360;
@@ -91,16 +91,16 @@ class NotesSubState extends MusicBeatSubstate
 			newShader.lightness = ClientPrefs.arrowHSV[i][2] / 100;
 			shaderArray.push(newShader);
 		}
-
+		
 		hsbText = new Alphabet(0, 0, "Hue    Saturation  Luminosity", false, false, 0, 0.65);
 		hsbText.x = posX + 240;
 		add(hsbText);
-
+		
 		changeSelection();
 	}
-
+	
 	var changingNote:Bool = false;
-
+	
 	override function update(elapsed:Float)
 	{
 		if (changingNote)
@@ -211,7 +211,7 @@ class NotesSubState extends MusicBeatSubstate
 				return;
 			}
 		}
-
+		
 		if (controls.BACK || (changingNote && controls.ACCEPT))
 		{
 			if (!changingNote)
@@ -225,23 +225,23 @@ class NotesSubState extends MusicBeatSubstate
 			changingNote = false;
 			FlxG.sound.play(Paths.sound('cancelMenu'));
 		}
-
+		
 		if (nextAccept > 0)
 		{
 			nextAccept -= 1;
 		}
 		super.update(elapsed);
 	}
-
+	
 	function changeSelection(change:Int = 0)
 	{
 		curSelected += change;
 		if (curSelected < 0) curSelected = ClientPrefs.arrowHSV.length - 1;
 		if (curSelected >= ClientPrefs.arrowHSV.length) curSelected = 0;
-
+		
 		curValue = ClientPrefs.arrowHSV[curSelected][typeSelected];
 		updateValue();
-
+		
 		for (i in 0...grpNumbers.length)
 		{
 			var item = grpNumbers.members[i];
@@ -266,16 +266,16 @@ class NotesSubState extends MusicBeatSubstate
 		}
 		FlxG.sound.play(Paths.sound('scrollMenu'));
 	}
-
+	
 	function changeType(change:Int = 0)
 	{
 		typeSelected += change;
 		if (typeSelected < 0) typeSelected = 2;
 		if (typeSelected > 2) typeSelected = 0;
-
+		
 		curValue = ClientPrefs.arrowHSV[curSelected][typeSelected];
 		updateValue();
-
+		
 		for (i in 0...grpNumbers.length)
 		{
 			var item = grpNumbers.members[i];
@@ -286,7 +286,7 @@ class NotesSubState extends MusicBeatSubstate
 			}
 		}
 	}
-
+	
 	function resetValue(selected:Int, type:Int)
 	{
 		curValue = 0;
@@ -300,12 +300,12 @@ class NotesSubState extends MusicBeatSubstate
 			case 2:
 				shaderArray[selected].lightness = 0;
 		}
-
+		
 		var item = grpNumbers.members[(selected * 3) + type];
 		item.changeText('0');
 		item.offset.x = (40 * (item.lettersArray.length - 1)) / 2;
 	}
-
+	
 	function updateValue(change:Float = 0)
 	{
 		curValue += change;
@@ -316,7 +316,7 @@ class NotesSubState extends MusicBeatSubstate
 			case 1 | 2:
 				max = 100;
 		}
-
+		
 		if (roundedValue < -max)
 		{
 			curValue = -max;
@@ -327,7 +327,7 @@ class NotesSubState extends MusicBeatSubstate
 		}
 		roundedValue = Math.round(curValue);
 		ClientPrefs.arrowHSV[curSelected][typeSelected] = roundedValue;
-
+		
 		switch (typeSelected)
 		{
 			case 0:
@@ -337,7 +337,7 @@ class NotesSubState extends MusicBeatSubstate
 			case 2:
 				shaderArray[curSelected].lightness = roundedValue / 100;
 		}
-
+		
 		var item = grpNumbers.members[(curSelected * 3) + typeSelected];
 		item.changeText(Std.string(roundedValue));
 		item.offset.x = (40 * (item.lettersArray.length - 1)) / 2;

@@ -17,8 +17,7 @@ import sys.io.*;
 import sys.*;
 #end
 #if DISCORD_ALLOWED
-import funkin.api.Discord;
-import funkin.api.Discord.DiscordClient;
+import funkin.api.DiscordClient;
 #end
 #if VIDEOS_ALLOWED
 import hxvlc.flixel.*;
@@ -32,6 +31,7 @@ import funkin.data.Highscore;
 import funkin.states.*;
 import funkin.objects.BGSprite;
 import funkin.backend.MusicBeatState;
+import funkin.backend.Cache;
 
 using StringTools;
 #end
