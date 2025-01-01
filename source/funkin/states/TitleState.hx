@@ -1,13 +1,10 @@
 package funkin.states;
 
+import funkin.data.scripts.Globals;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.addons.transition.FlxTransitionableState;
 import haxe.Json;
-#if MODS_ALLOWED
-import sys.FileSystem;
-import sys.io.File;
-#end
 import flixel.graphics.frames.FlxFrame;
 import flixel.group.FlxGroup;
 import flixel.input.gamepad.FlxGamepad;
@@ -16,12 +13,9 @@ import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
 import openfl.Assets;
-import funkin.data.*;
-import funkin.data.scripts.*;
-import funkin.states.*;
-import funkin.objects.*;
-import funkin.shaders.*;
+import funkin.shaders.ColorSwap;
 
+import funkin.data.WeekData;
 typedef TitleData =
 {
 	titlex:Float,

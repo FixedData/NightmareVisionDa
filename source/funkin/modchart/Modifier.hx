@@ -3,9 +3,6 @@ package funkin.modchart;
 
 import flixel.FlxSprite;
 import math.Vector3;
-import funkin.data.*;
-import funkin.states.*;
-import funkin.states.substates.*;
 import funkin.objects.*;
 
 // Based on Schmovin' and Andromeda's modifier systems

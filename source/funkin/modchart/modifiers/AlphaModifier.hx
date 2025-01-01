@@ -6,11 +6,9 @@ import flixel.math.FlxPoint;
 import flixel.math.FlxMath;
 import math.Vector3;
 import flixel.FlxG;
-import funkin.data.*;
-import funkin.states.*;
-import funkin.states.substates.*;
-import funkin.objects.*;
-
+import funkin.objects.Note;
+import funkin.objects.StrumNote;
+import funkin.states.PlayState;
 class AlphaModifier extends NoteModifier
 {
 	override function getName() return 'stealth';

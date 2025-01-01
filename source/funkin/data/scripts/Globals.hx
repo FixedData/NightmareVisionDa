@@ -1,9 +1,7 @@
 package funkin.data.scripts;
 
-import funkin.states.*;
-import funkin.states.substates.*;
-
-using StringTools;
+import funkin.states.PlayState;
+import funkin.states.substates.GameOverSubstate;
 
 class Globals
 {

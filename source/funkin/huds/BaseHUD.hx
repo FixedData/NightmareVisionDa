@@ -2,6 +2,7 @@ package funkin.huds;
 
 import flixel.group.FlxContainer.FlxTypedContainer;
 import flixel.FlxBasic;
+import funkin.states.PlayState;
 
 @:access(funkin.states.PlayState)
 class BaseHUD extends FlxTypedContainer<FlxBasic>
@@ -41,7 +42,7 @@ class BaseHUD extends FlxTypedContainer<FlxBasic>
 	
 	public function sectionHit():Void {}
 	
-	public function onUpdateScore(data:ScoreData, missed:Bool = false):Void {}
+	public function onUpdateScore(score:Float,acc:Float,misses:Float, missed:Bool = false):Void {}
 	
 	public function popUpScore(ratingImage:String,
 		combo:Int):Void {} // Rating only uses daRating.image for now, I plan on probably changing this later so that u can use any aspect of the rating but this is just temporary
@@ -56,12 +57,4 @@ class BaseHUD extends FlxTypedContainer<FlxBasic>
 	{
 		return Reflect.getProperty(this, obj);
 	}
-}
-
-// only used for huds so its here
-typedef ScoreData =
-{
-	score:Float,
-	accuracy:Float,
-	misses:Float,
 }

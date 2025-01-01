@@ -2,7 +2,7 @@ package funkin.game;
 
 // lowkey idk if i like the funckin game folder maybe ill change it
 import funkin.objects.Note;
-
+import funkin.states.PlayState;
 class Rating
 {
 	public static function judgeNote(note:Note, diff:Float = 0):Rating // die

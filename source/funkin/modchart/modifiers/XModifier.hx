@@ -1,10 +1,8 @@
 package funkin.modchart.modifiers;
 
 import math.Vector3;
-import funkin.data.*;
-import funkin.states.*;
-import funkin.states.substates.*;
-import funkin.objects.*;
+import funkin.objects.Note;
+import funkin.states.PlayState;
 
 class XModifier extends NoteModifier
 {

@@ -3,6 +3,7 @@ package funkin.video;
 import openfl.Assets;
 import haxe.io.Bytes;
 import hxvlc.flixel.FlxVideoSprite;
+import funkin.states.PlayState;
 
 class FunkinVideoSprite extends FlxVideoSprite
 {

@@ -5,6 +5,7 @@ import funkin.utils.MacroUtil;
 import crowplexus.iris.IrisConfig;
 import crowplexus.iris.Iris;
 import funkin.objects.*;
+import funkin.states.PlayState;
 
 class InterpEX extends crowplexus.hscript.Interp
 {
@@ -282,22 +283,10 @@ class FunkinIris extends FunkinScript
 		set("ClientPrefs", ClientPrefs);
 		set("CoolUtil", CoolUtil);
 		set("StageData", StageData);
-		set("PlayState", PlayState);
-		// set("FunkinLua", FunkinLua);
+		set("PlayState", funkin.states.PlayState);
 		set("FunkinIris", FunkinIris);
 		
 		set('WindowUtil', funkin.utils.WindowUtil); // temp till i fix some shit
-		
-		// FNF-specific things
-		set("MusicBeatState", funkin.backend.MusicBeatState);
-		set("Paths", Paths);
-		set("Conductor", Conductor);
-		set("Song", Song);
-		set("ClientPrefs", ClientPrefs);
-		set("CoolUtil", CoolUtil);
-		set("StageData", StageData);
-		set("PlayState", PlayState);
-		// set("FunkinLua", FunkinLua);
 		
 		// objects
 		set("Note", Note);

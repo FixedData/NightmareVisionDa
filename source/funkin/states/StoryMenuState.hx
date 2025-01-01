@@ -1,5 +1,7 @@
 package funkin.states;
 
+import funkin.states.substates.ResetScoreSubState;
+import funkin.states.substates.GameplayChangersSubstate;
 import funkin.utils.DifficultyUtil;
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -11,10 +13,9 @@ import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
 import flixel.graphics.FlxGraphic;
 import funkin.data.WeekData;
-import funkin.data.*;
-import funkin.states.*;
-import funkin.states.substates.*;
-import funkin.objects.*;
+import funkin.objects.MenuItem;
+import funkin.objects.MenuCharacter;
+import funkin.data.Song;
 
 class StoryMenuState extends MusicBeatState
 {

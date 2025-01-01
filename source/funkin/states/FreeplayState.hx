@@ -1,5 +1,8 @@
 package funkin.states;
 
+import funkin.states.substates.GameplayChangersSubstate;
+import funkin.data.Song;
+import funkin.states.substates.ResetScoreSubState;
 import funkin.backend.Cache;
 import funkin.utils.DifficultyUtil;
 import funkin.states.editors.ChartingState;
@@ -11,10 +14,7 @@ import flixel.text.FlxText;
 import flixel.util.FlxColor;
 import flixel.tweens.FlxTween;
 import funkin.data.WeekData;
-import funkin.states.*;
-import funkin.states.substates.*;
-import funkin.data.*;
-import funkin.objects.*;
+import funkin.objects.HealthIcon;
 
 class FreeplayState extends MusicBeatState
 {

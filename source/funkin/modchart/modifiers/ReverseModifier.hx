@@ -6,8 +6,8 @@ import flixel.FlxSprite;
 import flixel.FlxG;
 import funkin.modchart.*;
 import math.Vector3;
-import funkin.states.*;
-import funkin.objects.*;
+import funkin.objects.Note;
+import funkin.states.PlayState;
 
 class ReverseModifier extends NoteModifier
 {

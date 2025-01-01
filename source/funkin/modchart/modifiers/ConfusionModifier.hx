@@ -5,10 +5,9 @@ import funkin.modchart.*;
 import flixel.math.FlxPoint;
 import flixel.math.FlxMath;
 import math.Vector3;
-import funkin.data.*;
-import funkin.states.*;
-import funkin.states.substates.*;
-import funkin.objects.*;
+import funkin.objects.Note;
+import funkin.objects.StrumNote;
+import funkin.states.PlayState;
 
 class ConfusionModifier extends NoteModifier
 {

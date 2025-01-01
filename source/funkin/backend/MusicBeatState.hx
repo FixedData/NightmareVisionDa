@@ -11,6 +11,8 @@ import flixel.FlxG;
 import flixel.addons.transition.FlxTransitionableState;
 import funkin.data.*;
 import funkin.data.scripts.*;
+import funkin.states.PlayState;
+import funkin.states.FreeplayState;
 
 class MusicBeatState extends FlxUIState
 {

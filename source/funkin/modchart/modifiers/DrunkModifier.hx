@@ -6,6 +6,7 @@ import flixel.math.FlxMath;
 import flixel.FlxG;
 import math.Vector3;
 import funkin.objects.*;
+import funkin.states.PlayState;
 
 class DrunkModifier extends NoteModifier
 {

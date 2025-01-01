@@ -1,5 +1,5 @@
 run all these commands and compiling should work :P
-make sure you have haxe 4.3.1 or above!
+make sure you have haxe 4.3.4 or above!
 
 
 haxelib --global install hmm

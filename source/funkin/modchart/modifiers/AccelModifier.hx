@@ -6,11 +6,8 @@ import flixel.math.FlxPoint;
 import flixel.math.FlxMath;
 import flixel.FlxG;
 import math.Vector3;
-import funkin.data.*;
-import funkin.states.*;
-import funkin.states.substates.*;
-import funkin.objects.*;
 import flixel.FlxSprite;
+import funkin.states.PlayState;
 
 class AccelModifier extends NoteModifier
 { // this'll be boost in ModManager

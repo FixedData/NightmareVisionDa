@@ -4,8 +4,7 @@ import lime.app.Promise;
 import lime.app.Future;
 import flixel.FlxG;
 import flixel.FlxState;
-import flixel.FlxSprite;
-import flixel.graphics.frames.FlxAtlasFrames;
+import funkin.data.StageData;
 import flixel.util.FlxTimer;
 import flixel.math.FlxMath;
 import openfl.utils.Assets;
@@ -13,9 +12,6 @@ import lime.utils.Assets as LimeAssets;
 import lime.utils.AssetLibrary;
 import lime.utils.AssetManifest;
 import haxe.io.Path;
-import funkin.states.substates.*;
-import funkin.states.*;
-import funkin.data.*;
 
 class LoadingState extends MusicBeatState
 {

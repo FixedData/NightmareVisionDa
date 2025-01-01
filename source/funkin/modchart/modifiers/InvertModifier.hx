@@ -2,11 +2,7 @@ package funkin.modchart.modifiers;
 
 import flixel.FlxSprite;
 import math.Vector3;
-import funkin.data.*;
-import funkin.states.*;
-import funkin.states.substates.*;
-import funkin.objects.*;
-
+import funkin.objects.Note;
 class InvertModifier extends NoteModifier
 {
 	override function getName() return 'invert';

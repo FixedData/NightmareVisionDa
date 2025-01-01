@@ -3,10 +3,8 @@ package funkin.modchart.modifiers;
 import flixel.math.FlxPoint;
 import funkin.modchart.Modifier.ModifierOrder;
 import math.Vector3;
-import funkin.data.*;
-import funkin.states.*;
-import funkin.states.substates.*;
-import funkin.objects.*;
+import funkin.objects.Note;
+import funkin.objects.StrumNote;
 
 class ScaleModifier extends NoteModifier
 {
@@ -110,7 +108,7 @@ class ScaleModifier extends NoteModifier
 		
 		var receptors = modMgr.receptors[0];
 		var kNum = receptors.length;
-		for (i in 0...PlayState.SONG.keys)
+		for (i in 0...funkin.states.PlayState.SONG.keys)
 		{
 			subMods.push('mini${i}X');
 			subMods.push('mini${i}Y');

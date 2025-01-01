@@ -1747,53 +1747,6 @@ class PlayState extends MusicBeatState
 		
 		var daBeats:Int = 0; // Not exactly representative of 'daBeats' lol, just how much it has looped
 		
-		/*
-																													var songName:String = Paths.formatToSongPath(SONG.song);
-																													var file:String = Paths.json(songName + '/events');
-																													#if MODS_ALLOWED
-																													if (FileSystem.exists(Paths.modsJson(songName + '/events')) || FileSystem.exists(file)) {
-																													#else
-																													if (OpenFlAssets.exists(file)) {
-																													#end
-																														var eventsData:Array<Dynamic> = Song.loadFromJson('events', songName).events;
-																														for (event in eventsData) //Event Notes
-																														{
-																															for (i in 0...event[1].length)
-																															{
-																																var newEventNote:Array<Dynamic> = [event[0], event[1][i][0], event[1][i][1], event[1][i][2]];
-																																var subEvent:EventNote = {
-																																	strumTime: newEventNote[0] + ClientPrefs.noteOffset,
-																																	event: newEventNote[1],
-																																	value1: newEventNote[2],
-																																	value2: newEventNote[3]
-																																};
-																																subEvent.strumTime -= eventNoteEarlyTrigger(subEvent);
-																																if(!shouldPush(subEvent))continue;
-																																eventNotes.push(subEvent);
-																																eventPushed(subEvent);
-																															}
-																														}
-																													}
-		
-																													for (event in songData.events) //Event Notes
-																													{
-																														for (i in 0...event[1].length)
-																														{
-																															var newEventNote:Array<Dynamic> = [event[0], event[1][i][0], event[1][i][1], event[1][i][2]];
-																															var subEvent:EventNote = {
-																																strumTime: newEventNote[0] + ClientPrefs.noteOffset,
-																																event: newEventNote[1],
-																																value1: newEventNote[2],
-																																value2: newEventNote[3]
-																															};
-																															subEvent.strumTime -= eventNoteEarlyTrigger(subEvent);
-																															if(!shouldPush(subEvent))continue;
-																															eventNotes.push(subEvent);
-																															eventPushed(subEvent);
-																														}
-																														}
-				 */
-		
 		// loads note types
 		for (section in noteData)
 		{
@@ -2814,12 +2767,7 @@ class PlayState extends MusicBeatState
 	public function updateScoreBar(miss:Bool = false)
 	{
 		final scoreRetVal:Dynamic = callOnScripts('onUpdateScore', [miss]);
-		if (scoreRetVal != Globals.Function_Stop) callHUDFunc(p -> p.onUpdateScore(
-			{
-				score: songScore,
-				accuracy: funkin.utils.MathUtil.floorDecimal(ratingPercent * 100, 2),
-				misses: songMisses
-			}, miss));
+		if (scoreRetVal != Globals.Function_Stop) callHUDFunc(p -> p.onUpdateScore(songScore,funkin.utils.MathUtil.floorDecimal(ratingPercent * 100, 2),songMisses,miss));
 	}
 	
 	public var isDead:Bool = false; // Don't mess with this on Lua!!!

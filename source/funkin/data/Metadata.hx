@@ -1,7 +1,7 @@
 package funkin.data;
 
 import openfl.Assets;
-
+import funkin.states.PlayState;
 // debating rn should we rework songs to have a general global meta
 // that decides the stage, chars
 

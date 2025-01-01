@@ -7,10 +7,7 @@ import flixel.math.FlxPoint;
 import flixel.math.FlxMath;
 import flixel.FlxG;
 import math.Vector3;
-import funkin.data.*;
-import funkin.states.*;
-import funkin.states.substates.*;
-import funkin.objects.*;
+import funkin.objects.Note;
 
 class RotateModifier extends NoteModifier
 { // this'll be rotateX in ModManager

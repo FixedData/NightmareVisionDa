@@ -2,7 +2,7 @@ package funkin.objects;
 
 import funkin.objects.Note.EventNote;
 import flixel.group.FlxGroup.FlxTypedGroup;
-
+import funkin.states.PlayState;
 class Stage extends FlxTypedGroup<FlxBasic>
 {
 	public function addBehindGF(obj:FlxBasic)

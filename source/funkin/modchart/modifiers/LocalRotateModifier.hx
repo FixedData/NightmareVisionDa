@@ -7,11 +7,8 @@ import flixel.math.FlxPoint;
 import flixel.math.FlxMath;
 import flixel.FlxG;
 import math.Vector3;
-import funkin.data.*;
-import funkin.states.*;
-import funkin.states.substates.*;
-import funkin.objects.*;
-
+import funkin.states.PlayState;
+import funkin.objects.Note;
 class LocalRotateModifier extends NoteModifier
 { // this'll be rotateX in ModManager
 	override function getName() return '${prefix}rotateX';

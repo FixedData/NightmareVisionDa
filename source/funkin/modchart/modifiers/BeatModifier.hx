@@ -4,8 +4,7 @@ import flixel.FlxSprite;
 import funkin.modchart.*;
 import flixel.math.FlxMath;
 import math.Vector3;
-import funkin.states.*;
-
+import funkin.states.PlayState;
 class BeatModifier extends NoteModifier
 {
 	override function getName() return 'beat';

@@ -5,7 +5,6 @@ import funkin.api.PolyClient;
 import flixel.FlxState;
 import flixel.FlxG;
 import flixel.input.keyboard.FlxKey;
-import lime.app.Application;
 
 class Init extends FlxState
 {
@@ -53,16 +52,16 @@ class Init extends FlxState
 		// MusicBeatState.transitionInState = funkin.states.transitions.FadeTransition;
 		// MusicBeatState.transitionOutState = funkin.states.transitions.FadeTransition;
 		
-		#if desktop
+		#if DISCORD_ALLOWED
 		if (!DiscordClient.isInitialized)
 		{
 			DiscordClient.initialize();
-			Application.current.onExit.add((ec) -> DiscordClient.shutdown());
+			lime.app.Application.Application.current.onExit.add((ec) -> DiscordClient.shutdown());
 		}
 		#end
 		
 		super.create();
 		
-		FlxG.switchState(new TitleState());
+		FlxG.switchState(new funkin.states.TitleState());
 	}
 }

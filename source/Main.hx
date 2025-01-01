@@ -281,7 +281,7 @@ class FNFGame extends FlxGame
 		
 		final crashReport = 'Error caught:' + e.message + '\nCallstack:\n' + emsg;
 		
-		FlxG.switchState(new funkin.backend.FallbackState(crashReport, () -> FlxG.switchState(() -> new MainMenuState())));
+		FlxG.switchState(new funkin.backend.FallbackState(crashReport, () -> FlxG.switchState(() -> new funkin.states.MainMenuState())));
 	}
 }
 #end

@@ -10,10 +10,8 @@ import flixel.text.FlxText;
 import flixel.util.FlxColor;
 import flixel.tweens.FlxTween;
 import flixel.tweens.FlxEase;
-import funkin.data.*;
-import funkin.objects.*;
 import lime.utils.Assets;
-
+import funkin.objects.AttachedSprite;
 using StringTools;
 
 class CreditsState extends MusicBeatState
@@ -75,177 +73,42 @@ class CreditsState extends MusicBeatState
 		#end
 		
 		// were gonna need to update these credits later lol //data todo //still todo lol
-		var pisspoop:Array<Array<String>> = [
-			// Name - Icon name - Description - Link - BG Color
+		var pisspoop:Array<Array<String>> = [ // Name - Icon name - Description - Link - BG Color
 			['NIGHTMARISH FEDS'],
-			[
-				'DuskieWhy',
-				'duskie',
-				'Main Developer',
-				'https://twitter.com/DuskieWhy',
-				'0x6D32A8'
-			],
+			['DuskieWhy', 'duskie', 'Main Developer', 'https://twitter.com/DuskieWhy', '0x6D32A8'],
 			['Data', 'data', 'Programmer', 'https://twitter.com/FixedData', '0xFFAF64'],
-			[
-				'NebulaZorua',
-				'neb',
-				'Creator the modchart implementation',
-				'https://twitter.com/Nebula_Zorua',
-				'0xB300B3'
-			],
+			['NebulaZorua', 'neb', 'Creator the modchart implementation', 'https://twitter.com/Nebula_Zorua', '0xB300B3'],
 			['PHO', 'pho', 'Programmer', 'https://twitter.com/Phomow1', '0x7455be'],
-			[
-				'Decoy',
-				'decoy',
-				'Programmer, Charter',
-				'https://www.youtube.com/watch?v=PuYZ-9zcp4w',
-				'0x5833B6'
-			],
-			[
-				'JoggingScout',
-				'joggingscout',
-				'Artist (SUPER KUTTY!!!!)',
-				'https://twitter.com/JoggingScout',
-				'0x3366CC'
-			],
-			[
-				'Iseta',
-				'iseta',
-				'Artist (a little less kutty...)',
-				'https://twitter.com/Isetaaaaa',
-				'0x6ede0b'
-			],
+			['Decoy', 'decoy', 'Programmer, Charter', 'https://www.youtube.com/watch?v=PuYZ-9zcp4w', '0x5833B6'],
+			['JoggingScout', 'joggingscout', 'Artist (SUPER KUTTY!!!!)', 'https://twitter.com/JoggingScout', '0x3366CC'],
+			['Iseta', 'iseta', 'Artist (a little less kutty...)', 'https://twitter.com/Isetaaaaa', '0x6ede0b'],
 			[''],
-			['Special Thanks'],
-			[
-				'Infry',
-				'infry',
-				'made the little guys in chart editor',
-				'https://twitter.com/Isetaaaaa',
-				'0x8d00df'
-			],
-			[
-				'Rozebud',
-				'rozebud',
-				'made the original little chart guys',
-				'https://twitter.com/Isetaaaaa',
-				'0x800000'
-			],
-			[
-				'riconuts',
-				'riconuts',
-				'made the stage implementation setup',
-				'https://twitter.com/Isetaaaaa',
-				'0x700b98'
-			],
+			['Special Thanks'], ['Infry', 'infry', 'made the little guys in chart editor', 'https://twitter.com/Isetaaaaa', '0x8d00df'],
+			['Rozebud', 'rozebud', 'made the original little chart guys', 'https://twitter.com/Isetaaaaa', '0x800000'],
+			['riconuts', 'riconuts', 'made the stage implementation setup', 'https://twitter.com/Isetaaaaa', '0x700b98'],
 			[''],
 			['Psych Engine Team'],
-			[
-				'Shadow Mario',
-				'shadowmario',
-				'Main Programmer of Psych Engine',
-				'https://twitter.com/Shadow_Mario_',
-				'0x444444'
-			],
-			[
-				'RiverOaken',
-				'riveroaken',
-				'Main Artist/Animator of Psych Engine',
-				'https://twitter.com/RiverOaken',
-				'0xC30085'
-			],
+			['Shadow Mario', 'shadowmario', 'Main Programmer of Psych Engine', 'https://twitter.com/Shadow_Mario_', '0x444444'],
+			['RiverOaken', 'riveroaken', 'Main Artist/Animator of Psych Engine', 'https://twitter.com/RiverOaken', '0xC30085'],
 			[''],
 			['Former Psych Members'],
-			[
-				'bb-panzu',
-				'bb-panzu',
-				'Ex-Programmer of Psych Engine',
-				'https://twitter.com/bbsub3',
-				'0x389A58'
-			],
+			['bb-panzu', 'bb-panzu', 'Ex-Programmer of Psych Engine', 'https://twitter.com/bbsub3', '0x389A58'],
 			[''],
 			['Engine Contributors'],
-			[
-				"crowplexus",
-				"crowplexus",
-				"Creator of HScript-Iris and various PR's",
-				"https://twitter.com/crowplexus",
-				"0xCFCFCF"
-			],
-			[
-				'iFlicky',
-				'iflicky',
-				'Composer of Psync and Tea Time\nMade the Dialogue Sounds',
-				'https://twitter.com/flicky_i',
-				'0xAA32FE'
-			],
-			[
-				'SqirraRNG',
-				'sqirra',
-				'Chart Editor\'s Sound Waveform base',
-				'https://x.com/sqirradotdev',
-				'0xFF9300'
-			],
-			[
-				'MAJigsaw77',
-				'majigsaw',
-				'Video Playback support',
-				'https://x.com/MAJigsaw77',
-				'0x6E6E6E'
-			],
-			[
-				'Keoiki',
-				'keoiki',
-				'Note Splash Animations',
-				'https://twitter.com/Keoiki_',
-				'0xFFFFFF'
-			],
-			[
-				'Smokey',
-				'smokey',
-				'Spritemap Texture Support',
-				'https://twitter.com/Smokey_5_',
-				'0x4D5DBD'
-			],
+			["crowplexus", "crowplexus", "Creator of HScript-Iris and various PR's", "https://twitter.com/crowplexus", "0xCFCFCF"],
+			['iFlicky', 'iflicky', 'Composer of Psync and Tea Time\nMade the Dialogue Sounds', 'https://twitter.com/flicky_i', '0xAA32FE'],
+			['SqirraRNG', 'sqirra', 'Chart Editor\'s Sound Waveform base', 'https://x.com/sqirradotdev', '0xFF9300'],
+			['MAJigsaw77', 'majigsaw', 'Video Playback support', 'https://x.com/MAJigsaw77', '0x6E6E6E'],
+			['Keoiki', 'keoiki', 'Note Splash Animations', 'https://twitter.com/Keoiki_', '0xFFFFFF'],
+			['Smokey', 'smokey', 'Spritemap Texture Support', 'https://twitter.com/Smokey_5_', '0x4D5DBD'],
 			[''],
 			["Funkin' Crew"],
-			[
-				'ninjamuffin99',
-				'ninjamuffin99',
-				"Programmer of Friday Night Funkin'",
-				'https://twitter.com/ninja_muffin99',
-				'0xF73838'
-			],
-			[
-				'eliteMasterEric',
-				'mastereric',
-				"Programmer of Friday Night Funkin'",
-				'https://twitter.com/ninja_muffin99',
-				'0xF73838'
-			],
-			[
-				'PhantomArcade',
-				'phantomarcade',
-				"Animator of Friday Night Funkin'",
-				'https://twitter.com/PhantomArcade3K',
-				'0xFFBB1B'
-			],
-			[
-				'evilsk8r',
-				'evilsk8r',
-				"Artist of Friday Night Funkin'",
-				'https://twitter.com/evilsk8r',
-				'0x53E52C'
-			],
-			[
-				'kawaisprite',
-				'kawaisprite',
-				"Composer of Friday Night Funkin'",
-				'https://twitter.com/kawaisprite',
-				'0x6475F3'
-			]
-		];
-		
+			['ninjamuffin99', 'ninjamuffin99', "Programmer of Friday Night Funkin'", 'https://twitter.com/ninja_muffin99', '0xF73838'],
+			['eliteMasterEric', 'mastereric', "Programmer of Friday Night Funkin'", 'https://twitter.com/ninja_muffin99', '0xF73838'],
+			['PhantomArcade', 'phantomarcade', "Animator of Friday Night Funkin'", 'https://twitter.com/PhantomArcade3K', '0xFFBB1B'],
+			['evilsk8r', 'evilsk8r', "Artist of Friday Night Funkin'", 'https://twitter.com/evilsk8r', '0x53E52C'],
+			['kawaisprite', 'kawaisprite', "Composer of Friday Night Funkin'", 'https://twitter.com/kawaisprite', '0x6475F3']];
+			
 		creditsStuff = creditsStuff.concat(pisspoop);
 		
 		for (i in 0...creditsStuff.length)

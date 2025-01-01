@@ -1,5 +1,6 @@
 package funkin.utils;
 
+import funkin.states.PlayState;
 // do more wuith this //TODO RENAME THIS its not a UTIL its important to the whole thing
 class DifficultyUtil
 {

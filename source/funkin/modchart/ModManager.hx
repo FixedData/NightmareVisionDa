@@ -19,7 +19,7 @@ class ModManager
 {
 	public function registerDefaultModifiers()
 	{
-		var quickRegs:Array<Any> = [
+		var quickRegs:Array<Class<NoteModifier>> = [
 			FlipModifier,
 			ReverseModifier,
 			InvertModifier,

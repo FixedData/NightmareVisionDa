@@ -1,12 +1,6 @@
 package funkin.data;
 
 import openfl.utils.Assets;
-#if MODS_ALLOWED
-import sys.io.File;
-import sys.FileSystem;
-#else
-import openfl.utils.Assets;
-#end
 import haxe.Json;
 import funkin.data.Song;
 
@@ -48,10 +42,7 @@ class StageData
 		{
 			return Json.parse(Assets.getText(path));
 		}
-		else
-		{
-			return null;
-		}
+		return null;
 	}
 	
 	public static function generateDefault():StageFile return

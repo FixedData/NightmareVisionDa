@@ -4,7 +4,7 @@ import flixel.FlxObject;
 import flixel.util.FlxStringUtil;
 import funkin.objects.Bar;
 import funkin.objects.HealthIcon;
-import funkin.huds.BaseHUD.ScoreData;
+import funkin.states.PlayState;
 
 // if the hud resembles psych u can just extend this instead of base
 @:access(funkin.states.PlayState)
@@ -17,7 +17,6 @@ class PsychHUD extends BaseHUD
 	
 	var timeTxt:FlxText;
 	var timeBar:Bar;
-	var pixelZoom:Float = 6; // idgaf
 	
 	var ratingPrefix:String = "";
 	var ratingSuffix:String = '';
@@ -75,7 +74,7 @@ class PsychHUD extends BaseHUD
 		add(timeBar);
 		add(timeTxt);
 		
-		onUpdateScore({score: 0, accuracy: 0, misses: 0});
+		onUpdateScore(0,0,0);
 		
 		parent.setOnScripts('healthBar', healthBar);
 		parent.setOnScripts('iconP1', iconP1);
@@ -93,16 +92,16 @@ class PsychHUD extends BaseHUD
 		FlxTween.tween(timeTxt, {alpha: 1}, 0.5, {ease: FlxEase.circOut});
 	}
 	
-	override function onUpdateScore(data:ScoreData, missed:Bool = false)
+	override function onUpdateScore(score:Float,acc:Float,misses:Float, missed:Bool = false)
 	{
 		var str:String = parent.ratingName;
 		if (parent.totalPlayed != 0)
 		{
-			str += ' (${data.accuracy}%) - ${parent.ratingFC}';
+			str += ' (${acc}%) - ${parent.ratingFC}';
 		}
 		
-		final tempScore:String = 'Score: ${FlxStringUtil.formatMoney(data.score, false)}'
-			+ (!parent.instakillOnMiss ? ' | Misses: ${data.misses}' : "")
+		final tempScore:String = 'Score: ${FlxStringUtil.formatMoney(score, false)}'
+			+ (!parent.instakillOnMiss ? ' | Misses: ${misses}' : "")
 			+ ' | Rating: ${str}';
 			
 		if (!missed && !parent.cpuControlled) doScoreBop();
@@ -228,7 +227,7 @@ class PsychHUD extends BaseHUD
 		}
 		else
 		{
-			rating.setGraphicSize(Std.int(rating.width * pixelZoom * 0.85));
+			rating.setGraphicSize(Std.int(rating.width * PlayState.daPixelZoom * 0.85));
 		}
 		rating.updateHitbox();
 		
@@ -266,7 +265,7 @@ class PsychHUD extends BaseHUD
 			}
 			else
 			{
-				numScore.setGraphicSize(Std.int(numScore.width * pixelZoom));
+				numScore.setGraphicSize(Std.int(numScore.width * PlayState.daPixelZoom));
 			}
 			numScore.updateHitbox();
 			

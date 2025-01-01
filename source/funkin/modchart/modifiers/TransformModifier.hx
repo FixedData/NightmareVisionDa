@@ -7,10 +7,6 @@ import flixel.math.FlxPoint;
 import flixel.math.FlxMath;
 import flixel.FlxG;
 import math.Vector3;
-import funkin.data.*;
-import funkin.states.*;
-import funkin.states.substates.*;
-import funkin.objects.*;
 
 class TransformModifier extends NoteModifier
 { // this'll be transformX in ModManager
@@ -41,7 +37,7 @@ class TransformModifier extends NoteModifier
 		var subMods:Array<String> = ["transformY", "transformZ", "transformX-a", "transformY-a", "transformZ-a"];
 		
 		var receptors = modMgr.receptors[0];
-		for (i in 0...PlayState.SONG.keys)
+		for (i in 0...funkin.states.PlayState.SONG.keys)
 		{
 			subMods.push('transform${i}X');
 			subMods.push('transform${i}Y');
