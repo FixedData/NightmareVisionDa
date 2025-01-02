@@ -65,8 +65,12 @@ class PlayState extends MusicBeatState
 	
 	public static var meta:Metadata = null;
 	
+
+	//might remove as these are not needed?
 	public static var STRUM_X = 42;
 	public static var STRUM_X_MIDDLESCROLL = -278;
+
+
 	public static var arrowSkin:String = '';
 	public static var noteSplashSkin:String = '';
 	public static var ratingStuff:Array<RatingInfo> = [
