@@ -1,6 +1,6 @@
 package funkin.data.scripts;
 
-import funkin.utils.DifficultyUtil;
+import funkin.backend.Difficulty;
 import funkin.states.*;
 
 using StringTools;
@@ -71,7 +71,7 @@ class FunkinScript
 			set('weekRaw', PlayState.storyWeek);
 			set('seenCutscene', PlayState.seenCutscene);
 			set('week', WeekData.weeksList[PlayState.storyWeek]);
-			set('difficultyName', DifficultyUtil.difficulties[PlayState.storyDifficulty]);
+			set('difficultyName', Difficulty.difficulties[PlayState.storyDifficulty]);
 			set('songLength', flixel.FlxG.sound.music.length);
 			set('healthGainMult', PlayState.instance.healthGain);
 			set('healthLossMult', PlayState.instance.healthLoss);

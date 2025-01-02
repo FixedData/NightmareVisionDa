@@ -2,7 +2,7 @@ package funkin.states;
 
 import funkin.backend.Cache;
 import funkin.utils.SortUtil;
-import funkin.utils.DifficultyUtil;
+import funkin.backend.Difficulty;
 import funkin.game.RatingInfo;
 import haxe.ds.Vector;
 import openfl.utils.Assets as OpenFlAssets;
@@ -548,7 +548,7 @@ class PlayState extends MusicBeatState
 		initNoteSkinning();
 		
 		#if DISCORD_ALLOWED
-		storyDifficultyText = DifficultyUtil.difficulties[storyDifficulty];
+		storyDifficultyText = Difficulty.difficulties[storyDifficulty];
 		
 		// String that contains the mode defined here so it isn't necessary to call changePresence for each mode
 		detailsText = isStoryMode ? 'Story Mode' : 'Freeplay';
@@ -3498,7 +3498,7 @@ class PlayState extends MusicBeatState
 				}
 				else
 				{
-					var difficulty:String = DifficultyUtil.getDifficultyFilePath();
+					var difficulty:String = Difficulty.getDifficultyFilePath();
 					
 					trace('LOADING NEXT SONG');
 					trace(Paths.formatToSongPath(PlayState.storyPlaylist[0]) + difficulty);

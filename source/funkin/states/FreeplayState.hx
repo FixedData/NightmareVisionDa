@@ -4,7 +4,7 @@ import funkin.states.substates.GameplayChangersSubstate;
 import funkin.data.Song;
 import funkin.states.substates.ResetScoreSubState;
 import funkin.backend.Cache;
-import funkin.utils.DifficultyUtil;
+import funkin.backend.Difficulty;
 import funkin.states.editors.ChartingState;
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -144,9 +144,9 @@ class FreeplayState extends MusicBeatState
 		
 		if (lastDifficultyName == '')
 		{
-			lastDifficultyName = DifficultyUtil.defaultDifficulty;
+			lastDifficultyName = Difficulty.defaultDifficulty;
 		}
-		curDifficulty = Math.round(Math.max(0, DifficultyUtil.defaultDifficulties.indexOf(lastDifficultyName)));
+		curDifficulty = Math.round(Math.max(0, Difficulty.defaultDifficulties.indexOf(lastDifficultyName)));
 		
 		var textBG:FlxSprite = new FlxSprite(0, FlxG.height - 26).makeGraphic(FlxG.width, 26, 0xFF000000);
 		textBG.alpha = 0.6;
@@ -380,9 +380,9 @@ class FreeplayState extends MusicBeatState
 		debugBG.alpha = 0;
 		debugTxt.text = '';
 		
-		curDifficulty = FlxMath.wrap(curDifficulty + change, 0, DifficultyUtil.difficulties.length - 1);
+		curDifficulty = FlxMath.wrap(curDifficulty + change, 0, Difficulty.difficulties.length - 1);
 		
-		lastDifficultyName = DifficultyUtil.difficulties[curDifficulty];
+		lastDifficultyName = Difficulty.difficulties[curDifficulty];
 		
 		#if !switch
 		intendedScore = Highscore.getScore(songs[curSelected].songName, curDifficulty);
@@ -390,7 +390,7 @@ class FreeplayState extends MusicBeatState
 		#end
 		
 		PlayState.storyDifficulty = curDifficulty;
-		diffText.text = '< ' + DifficultyUtil.getCurDifficulty() + ' >';
+		diffText.text = '< ' + Difficulty.getCurDifficulty() + ' >';
 		positionHighscore();
 	}
 	
@@ -441,7 +441,7 @@ class FreeplayState extends MusicBeatState
 		Paths.currentModDirectory = songs[curSelected].folder;
 		PlayState.storyWeek = songs[curSelected].week;
 		
-		DifficultyUtil.reset();
+		Difficulty.reset();
 		
 		var diffStr:String = WeekData.getCurrentWeek().difficulties;
 		if (diffStr != null) diffStr = diffStr.trim(); // Fuck you HTML5
@@ -462,20 +462,20 @@ class FreeplayState extends MusicBeatState
 			
 			if (diffs.length > 0 && diffs[0].length > 0)
 			{
-				DifficultyUtil.difficulties = diffs;
+				Difficulty.difficulties = diffs;
 			}
 		}
 		
-		if (DifficultyUtil.difficulties.contains(DifficultyUtil.defaultDifficulty))
+		if (Difficulty.difficulties.contains(Difficulty.defaultDifficulty))
 		{
-			curDifficulty = Math.round(Math.max(0, DifficultyUtil.defaultDifficulties.indexOf(DifficultyUtil.defaultDifficulty)));
+			curDifficulty = Math.round(Math.max(0, Difficulty.defaultDifficulties.indexOf(Difficulty.defaultDifficulty)));
 		}
 		else
 		{
 			curDifficulty = 0;
 		}
 		
-		var newPos:Int = DifficultyUtil.difficulties.indexOf(lastDifficultyName);
+		var newPos:Int = Difficulty.difficulties.indexOf(lastDifficultyName);
 		if (newPos > -1)
 		{
 			curDifficulty = newPos;

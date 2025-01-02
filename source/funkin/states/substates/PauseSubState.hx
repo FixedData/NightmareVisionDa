@@ -1,6 +1,6 @@
 package funkin.states.substates;
 
-import funkin.utils.DifficultyUtil;
+import funkin.backend.Difficulty;
 import funkin.utils.CameraUtil;
 import funkin.data.options.OptionsState;
 import flixel.FlxG;
@@ -43,7 +43,7 @@ class PauseSubState extends MusicBeatSubstate
 	{
 		var cam:FlxCamera = CameraUtil.lastCamera;
 		
-		if (DifficultyUtil.difficulties.length < 2) menuItemsOG.remove('Change Difficulty'); // No need to change difficulty if there is only one!
+		if (Difficulty.difficulties.length < 2) menuItemsOG.remove('Change Difficulty'); // No need to change difficulty if there is only one!
 		
 		if (PlayState.chartingMode)
 		{
@@ -66,9 +66,9 @@ class PauseSubState extends MusicBeatSubstate
 		}
 		menuItems = menuItemsOG;
 		
-		for (i in 0...DifficultyUtil.difficulties.length)
+		for (i in 0...Difficulty.difficulties.length)
 		{
-			var diff:String = '' + DifficultyUtil.difficulties[i];
+			var diff:String = '' + Difficulty.difficulties[i];
 			difficultyChoices.push(diff);
 		}
 		difficultyChoices.push('BACK');
@@ -98,21 +98,21 @@ class PauseSubState extends MusicBeatSubstate
 		bg.alpha = 0;
 		
 		var corners:Array<FlxText> = [];
-		function createCornerText(text:String, addto:Bool = false)
+		function createCornerText(text:String, addtoo:Bool = false)
 		{
 			var t = new FlxText(0, 15, cam.width - 15, text, 32);
 			t.alignment = RIGHT;
 			t.setFormat(Paths.font("vcr.ttf"), 32);
 			t.scrollFactor.set();
 			corners.push(t);
-			if (addto) add(t);
+			if (addtoo) add(t);
 			return t;
 		}
 		
 		var levelInfo = createCornerText(PlayState.SONG.song);
 		add(levelInfo);
 		
-		var levelDifficulty = createCornerText(DifficultyUtil.getCurDifficulty());
+		var levelDifficulty = createCornerText(Difficulty.getCurDifficulty());
 		add(levelDifficulty);
 		
 		// temp just wanted to see this

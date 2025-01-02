@@ -2,10 +2,6 @@
 package funkin.modchart;
 
 import funkin.modchart.Modifier.ModifierType;
-import funkin.data.*;
-import funkin.states.*;
-import funkin.states.substates.*;
-import funkin.objects.*;
 
 class NoteModifier extends Modifier
 {

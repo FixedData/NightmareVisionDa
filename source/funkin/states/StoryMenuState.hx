@@ -2,7 +2,7 @@ package funkin.states;
 
 import funkin.states.substates.ResetScoreSubState;
 import funkin.states.substates.GameplayChangersSubstate;
-import funkin.utils.DifficultyUtil;
+import funkin.backend.Difficulty;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup;
@@ -143,12 +143,12 @@ class StoryMenuState extends MusicBeatState
 		leftArrow.antialiasing = ClientPrefs.globalAntialiasing;
 		difficultySelectors.add(leftArrow);
 		
-		DifficultyUtil.reset();
+		Difficulty.reset();
 		if (lastDifficultyName == '')
 		{
-			lastDifficultyName = DifficultyUtil.defaultDifficulty;
+			lastDifficultyName = Difficulty.defaultDifficulty;
 		}
-		curDifficulty = Math.round(Math.max(0, DifficultyUtil.defaultDifficulties.indexOf(lastDifficultyName)));
+		curDifficulty = Math.round(Math.max(0, Difficulty.defaultDifficulties.indexOf(lastDifficultyName)));
 		
 		sprDifficulty = new FlxSprite(0, leftArrow.y);
 		sprDifficulty.antialiasing = ClientPrefs.globalAntialiasing;
@@ -292,7 +292,7 @@ class StoryMenuState extends MusicBeatState
 			PlayState.isStoryMode = true;
 			selectedWeek = true;
 			
-			var diffic = DifficultyUtil.getDifficultyFilePath(curDifficulty);
+			var diffic = Difficulty.getDifficultyFilePath(curDifficulty);
 			if (diffic == null) diffic = '';
 			
 			PlayState.storyDifficulty = curDifficulty;
@@ -317,12 +317,12 @@ class StoryMenuState extends MusicBeatState
 	{
 		curDifficulty += change;
 		
-		if (curDifficulty < 0) curDifficulty = DifficultyUtil.difficulties.length - 1;
-		if (curDifficulty >= DifficultyUtil.difficulties.length) curDifficulty = 0;
+		if (curDifficulty < 0) curDifficulty = Difficulty.difficulties.length - 1;
+		if (curDifficulty >= Difficulty.difficulties.length) curDifficulty = 0;
 		
 		WeekData.setDirectoryFromWeek(loadedWeeks[curWeek]);
 		
-		var diff:String = DifficultyUtil.difficulties[curDifficulty];
+		var diff:String = Difficulty.difficulties[curDifficulty];
 		var newImage:FlxGraphic = Paths.image('menudifficulties/' + Paths.formatToSongPath(diff));
 		// trace(Paths.currentModDirectory + ', menudifficulties/' + Paths.formatToSongPath(diff));
 		
@@ -389,7 +389,7 @@ class StoryMenuState extends MusicBeatState
 		}
 		PlayState.storyWeek = curWeek;
 		
-		DifficultyUtil.reset();
+		Difficulty.reset();
 		var diffStr:String = WeekData.getCurrentWeek().difficulties;
 		if (diffStr != null) diffStr = diffStr.trim(); // Fuck you HTML5
 		difficultySelectors.visible = unlocked;
@@ -410,20 +410,20 @@ class StoryMenuState extends MusicBeatState
 			
 			if (diffs.length > 0 && diffs[0].length > 0)
 			{
-				DifficultyUtil.difficulties = diffs;
+				Difficulty.difficulties = diffs;
 			}
 		}
 		
-		if (DifficultyUtil.difficulties.contains(DifficultyUtil.defaultDifficulty))
+		if (Difficulty.difficulties.contains(Difficulty.defaultDifficulty))
 		{
-			curDifficulty = Math.round(Math.max(0, DifficultyUtil.defaultDifficulties.indexOf(DifficultyUtil.defaultDifficulty)));
+			curDifficulty = Math.round(Math.max(0, Difficulty.defaultDifficulties.indexOf(Difficulty.defaultDifficulty)));
 		}
 		else
 		{
 			curDifficulty = 0;
 		}
 		
-		var newPos:Int = DifficultyUtil.difficulties.indexOf(lastDifficultyName);
+		var newPos:Int = Difficulty.difficulties.indexOf(lastDifficultyName);
 		// trace('Pos of ' + lastDifficultyName + ' is ' + newPos);
 		if (newPos > -1)
 		{

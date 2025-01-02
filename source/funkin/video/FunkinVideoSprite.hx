@@ -139,7 +139,7 @@ class FunkinVideoSprite extends FlxVideoSprite
 	public static function cacheVid(path:String)
 	{
 		var video = new FunkinVideoSprite(0, 0, false);
-		video.onFormat(video.destroy);
+		video.onStart(video.destroy);
 		if (video.load(path, [muted])) video.delayAndStart();
 	}
 	

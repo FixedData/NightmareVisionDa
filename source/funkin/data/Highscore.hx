@@ -1,6 +1,6 @@
 package funkin.data;
 
-import funkin.utils.DifficultyUtil;
+import funkin.backend.Difficulty;
 import flixel.FlxG;
 
 using StringTools;
@@ -85,7 +85,7 @@ class Highscore
 	
 	public static function formatSong(song:String, diff:Int):String
 	{
-		return Paths.formatToSongPath(song) + DifficultyUtil.getDifficultyFilePath(diff);
+		return Paths.formatToSongPath(song) + Difficulty.getDifficultyFilePath(diff);
 	}
 	
 	public static function getScore(song:String, diff:Int):Int

@@ -1,6 +1,6 @@
 package funkin.states.editors;
 
-import funkin.utils.DifficultyUtil;
+import funkin.backend.Difficulty;
 import haxe.ds.IntMap;
 import openfl.geom.Rectangle;
 import haxe.Json;
@@ -336,7 +336,7 @@ class ChartingState extends MusicBeatState
 		if (PlayState.SONG != null) _song = PlayState.SONG;
 		else
 		{
-			DifficultyUtil.reset();
+			Difficulty.reset();
 			
 			_song =
 				{
@@ -3715,15 +3715,15 @@ class ChartingState extends MusicBeatState
 		// shitty null fix, i fucking hate it when this happens
 		// make it look sexier if possible
 		reloadGridLayer();
-		if (DifficultyUtil.difficulties[PlayState.storyDifficulty] != DifficultyUtil.defaultDifficulty)
+		if (Difficulty.difficulties[PlayState.storyDifficulty] != Difficulty.defaultDifficulty)
 		{
-			if (DifficultyUtil.difficulties[PlayState.storyDifficulty] == null)
+			if (Difficulty.difficulties[PlayState.storyDifficulty] == null)
 			{
 				PlayState.SONG = Song.loadFromJson(song.toLowerCase(), song.toLowerCase());
 			}
 			else
 			{
-				PlayState.SONG = Song.loadFromJson(song.toLowerCase() + "-" + DifficultyUtil.difficulties[PlayState.storyDifficulty], song.toLowerCase());
+				PlayState.SONG = Song.loadFromJson(song.toLowerCase() + "-" + Difficulty.difficulties[PlayState.storyDifficulty], song.toLowerCase());
 			}
 		}
 		else

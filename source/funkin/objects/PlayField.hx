@@ -21,7 +21,7 @@ class PlayField extends FlxTypedGroup<StrumNote>
 	public var notes:Array<Note> = [];
 	public var keyCount(default, set):Int = 0;
 	@:isVar
-	public var swagWidth(get, null):Float;
+	public var swagWidth(get, never):Float;
 	
 	public function get_swagWidth()
 	{

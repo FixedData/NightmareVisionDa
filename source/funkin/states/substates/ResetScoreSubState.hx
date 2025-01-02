@@ -1,6 +1,6 @@
 package funkin.states.substates;
 
-import funkin.utils.DifficultyUtil;
+import funkin.backend.Difficulty;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxSubState;
@@ -39,7 +39,7 @@ class ResetScoreSubState extends MusicBeatSubstate
 		{
 			name = WeekData.weeksLoaded.get(WeekData.weeksList[week]).weekName;
 		}
-		name += ' (' + DifficultyUtil.difficulties[difficulty] + ')?';
+		name += ' (' + Difficulty.difficulties[difficulty] + ')?';
 		
 		bg = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
 		bg.alpha = 0;
