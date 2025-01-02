@@ -20,7 +20,7 @@
 			"fps": 24,
 			"anim": "firstDeath",
 			"loop": false,
-			"name": "BF Dies with GF"
+			"name": "BF_dies with GF"
 		},
 		{
 			"offsets": [

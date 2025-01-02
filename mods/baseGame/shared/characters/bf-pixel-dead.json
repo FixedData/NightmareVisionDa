@@ -9,7 +9,7 @@
 			"fps": 24,
 			"anim": "deathConfirm",
 			"indices": [],
-			"name": "RETRY CONFIRM"
+			"name": "RETRY_CONFIRM"
 		},
 		{
 			"loop": true,
@@ -20,7 +20,7 @@
 			"fps": 24,
 			"anim": "deathLoop",
 			"indices": [],
-			"name": "Retry Loop"
+			"name": "Retry_Loop"
 		},
 		{
 			"loop": false,
@@ -31,7 +31,7 @@
 			"fps": 24,
 			"anim": "firstDeath",
 			"indices": [],
-			"name": "BF Dies pixel"
+			"name": "BF_dies_pixel"
 		}
 	],
 	"no_antialiasing": true,

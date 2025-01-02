@@ -2,7 +2,7 @@
 <TextureAtlas imagePath="noooooo.png">
 	<!-- Created with Adobe Flash CS6 version 12.0.0.481 -->
 	<!-- http://www.adobe.com/products/flash.html -->
-	<SubTexture name="Henchmen on rail PINK0000" x="0" y="0" width="434" height="380"/>
+	<SubTexture name="Henchmen_on_rail_PINK0000" x="0" y="0" width="434" height="380"/>
 	<SubTexture name="henchmen death2 PINK0000" x="118" y="999" width="265" height="304"/>
 	<SubTexture name="hench arm spin 2 PINK0000" x="435" y="0" width="121" height="131" frameX="-7" frameY="0" frameWidth="134" frameHeight="131"/>
 	<SubTexture name="hench arm spin 2 PINK0001" x="435" y="0" width="121" height="131" frameX="-7" frameY="0" frameWidth="134" frameHeight="131"/>

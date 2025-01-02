@@ -355,7 +355,7 @@ function deathAnimStartPost(volume){
         //     picoCutscene.alpha = 0.00001;
 
         //     boyfriendCutscene.frames = Paths.getSparrowAtlas('characters/BOYFRIEND');
-        //     boyfriendCutscene.animation.addByPrefix('idle', 'BF idle dance', 24, false);
+        //     boyfriendCutscene.animation.addByPrefix('idle', 'BF_idle_dance', 24, false);
         //     boyfriendCutscene.animation.play('idle', true);
         //     boyfriendCutscene.animation.curAnim.finish();
         //     addBehindBF(boyfriendCutscene);

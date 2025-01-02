@@ -8,7 +8,7 @@
 			"loop": false,
 			"anim": "singLEFT",
 			"fps": 24,
-			"name": "Dad Sing Note LEFT",
+			"name": "Dad_Sing_Note_LEFT",
 			"indices": []
 		},
 		{
@@ -19,7 +19,7 @@
 			"loop": false,
 			"anim": "singDOWN",
 			"fps": 24,
-			"name": "Dad Sing Note DOWN",
+			"name": "Dad_Sing_Note_DOWN",
 			"indices": []
 		},
 		{
@@ -30,7 +30,7 @@
 			"loop": false,
 			"anim": "singUP",
 			"fps": 24,
-			"name": "Dad Sing Note UP",
+			"name": "Dad_Sing_Note_UP",
 			"indices": []
 		},
 		{
@@ -41,7 +41,7 @@
 			"loop": false,
 			"anim": "singRIGHT",
 			"fps": 24,
-			"name": "Dad Sing Note RIGHT",
+			"name": "Dad_Sing_Note_RIGHT",
 			"indices": []
 		},
 		{
@@ -52,7 +52,7 @@
 			"loop": false,
 			"anim": "idle",
 			"fps": 24,
-			"name": "Dad idle dance",
+			"name": "Dad_idle_dance",
 			"indices": []
 		},
 		{
@@ -69,7 +69,7 @@
 				12,
 				12
 			],
-			"name": "Dad idle dance"
+			"name": "Dad_idle_dance"
 		},
 		{
 			"offsets": [
@@ -85,7 +85,7 @@
 				14,
 				15
 			],
-			"name": "Dad Sing Note LEFT"
+			"name": "Dad_Sing_Note_LEFT"
 		},
 		{
 			"offsets": [
@@ -101,7 +101,7 @@
 				17,
 				18
 			],
-			"name": "Dad Sing Note RIGHT"
+			"name": "Dad_Sing_Note_RIGHT"
 		},
 		{
 			"offsets": [
@@ -117,7 +117,7 @@
 				58,
 				59
 			],
-			"name": "Dad Sing Note UP"
+			"name": "Dad_Sing_Note_UP"
 		}
 	],
 	"no_antialiasing": false,

@@ -270,7 +270,6 @@ class TitleState extends MusicBeatState
 			if (titleTimer > 2) titleTimer -= 2;
 		}
 		
-		// EASTER EGG
 		
 		if (initialized && !transitioning && skippedIntro)
 		{

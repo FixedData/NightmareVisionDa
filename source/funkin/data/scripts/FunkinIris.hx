@@ -293,7 +293,6 @@ class FunkinIris extends FunkinScript
 		set("Bar", funkin.objects.Bar);
 		
 		// set("FunkinVideoSprite", funkin.video.FunkinVideoSprite);
-		set("BackgroundGirls", funkin.objects.stageobjects.BackgroundGirls);
 		set("TankmenBG", funkin.objects.stageobjects.TankmenBG);
 		set("FNFSprite", funkin.objects.FNFSprite);
 		set("HealthIcon", HealthIcon);
@@ -305,7 +304,7 @@ class FunkinIris extends FunkinScript
 		set("AttachedSprite", AttachedSprite);
 		set("AttachedText", AttachedText);
 		
-		set("CutsceneHandler", funkin.backend.CutsceneHandler);
+
 		
 		// modchart related
 		set("ModManager", funkin.modchart.ModManager);

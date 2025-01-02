@@ -46,7 +46,7 @@ class limo extends ScriptedStage
             bgLimo = new BGSprite('week4/bgLimo', -150, 480, 0.4, 0.4, ['background limo pink'], true);
             add(bgLimo);
     
-            limoCorpse = new BGSprite('week4/noooooo', -500, limoMetalPole.y - 130, 0.4, 0.4, ['Henchmen on rail'], true);
+            limoCorpse = new BGSprite('week4/noooooo', -500, limoMetalPole.y - 130, 0.4, 0.4, ['Henchmen_on_rail_PINK'], true);
             add(limoCorpse);
     
             limoCorpseTwo = new BGSprite('week4/noooooo', -500, limoMetalPole.y, 0.4, 0.4, ['henchmen death'], true);

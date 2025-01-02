@@ -2,7 +2,11 @@ package funkin.scripting;
 
 import funkin.scripting.classes.ScriptedFunkinScript;
 
-// based on base games implementation!!! love yall
+/**
+ * Class that contains and handles FunkinScripts
+ * 
+ * Based off Funkin ModuleHandler
+ */
 class ScriptManager
 {
 	public static final loadedScripts:Map<String, FunkinScript> = [];

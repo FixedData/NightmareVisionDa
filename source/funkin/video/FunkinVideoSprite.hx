@@ -9,7 +9,7 @@ import hxvlc.util.Location;
 /**
  * Handles video playback as a `FlxSprite`. Has additional features for ease
  * 
- * If used in `PlayState`, will autopause too
+ * If used in `PlayState`, will autopause when the game is paused too
  * 
  * General Usage:
  * ```haxe

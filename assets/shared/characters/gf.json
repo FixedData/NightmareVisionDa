@@ -9,7 +9,7 @@
 			"fps": 24,
 			"anim": "cheer",
 			"indices": [],
-			"name": "GF Cheer"
+			"name": "GF_Cheer"
 		},
 		{
 			"loop": false,
@@ -20,7 +20,7 @@
 			"fps": 24,
 			"anim": "singLEFT",
 			"indices": [],
-			"name": "GF left note"
+			"name": "GF_left_note"
 		},
 		{
 			"loop": false,
@@ -31,7 +31,7 @@
 			"fps": 24,
 			"anim": "singDOWN",
 			"indices": [],
-			"name": "GF Down Note"
+			"name": "GF_Down_Note"
 		},
 		{
 			"loop": false,
@@ -42,7 +42,7 @@
 			"fps": 24,
 			"anim": "singUP",
 			"indices": [],
-			"name": "GF Up Note"
+			"name": "GF_Up_Note"
 		},
 		{
 			"loop": false,
@@ -53,7 +53,7 @@
 			"fps": 24,
 			"anim": "singRIGHT",
 			"indices": [],
-			"name": "GF Right Note"
+			"name": "GF_Right_Note"
 		},
 		{
 			"loop": false,
@@ -78,7 +78,7 @@
 				11,
 				12
 			],
-			"name": "gf sad"
+			"name": "gf_sad"
 		},
 		{
 			"loop": false,
@@ -106,7 +106,7 @@
 				13,
 				14
 			],
-			"name": "GF Dancing Beat"
+			"name": "GF_Dancing_Beat"
 		},
 		{
 			"loop": false,
@@ -133,7 +133,7 @@
 				28,
 				29
 			],
-			"name": "GF Dancing Beat"
+			"name": "GF_Dancing_Beat"
 		},
 		{
 			"loop": true,
@@ -149,7 +149,7 @@
 				2,
 				3
 			],
-			"name": "GF Dancing Beat Hair blowing"
+			"name": "GF_Dancing_Beat Hair blowing"
 		},
 		{
 			"loop": false,
@@ -173,7 +173,7 @@
 				10,
 				11
 			],
-			"name": "GF Dancing Beat Hair Landing"
+			"name": "GF_Dancing_Beat_Hair_Landing"
 		},
 		{
 			"loop": true,
@@ -184,7 +184,7 @@
 			"fps": 24,
 			"anim": "scared",
 			"indices": [],
-			"name": "GF FEAR"
+			"name": "GF_FEAR"
 		}
 	],
 	"no_antialiasing": false,

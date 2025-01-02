@@ -358,7 +358,7 @@ class CharacterEditorState extends MusicBeatState
 					"fps": 24,
 					"anim": "idle",
 					"indices": [],
-					"name": "Dad idle dance"
+					"name": "Dad_idle_dance"
 				},
 				{
 					"offsets": [
@@ -369,7 +369,7 @@ class CharacterEditorState extends MusicBeatState
 					"fps": 24,
 					"anim": "singLEFT",
 					"loop": false,
-					"name": "Dad Sing Note LEFT"
+					"name": "Dad_Sing_Note_LEFT"
 				},
 				{
 					"offsets": [
@@ -380,7 +380,7 @@ class CharacterEditorState extends MusicBeatState
 					"fps": 24,
 					"anim": "singDOWN",
 					"loop": false,
-					"name": "Dad Sing Note DOWN"
+					"name": "Dad_Sing_Note_DOWN"
 				},
 				{
 					"offsets": [
@@ -391,7 +391,7 @@ class CharacterEditorState extends MusicBeatState
 					"fps": 24,
 					"anim": "singUP",
 					"loop": false,
-					"name": "Dad Sing Note UP"
+					"name": "Dad_Sing_Note_UP"
 				},
 				{
 					"offsets": [
@@ -402,7 +402,7 @@ class CharacterEditorState extends MusicBeatState
 					"fps": 24,
 					"anim": "singRIGHT",
 					"loop": false,
-					"name": "Dad Sing Note RIGHT"
+					"name": "Dad_Sing_Note_RIGHT"
 				}
 			],
 			"no_antialiasing": false,
@@ -949,7 +949,7 @@ class CharacterEditorState extends MusicBeatState
 		}
 		else
 		{
-			char.quickAnimAdd('idle', 'BF idle dance');
+			char.quickAnimAdd('idle', 'BF_idle_dance');
 		}
 		
 		if (lastAnim != '')

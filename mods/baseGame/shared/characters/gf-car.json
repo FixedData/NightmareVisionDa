@@ -8,7 +8,7 @@
 			],
 			"anim": "singUP",
 			"fps": 24,
-			"name": "GF Dancing Beat Hair blowing CAR",
+			"name": "GF_Dancing_Beat Hair blowing CAR",
 			"indices": []
 		},
 		{
@@ -36,7 +36,7 @@
 				28,
 				29
 			],
-			"name": "GF Dancing Beat Hair blowing CAR"
+			"name": "GF_Dancing_Beat Hair blowing CAR"
 		},
 		{
 			"loop": false,
@@ -64,7 +64,7 @@
 				13,
 				14
 			],
-			"name": "GF Dancing Beat Hair blowing CAR"
+			"name": "GF_Dancing_Beat Hair blowing CAR"
 		}
 	],
 	"no_antialiasing": false,
