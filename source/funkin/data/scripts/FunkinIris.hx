@@ -291,7 +291,8 @@ class FunkinIris extends FunkinScript
 		// objects
 		set("Note", Note);
 		set("Bar", funkin.objects.Bar);
-		set("FunkinVideoSprite", funkin.video.FunkinVideoSprite);
+		
+		// set("FunkinVideoSprite", funkin.video.FunkinVideoSprite);
 		set("BackgroundGirls", funkin.objects.stageobjects.BackgroundGirls);
 		set("TankmenBG", funkin.objects.stageobjects.TankmenBG);
 		set("FNFSprite", funkin.objects.FNFSprite);

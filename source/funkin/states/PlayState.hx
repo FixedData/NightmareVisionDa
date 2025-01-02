@@ -1,6 +1,5 @@
 package funkin.states;
 
-import funkin.video.FunkinVideoSprite;
 import funkin.backend.Cache;
 import funkin.utils.SortUtil;
 import funkin.utils.DifficultyUtil;
@@ -2197,7 +2196,9 @@ class PlayState extends MusicBeatState
 				vocals.pause();
 			}
 
+			#if VIDEOS_ALLOWED
 			forEachOfType(FunkinVideoSprite,video->video?.pause(),true);
+			#end
 			
 			FlxTimer.globalManager.forEach((i:FlxTimer) -> if (!i.finished) i.active = false);
 			FlxTween.globalManager.forEach((i:FlxTween) -> if (!i.finished) i.active = false);
@@ -2230,7 +2231,9 @@ class PlayState extends MusicBeatState
 				resyncVocals();
 			}
 			
+			#if VIDEOS_ALLOWED
 			forEachOfType(FunkinVideoSprite,video->video?.resume(),true);
+			#end
 
 			FlxTimer.globalManager.forEach((i:FlxTimer) -> if (!i.finished) i.active = true);
 			FlxTween.globalManager.forEach((i:FlxTween) -> if (!i.finished) i.active = true);

@@ -23,6 +23,7 @@ import funkin.api.DiscordClient;
 // Videos ========
 #if VIDEOS_ALLOWED
 import hxvlc.flixel.*;
+import funkin.video.FunkinVideoSprite;
 #end
 // Funkin ========
 import Init;

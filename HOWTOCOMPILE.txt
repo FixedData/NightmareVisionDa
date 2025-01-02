@@ -1,0 +1,10 @@
+Use haxe 4.3.4
+
+then run these commands in order in a command prompt
+haxelib set hxvlc 1.9.5 --global
+y
+haxelib install hmm --global
+haxelib run hmm setup --global
+hmm install
+
+then you should be able to lime test windows or whatnot

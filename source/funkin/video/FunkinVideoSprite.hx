@@ -1,5 +1,6 @@
 package funkin.video;
 
+#if VIDEOS_ALLOWED
 import hxvlc.flixel.FlxVideoSprite;
 import hxvlc.util.Location;
 
@@ -155,4 +156,6 @@ class FunkinVideoSprite extends FlxVideoSprite
 		super.destroy();
 	}
 }
+
+#end
 

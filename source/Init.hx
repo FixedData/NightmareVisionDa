@@ -38,7 +38,9 @@ class Init extends FlxState
 		
 		funkin.data.Highscore.load();
 		
+		#if VIDEOS_ALLOWED
 		funkin.video.FunkinVideoSprite.init();
+		#end
 		
 		PolyClient.init();
 		

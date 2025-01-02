@@ -494,7 +494,7 @@ class DialogueCharacterEditorState extends MusicBeatState
 				+ character.jsonFile.animations.length
 				+ ') - Press W or S to scroll';
 				
-		#if desktop
+		#if DISCORD_ALLOWED
 		// Updating Discord Rich Presence
 		DiscordClient.changePresence("Dialogue Character Editor", "Editting: " + character.jsonFile.image);
 		#end

@@ -19,9 +19,11 @@ class MainMenuState extends MusicBeatState
 	{
 		FlxG.cameras.reset();
 		FlxG.camera.followLerp = 0.3;
-		
-		// if (__script != null) __script.set('MenuButton', MenuButton);
-		
+
+		#if DISCORD_ALLOWED
+		DiscordClient.changePresence('In the menus',null);
+		#end
+
 		persistentUpdate = true;
 		
 		var bg = new FlxSprite().loadGraphic(Paths.image('menuBG'));
@@ -55,7 +57,7 @@ class MainMenuState extends MusicBeatState
 		var options:MenuButton = new MenuButton(0, 0, () -> FlxG.switchState(() -> new OptionsState())).load('options', 'mainmenu/menu_options');
 		addButton(options);
 		
-		var funkVersion = "Nightmare Vision Engine v" + Main.NM_VERSION + '\nPsych Engine v' + Main.PSYCH_VERSION + "\nFriday Night Funkin' v" + Main.FUNKIN_VERSION;
+		final funkVersion = "Nightmare Vision Engine v" + Main.NM_VERSION + '\nPsych Engine v' + Main.PSYCH_VERSION + "\nFriday Night Funkin' v" + Main.FUNKIN_VERSION;
 		
 		var watermark:FlxText = new FlxText(12, FlxG.height - 44, 0, funkVersion, 16);
 		watermark.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);

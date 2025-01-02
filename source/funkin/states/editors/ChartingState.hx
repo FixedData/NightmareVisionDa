@@ -367,10 +367,10 @@ class ChartingState extends MusicBeatState
 			NoteSkinHelper.setNoteHelpers(PlayState.noteSkin, _song.keys);
 		}
 		
-		#if desktop
+		#if DISCORD_ALLOWED
 		// Updating Discord Rich Presence
 		// DiscordClient.changePresence("Chart Editor", StringTools.replace(_song.song, '-', ' '));
-		DiscordClient.changePresence("Chart Editor", "Uhm idk mane burp");
+		DiscordClient.changePresence("Chart Editor", "");
 		#end
 		
 		vortex = FlxG.save.data.chart_vortex;

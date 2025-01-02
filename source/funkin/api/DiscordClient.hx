@@ -1,11 +1,13 @@
 package funkin.api;
 
 import Sys.sleep;
-import discord_rpc.DiscordRpc;
 import funkin.states.*;
 #if LUA_ALLOWED
 import llua.Lua;
 import llua.State;
+#end
+#if DISCORD_ALLOWED
+import discord_rpc.DiscordRpc;
 #end
 
 class DiscordClient
@@ -16,7 +18,9 @@ class DiscordClient
 	
 	public function new()
 	{
+		#if DISCORD_ALLOWED
 		trace("Discord Client starting...");
+		
 		DiscordRpc.start(
 			{
 				clientID: "1252033037680513115",
@@ -26,25 +30,26 @@ class DiscordClient
 			});
 		trace("Discord Client started.");
 		
-		// run the pinging process on its own thread
-		sys.thread.Thread.create(() -> {
-			while (true)
-			{
-				DiscordRpc.process();
-				sleep(2);
-			}
-		});
+		while (true)
+		{
+			DiscordRpc.process();
+			sleep(2);
+		}
 		
 		DiscordRpc.shutdown();
+		#end
 	}
 	
 	public static function shutdown()
 	{
+		#if DISCORD_ALLOWED
 		DiscordRpc.shutdown();
+		#end
 	}
 	
 	static function onReady()
 	{
+		#if DISCORD_ALLOWED
 		DiscordRpc.presence(
 			{
 				details: "mod",
@@ -52,6 +57,7 @@ class DiscordClient
 				largeImageKey: 'icon',
 				largeImageText: "mod"
 			});
+		#end
 	}
 	
 	static function onError(_code:Int, _message:String)
@@ -66,15 +72,18 @@ class DiscordClient
 	
 	public static function initialize()
 	{
-		var DiscordDaemon = sys.thread.Thread.create(() -> {
+		#if DISCORD_ALLOWED
+		sys.thread.Thread.create(() -> {
 			new DiscordClient();
 		});
 		trace("Discord Client initialized");
 		isInitialized = true;
+		#end
 	}
 	
 	public static function changePresence(details:String, state:Null<String>, ?smallImageKey:String, ?hasStartTimestamp:Bool, ?endTimestamp:Float)
 	{
+		#if DISCORD_ALLOWED
 		var startTimestamp:Float = if (hasStartTimestamp) Date.now().getTime() else 0;
 		
 		if (endTimestamp > 0)
@@ -93,8 +102,7 @@ class DiscordClient
 				startTimestamp: Std.int(startTimestamp / 1000),
 				endTimestamp: Std.int(endTimestamp / 1000)
 			});
-			
-		// trace('Discord RPC Updated. Arguments: $details, $state, $smallImageKey, $hasStartTimestamp, $endTimestamp');
+		#end
 	}
 	
 	#if LUA_ALLOWED
