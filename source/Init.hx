@@ -49,8 +49,6 @@ class Init extends FlxState
 		if (FlxG.save.data != null && FlxG.save.data.fullscreen) FlxG.fullscreen = FlxG.save.data.fullscreen;
 		if (FlxG.save.data.weekCompleted != null) funkin.states.StoryMenuState.weekCompleted = FlxG.save.data.weekCompleted;
 		
-		FlxG.mouse.visible = false;
-		
 		// MusicBeatState.transitionInState = funkin.states.transitions.FadeTransition;
 		// MusicBeatState.transitionOutState = funkin.states.transitions.FadeTransition;
 		

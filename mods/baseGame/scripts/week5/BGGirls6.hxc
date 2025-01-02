@@ -1,0 +1,48 @@
+import flixel.FlxG;
+import funkin.scripting.classes.ScriptedFlxSprite;
+import flixel.FlxSprite;
+import funkin.utils.MathUtil;
+
+
+class WeekSixBGGirls extends ScriptedFlxSprite 
+{
+
+	public function new(x:Float, y:Float)
+	{
+		super(x, y);
+
+		frames = Paths.getSparrowAtlas('week6/bgFreaks');
+		
+		swapDanceType();
+		
+		animation.play('danceLeft');
+	}
+
+	var isPissed:Bool = true;
+
+	public function swapDanceType():Void
+	{
+		isPissed = !isPissed;
+		if (!isPissed)
+		{ // Gets unpissed
+			animation.addByIndices('danceLeft', 'BG girls group', MathUtil.numberArray(0, 14), "", 24, false);
+			animation.addByIndices('danceRight', 'BG girls group', MathUtil.numberArray(15, 30), "", 24, false);
+		}
+		else
+		{ // Pisses
+			animation.addByIndices('danceLeft', 'BG fangirls dissuaded', MathUtil.numberArray(0, 14), "", 24, false);
+			animation.addByIndices('danceRight', 'BG fangirls dissuaded', MathUtil.numberArray(15, 30), "", 24, false);
+		}
+		dance();
+	}
+
+	var danceDir:Bool = false;
+
+	public function dance():Void
+	{
+		danceDir = !danceDir;
+
+		if (danceDir) animation.play('danceRight', true);
+		else animation.play('danceLeft', true);
+	}
+}

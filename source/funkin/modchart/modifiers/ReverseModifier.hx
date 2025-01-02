@@ -74,9 +74,10 @@ class ReverseModifier extends NoteModifier
 				{
 					if (y - daNote.offset.y * daNote.scale.y + daNote.height >= center)
 					{
-						var swagRect = new FlxRect(0, 0, daNote.frameWidth, daNote.frameHeight);
+						var swagRect = getRect(daNote);
 						swagRect.height = (center - y) / daNote.scale.y;
 						swagRect.y = daNote.frameHeight - swagRect.height;
+
 						
 						daNote.clipRect = swagRect;
 					}
@@ -85,7 +86,7 @@ class ReverseModifier extends NoteModifier
 				{
 					if (y + daNote.offset.y * daNote.scale.y <= center)
 					{
-						var swagRect = new FlxRect(0, 0, daNote.frameWidth, daNote.frameHeight);
+						var swagRect = getRect(daNote);
 						swagRect.y = (center - y) / daNote.scale.y;
 						swagRect.height -= swagRect.y;
 						
@@ -94,6 +95,13 @@ class ReverseModifier extends NoteModifier
 				}
 			}
 		}
+	}
+
+	inline function getRect(note:Note) //prevents making new rects when we dont need to
+	{
+		if (note.clipRect == null) return new FlxRect(0, 0, note.frameWidth, note.frameHeight);
+
+		return note.clipRect;
 	}
 	
 	override function getPos(time:Float, visualDiff:Float, timeDiff:Float, beat:Float, pos:Vector3, data:Int, player:Int, obj:FlxSprite)
@@ -119,10 +127,8 @@ class ReverseModifier extends NoteModifier
 				{
 					daY += 10.5 * (fakeCrochet * 0.0025) * 1.5 * songSpeed + (46 * (songSpeed - 1));
 					daY -= 46 * (1 - (fakeCrochet / 600)) * songSpeed;
-					/*if (PlayState.isPixelStage)
-							daY += 8;
-						else */
-					daY -= 19;
+					if (PlayState.isPixelStage) daY += 8;
+					else daY -= 19;
 				}
 				daY += (Note.swagWidth * 0.5) - (60.5 * (songSpeed - 1));
 				daY += 27.5 * ((PlayState.SONG.bpm * 0.01) - 1) * (songSpeed - 1);

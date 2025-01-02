@@ -1497,21 +1497,6 @@ class PlayState extends MusicBeatState
 		}
 	}
 	
-	public function addBehindGF(obj:FlxObject)
-	{
-		insert(members.indexOf(gfGroup), obj);
-	}
-	
-	public function addBehindBF(obj:FlxObject)
-	{
-		insert(members.indexOf(boyfriendGroup), obj);
-	}
-	
-	public function addBehindDad(obj:FlxObject)
-	{
-		insert(members.indexOf(dadGroup), obj);
-	}
-	
 	public function clearNotesBefore(time:Float)
 	{
 		var i:Int = unspawnNotes.length - 1;

@@ -55,7 +55,7 @@ class FunkinVideoSprite extends FlxVideoSprite
 	 */
 	public static function init()
 	{
-		hxvlc.util.Handle.init(#if (hxvlc >= "1.8.0") ['--no-lua'] #end);
+		hxvlc.util.Handle.init();
 	}
 	
 	/**

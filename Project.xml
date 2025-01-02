@@ -106,6 +106,8 @@
 
 	<!-- ______________________________ Haxedefines _____________________________ -->
 
+	<haxedef name="HXVLC_NO_SHARE_DIRECTORY" if="hxvlc"/>
+
 	<haxedef name="hscriptPos"/>
 
 	<haxedef name="CRASH_HANDLER"/>
