@@ -1,12 +1,9 @@
 package funkin.objects;
 
-import flixel.FlxG;
 import flixel.FlxSprite;
-import flixel.graphics.frames.FlxAtlasFrames;
-import funkin.shaders.*;
-import funkin.data.*;
-import funkin.states.*;
-
+import funkin.shaders.HSLColorSwap;
+import funkin.states.PlayState;
+import funkin.data.NoteSkinHelper;
 class NoteSplash extends FlxSprite
 {
 	public static var handler:NoteSkinHelper;

@@ -4,7 +4,6 @@ import funkin.data.options.OptionsState;
 import flixel.effects.FlxFlicker;
 import flixel.group.FlxGroup.FlxTypedGroup;
 
-// @:build(funkin.data.scripts.ScriptMacros.buildScriptedState())
 class MainMenuState extends MusicBeatState
 {
 	static var curSelected:Int = 0;

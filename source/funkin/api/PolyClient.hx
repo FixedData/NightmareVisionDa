@@ -8,7 +8,9 @@ import funkin.scripting.ScriptClasses.ScriptFlxAxes;
 import funkin.scripting.ScriptManager;
 import polymod.Polymod;
 
-// needs docs
+/**
+ * Handles interactions with Polymod
+ */
 class PolyClient
 {
 	/**
@@ -94,6 +96,10 @@ class PolyClient
 			});
 	}
 	
+	/**
+	 * Handles the action to take in case an error with Polymod had occured
+	 * @param error Polymod Error holding information about the error
+	 */
 	static function onError(error:PolymodError)
 	{
 		switch (error.code)
@@ -125,12 +131,18 @@ class PolyClient
 		}
 	}
 	
-	public static function doPopUp(title:String, desc:String)
+	/**
+	 * Opens a windows alert
+	 */
+	public static function doPopUp(title:String, description:String)
 	{
-		FlxG.stage.window.alert(desc, title);
-		trace(desc);
+		FlxG.stage.window.alert(description, title);
+		trace(description);
 	}
 	
+	/**
+	 * Sets Polymod Scripted Classes default imports
+	 */
 	static function setImports()
 	{
 		// flixel

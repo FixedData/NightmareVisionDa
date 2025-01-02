@@ -146,16 +146,14 @@ class PlayField extends FlxTypedGroup<StrumNote>
 	
 	public function fadeIn(skip:Bool = false)
 	{
-		for (data in 0...members.length)
+		for (i in 0...members.length)
 		{
-			var babyArrow:StrumNote = members[data];
+			var babyArrow:StrumNote = members[i];
 			if (skip) babyArrow.alpha = baseAlpha;
 			else
 			{
 				babyArrow.alpha = 0;
-				var daY = babyArrow.downScroll ? -10 : 10;
-				babyArrow.y -= daY;
-				FlxTween.tween(babyArrow, {y: babyArrow.y + daY, alpha: baseAlpha}, 1, {ease: FlxEase.circOut, startDelay: 0.5 + (0.2 * data)});
+				FlxTween.tween(babyArrow, {alpha: baseAlpha}, 1, {ease: FlxEase.circOut, startDelay: 0.5 + (0.2 * i)});
 			}
 		}
 	}

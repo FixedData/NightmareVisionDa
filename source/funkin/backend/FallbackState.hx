@@ -1,5 +1,6 @@
 package funkin.backend;
 
+
 class FallbackState extends MusicBeatState
 {
 	var warningMessage:String;

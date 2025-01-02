@@ -149,8 +149,6 @@ class Note extends FlxSprite
 	public var copyAngle:Bool = true;
 	public var copyAlpha:Bool = true;
 	
-	public var doAutoSustain:Bool = false;
-	
 	public var hitHealth:Float = 0.023;
 	public var missHealth:Float = 0.0475;
 	public var rating:String = 'unknown';
@@ -163,7 +161,7 @@ class Note extends FlxSprite
 	public var noMissAnimation:Bool = false;
 	public var hitCausesMiss:Bool = false;
 	public var canMiss:Bool = false;
-	public var distance:Float = 2000; // plan on doing scroll directions soon -bb
+	public var distance:Float = 2000;
 	
 	public var hitsoundDisabled:Bool = false;
 	
@@ -190,7 +188,6 @@ class Note extends FlxSprite
 	{
 		resizeByRatio(value / multSpeed);
 		multSpeed = value;
-		// trace('fuck cock');
 		return value;
 	}
 	
@@ -202,13 +199,7 @@ class Note extends FlxSprite
 			baseScaleY = scale.y;
 			updateHitbox();
 		}
-		
-		if (isSustainNote && !animation.curAnim.name.endsWith('end') && noteData > keys)
-		{
-			scale.y *= ratio / 1.6;
-			baseScaleY = scale.y;
-			updateHitbox();
-		}
+
 	}
 	
 	private function set_texture(value:String):String

@@ -51,8 +51,6 @@ typedef AnimArray =
 	var offsets:Array<Int>;
 	@:optional var cameraOffset:Array<Float>;
 }
-
-// @:build(funkin.utils.MacroUtil.buildFlxSprite())
 class Character extends FlxSprite
 {
 	public var mostRecentRow:Int = 0; // for ghost anims n shit

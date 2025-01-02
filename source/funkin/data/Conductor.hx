@@ -1,10 +1,6 @@
 package funkin.data;
 
-import funkin.game.Rating;
 import funkin.data.Song.SwagSong;
-import funkin.objects.*;
-import funkin.states.*;
-
 /**
  * ...
  * @author
@@ -25,7 +21,6 @@ class Conductor
 	public static var crotchet:Float = ((60 / bpm) * 1000); // beats in milliseconds
 	public static var stepCrotchet:Float = crotchet / 4; // steps in milliseconds
 	public static var songPosition:Float = 0;
-	public static var lastSongPos:Float;
 	public static var offset:Float = 0;
 	
 	public static var ROWS_PER_BEAT = 48; // from Stepmania

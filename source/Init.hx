@@ -6,10 +6,32 @@ import flixel.FlxState;
 import flixel.FlxG;
 import flixel.input.keyboard.FlxKey;
 
+/**
+ * Initiation state that prepares backend classes and returns to menus when finished
+ * 
+ * There is no need to open this beyond the first time
+ */
 class Init extends FlxState
 {
+	/**
+	 * Contains keys that mute the game volume
+	 * 
+	 * default is `0`
+	 */
 	public static var muteKeys:Array<FlxKey> = [FlxKey.ZERO];
+	
+	/**
+	 * Contains keys that turn down the game volume
+	 * 
+	 * default is `-`
+	 */
 	public static var volumeDownKeys:Array<FlxKey> = [FlxKey.NUMPADMINUS, FlxKey.MINUS];
+	
+	/**
+	 * Contains keys that turn up the game volume
+	 * 
+	 * default is `+`
+	 */
 	public static var volumeUpKeys:Array<FlxKey> = [FlxKey.NUMPADPLUS, FlxKey.PLUS];
 	
 	override public function create():Void

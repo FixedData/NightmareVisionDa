@@ -55,6 +55,6 @@ class ScriptManager
 	
 	public static function onStateChangePost()
 	{
-		dispatchEvent(f -> f.onStateChangePost());
+		dispatchEvent(script -> script.onStateChangePost());
 	}
 }
