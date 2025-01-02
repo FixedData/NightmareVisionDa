@@ -168,9 +168,7 @@ class Cache
 		
 		if (!Assets.exists(key, SOUND)) // couldnt find it
 		{
-			// trace('SOUND: [$key] is returning null');
-			
-			FlxG.log.warn('Sound "$key" was not found!');
+			if (nullSafety) FlxG.log.warn('Sound "$key" was not found!');
 			
 			// flixel hates null sounds and instantly kills itself so we are gonna return a sound we know is there
 			// temporarily toggleable until i finish some stuff

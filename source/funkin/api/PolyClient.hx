@@ -81,6 +81,10 @@ class PolyClient
 		{
 			modDirectories.push(i.id);
 		}
+
+		//not gonna stay but did this fo fun
+		FlxG.stage.window.setIcon(lime.graphics.Image.fromBytes(loadedModMetas[0].icon));
+		
 	}
 	
 	static function initialize()

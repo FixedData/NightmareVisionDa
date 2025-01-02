@@ -21,6 +21,8 @@ import haxe.Json;
 import flixel.FlxCamera;
 import flixel.group.FlxSpriteGroup;
 import lime.system.Clipboard;
+import extensions.FlxUIInputTextEx;
+
 #if sys
 import sys.io.File;
 #end
@@ -222,9 +224,9 @@ class DialogueCharacterEditorState extends MusicBeatState
 	var curSelectedAnim:String;
 	var animationArray:Array<String> = [];
 	var animationDropDown:FlxUIDropDownMenuEx;
-	var animationInputText:FlxUIInputText;
-	var loopInputText:FlxUIInputText;
-	var idleInputText:FlxUIInputText;
+	var animationInputText:FlxUIInputTextEx;
+	var loopInputText:FlxUIInputTextEx;
+	var idleInputText:FlxUIInputTextEx;
 	
 	function addAnimationsUI()
 	{
@@ -249,11 +251,11 @@ class DialogueCharacterEditorState extends MusicBeatState
 			}
 		});
 		
-		animationInputText = new FlxUIInputText(15, 85, 80, '', 8);
+		animationInputText = new FlxUIInputTextEx(15, 85, 80, '', 8);
 		blockPressWhileTypingOn.push(animationInputText);
-		loopInputText = new FlxUIInputText(animationInputText.x, animationInputText.y + 35, 150, '', 8);
+		loopInputText = new FlxUIInputTextEx(animationInputText.x, animationInputText.y + 35, 150, '', 8);
 		blockPressWhileTypingOn.push(loopInputText);
-		idleInputText = new FlxUIInputText(loopInputText.x, loopInputText.y + 40, 150, '', 8);
+		idleInputText = new FlxUIInputTextEx(loopInputText.x, loopInputText.y + 40, 150, '', 8);
 		blockPressWhileTypingOn.push(idleInputText);
 		
 		var addUpdateButton:FlxButton = new FlxButton(10, idleInputText.y + 30, "Add/Update", function() {
@@ -354,18 +356,18 @@ class DialogueCharacterEditorState extends MusicBeatState
 		animationDropDown.setData(FlxUIDropDownMenuEx.makeStrIdLabelArray(animationArray, true));
 	}
 	
-	var imageInputText:FlxUIInputText;
+	var imageInputText:FlxUIInputTextEx;
 	var scaleStepper:FlxUINumericStepper;
 	var xStepper:FlxUINumericStepper;
 	var yStepper:FlxUINumericStepper;
-	var blockPressWhileTypingOn:Array<FlxUIInputText> = [];
+	var blockPressWhileTypingOn:Array<FlxUIInputTextEx> = [];
 	
 	function addCharacterUI()
 	{
 		var tab_group = new FlxUI(null, UI_mainbox);
 		tab_group.name = "Character";
 		
-		imageInputText = new FlxUIInputText(10, 30, 80, character.jsonFile.image, 8);
+		imageInputText = new FlxUIInputTextEx(10, 30, 80, character.jsonFile.image, 8);
 		blockPressWhileTypingOn.push(imageInputText);
 		xStepper = new FlxUINumericStepper(imageInputText.x, imageInputText.y + 50, 10, character.jsonFile.position[0], -2000, 2000, 0);
 		yStepper = new FlxUINumericStepper(imageInputText.x + 80, xStepper.y, 10, character.jsonFile.position[1], -2000, 2000, 0);

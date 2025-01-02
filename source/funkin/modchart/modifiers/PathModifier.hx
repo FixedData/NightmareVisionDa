@@ -81,10 +81,10 @@ class PathModifier extends NoteModifier
 			dir++;
 		}
 		
-		for (dir in 0...totalDists.length)
-		{
-			trace(dir, totalDists[dir]);
-		}
+		// for (dir in 0...totalDists.length)
+		// {
+		// 	trace(dir, totalDists[dir]);
+		// }
 	}
 	
 	override function getPos(time:Float, visualDiff:Float, timeDiff:Float, beat:Float, pos:Vector3, data:Int, player:Int, obj:FlxSprite)

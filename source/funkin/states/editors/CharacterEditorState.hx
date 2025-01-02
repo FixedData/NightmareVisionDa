@@ -1,5 +1,8 @@
 package funkin.states.editors;
 
+import extensions.FlxUIInputTextEx;
+import extensions.FlxUIDropDownMenuEx;
+
 import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSprite;
@@ -23,7 +26,6 @@ import lime.system.Clipboard;
 import flixel.animation.FlxAnimation;
 import funkin.objects.*;
 
-import extensions.FlxUIDropDownMenuEx;
 #if MODS_ALLOWED
 import sys.FileSystem;
 #end
@@ -192,8 +194,18 @@ class CharacterEditorState extends MusicBeatState
 		
 		FlxG.mouse.visible = true;
 		reloadCharacterOptions();
+
+
+		updateFlxUIcameras();
 		
 		super.create();
+	}
+
+	inline function updateFlxUIcameras()
+	{
+		UI_box.forEachAlive(spr->spr.cameras = UI_box.cameras,true);
+		UI_characterbox.forEachAlive(spr->spr.cameras = UI_box.cameras,true);
+
 	}
 	
 	var onPixelBG:Bool = false;
@@ -497,8 +509,8 @@ class CharacterEditorState extends MusicBeatState
 		UI_box.addGroup(tab_group);
 	}
 	
-	var imageInputText:FlxUIInputText;
-	var healthIconInputText:FlxUIInputText;
+	var imageInputText:FlxUIInputTextEx;
+	var healthIconInputText:FlxUIInputTextEx;
 	
 	var singDurationStepper:FlxUINumericStepper;
 	var scaleStepper:FlxUINumericStepper;
@@ -519,7 +531,7 @@ class CharacterEditorState extends MusicBeatState
 		var tab_group = new FlxUI(null, UI_box);
 		tab_group.name = "Character";
 		
-		imageInputText = new FlxUIInputText(15, 30, 200, 'characters/BOYFRIEND', 8);
+		imageInputText = new FlxUIInputTextEx(15, 30, 200, 'characters/BOYFRIEND', 8);
 		var reloadImage:FlxButton = new FlxButton(imageInputText.x + 210, imageInputText.y - 3, "Reload Image", function() {
 			char.imageFile = imageInputText.text;
 			reloadCharacterImage();
@@ -539,7 +551,7 @@ class CharacterEditorState extends MusicBeatState
 			getEvent(FlxUINumericStepper.CHANGE_EVENT, healthColorStepperB, null);
 		});
 		
-		healthIconInputText = new FlxUIInputText(15, imageInputText.y + 35, 75, leHealthIcon.getCharacter(), 8);
+		healthIconInputText = new FlxUIInputTextEx(15, imageInputText.y + 35, 75, leHealthIcon.getCharacter(), 8);
 		
 		singDurationStepper = new FlxUINumericStepper(15, healthIconInputText.y + 45, 0.1, 4, 0, 999, 1);
 		
@@ -610,11 +622,11 @@ class CharacterEditorState extends MusicBeatState
 	
 	var ghostDropDown:FlxUIDropDownMenuEx;
 	var animationDropDown:FlxUIDropDownMenuEx;
-	var animationInputText:FlxUIInputText;
+	var animationInputText:FlxUIInputTextEx;
 	var animationXCam:FlxUINumericStepper;
 	var animationYCam:FlxUINumericStepper;
-	var animationNameInputText:FlxUIInputText;
-	var animationIndicesInputText:FlxUIInputText;
+	var animationNameInputText:FlxUIInputTextEx;
+	var animationIndicesInputText:FlxUIInputTextEx;
 	var animationNameFramerate:FlxUINumericStepper;
 	var animationLoopCheckBox:FlxUICheckBox;
 	
@@ -623,9 +635,9 @@ class CharacterEditorState extends MusicBeatState
 		var tab_group = new FlxUI(null, UI_box);
 		tab_group.name = "Animations";
 		
-		animationInputText = new FlxUIInputText(15, 85, 80, '', 8);
-		animationNameInputText = new FlxUIInputText(animationInputText.x, animationInputText.y + 35, 150, '', 8);
-		animationIndicesInputText = new FlxUIInputText(animationNameInputText.x, animationNameInputText.y + 40, 250, '', 8);
+		animationInputText = new FlxUIInputTextEx(15, 85, 80, '', 8);
+		animationNameInputText = new FlxUIInputTextEx(animationInputText.x, animationInputText.y + 35, 150, '', 8);
+		animationIndicesInputText = new FlxUIInputTextEx(animationNameInputText.x, animationNameInputText.y + 40, 250, '', 8);
 		animationNameFramerate = new FlxUINumericStepper(animationInputText.x + 170, animationInputText.y, 1, 24, 0, 240, 0);
 		animationLoopCheckBox = new FlxUICheckBox(animationNameInputText.x + 170, animationNameInputText.y - 1, null, null, "Should it Loop?", 100);
 		
@@ -819,6 +831,7 @@ class CharacterEditorState extends MusicBeatState
 		
 		updatePointerPos();
 		UI_characterbox.addGroup(tab_group);
+		
 	}
 	
 	override function getEvent(id:String, sender:Dynamic, data:Dynamic, ?params:Array<Dynamic>)
@@ -1226,7 +1239,7 @@ class CharacterEditorState extends MusicBeatState
 			textAnim.text = '';
 		}
 		
-		var inputTexts:Array<FlxUIInputText> = [
+		var inputTexts:Array<FlxUIInputTextEx> = [
 			animationInputText,
 			imageInputText,
 			healthIconInputText,

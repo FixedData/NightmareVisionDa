@@ -24,6 +24,7 @@ import funkin.objects.DialogueBoxPsych.DialogueCharacter;
 import funkin.objects.DialogueBoxPsych.DialogueLine;
 import funkin.objects.DialogueBoxPsych.DialogueAnimArray;
 import funkin.objects.DialogueBoxPsych.DialogueFile;
+import extensions.FlxUIInputTextEx;
 
 using StringTools;
 
@@ -113,18 +114,18 @@ class DialogueEditorState extends MusicBeatState
 		add(UI_box);
 	}
 	
-	var characterInputText:FlxUIInputText;
-	var lineInputText:FlxUIInputText;
+	var characterInputText:FlxUIInputTextEx;
+	var lineInputText:FlxUIInputTextEx;
 	var angryCheckbox:FlxUICheckBox;
 	var speedStepper:FlxUINumericStepper;
-	var soundInputText:FlxUIInputText;
+	var soundInputText:FlxUIInputTextEx;
 	
 	function addDialogueLineUI()
 	{
 		var tab_group = new FlxUI(null, UI_box);
 		tab_group.name = "Dialogue Line";
 		
-		characterInputText = new FlxUIInputText(10, 20, 80, DialogueCharacter.DEFAULT_CHARACTER, 8);
+		characterInputText = new FlxUIInputTextEx(10, 20, 80, DialogueCharacter.DEFAULT_CHARACTER, 8);
 		blockPressWhileTypingOn.push(characterInputText);
 		
 		speedStepper = new FlxUINumericStepper(10, characterInputText.y + 40, 0.005, 0.05, 0, 0.5, 3);
@@ -135,10 +136,10 @@ class DialogueEditorState extends MusicBeatState
 			dialogueFile.dialogue[curSelected].boxState = (angryCheckbox.checked ? 'angry' : 'normal');
 		};
 		
-		soundInputText = new FlxUIInputText(10, speedStepper.y + 40, 150, '', 8);
+		soundInputText = new FlxUIInputTextEx(10, speedStepper.y + 40, 150, '', 8);
 		blockPressWhileTypingOn.push(soundInputText);
 		
-		lineInputText = new FlxUIInputText(10, soundInputText.y + 35, 200, DEFAULT_TEXT, 8);
+		lineInputText = new FlxUIInputTextEx(10, soundInputText.y + 35, 200, DEFAULT_TEXT, 8);
 		blockPressWhileTypingOn.push(lineInputText);
 		
 		var loadButton:FlxButton = new FlxButton(20, lineInputText.y + 25, "Load Dialogue", function() {

@@ -1666,6 +1666,7 @@ class PlayState extends MusicBeatState
 			var playerSound = Paths.voices(PlayState.SONG.song, 'player');
 			vocals.addPlayerVocals(new FlxSound().loadEmbedded(playerSound ?? Paths.voices(PlayState.SONG.song)));
 			
+
 			var opponentSound = Paths.voices(PlayState.SONG.song, 'opp');
 			if (opponentSound != null)
 			{
@@ -1687,10 +1688,7 @@ class PlayState extends MusicBeatState
 		notes = new FlxTypedGroup<Note>();
 		add(notes);
 		
-		var noteData:Array<SwagSection>;
-		
-		// NEW SHIT
-		noteData = songData.notes;
+		var noteData:Array<SwagSection> = songData.notes;
 		
 		var daBeats:Int = 0; // Not exactly representative of 'daBeats' lol, just how much it has looped
 		
@@ -1790,8 +1788,8 @@ class PlayState extends MusicBeatState
 		
 		speedChanges.sort(SortUtil.svSort);
 		
-		var lastBFNotes:Array<Note> = [null, null, null, null];
-		var lastDadNotes:Array<Note> = [null, null, null, null];
+		var lastBFNotes:Array<Note> = [for (i in 0...SONG.keys) null];
+		var lastDadNotes:Array<Note> = [for (i in 0...SONG.keys) null];
 		// Should populate these w/ nulls depending on keycount -neb
 		for (section in noteData)
 		{
@@ -3135,7 +3133,7 @@ class PlayState extends MusicBeatState
 				}
 				else
 				{
-					songSpeedTween = FlxTween.tween(this, {songSpeed: newValue}, val2,
+					songSpeedTween = FlxTween.tween(this, {songSpeed: newValue}, val2 / playbackRate,
 						{
 							ease: FlxEase.linear,
 							onComplete: function(twn:FlxTween) {
