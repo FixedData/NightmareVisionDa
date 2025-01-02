@@ -1,6 +1,5 @@
 package funkin.modchart.modifiers;
 
-import ui.*;
 import funkin.modchart.*;
 import flixel.math.FlxPoint;
 import flixel.math.FlxMath;
