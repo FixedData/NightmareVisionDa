@@ -1,18 +1,11 @@
 package funkin.objects;
 
 import flixel.math.FlxRect;
-import funkin.data.scripts.FunkinScript.ScriptType;
-import flixel.FlxG;
 import flixel.math.FlxPoint;
 import flixel.FlxSprite;
-import flixel.graphics.frames.FlxAtlasFrames;
-import flixel.math.FlxMath;
-import flixel.util.FlxColor;
-import openfl.display.BitmapData;
 import funkin.states.editors.ChartingState;
 import funkin.data.*;
 import funkin.states.*;
-import openfl.utils.AssetType;
 import openfl.utils.Assets;
 import funkin.data.scripts.*;
 import funkin.shaders.*;

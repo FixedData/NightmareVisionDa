@@ -43,11 +43,11 @@ import funkin.backend.SyncedFlxSoundGroup;
 
 @:structInit class SpeedEvent
 {
-	public var position:Float; // the y position where the change happens (modManager.getVisPos(songTime))
-	public var startTime:Float; // the song position (conductor.songTime) where the change starts
-	public var songTime:Float; // the song position (conductor.songTime) when the change ends
-	@:optional public var startSpeed:Null<Float>; // the starting speed
-	public var speed:Float; // speed mult after the change
+	public var position:Float = 0; // the y position where the change happens (modManager.getVisPos(songTime))
+	public var startTime:Float = 0; // the song position (conductor.songTime) where the change starts
+	public var songTime:Float = 0; // the song position (conductor.songTime) when the change ends
+	@:optional public var startSpeed:Null<Float> = 1; // the starting speed
+	public var speed:Float = 1; // speed mult after the change
 }
 
 class PlayState extends MusicBeatState
@@ -57,25 +57,10 @@ class PlayState extends MusicBeatState
 	**/
 	public var modManager:ModManager;
 	
-	var speedChanges:Array<SpeedEvent> = [
-		{
-			position: 0,
-			songTime: 0,
-			startTime: 0,
-			startSpeed: 1,
-			speed: 1,
-		}
-	];
+	var speedChanges:Array<SpeedEvent> = [{}];
 	
-	public var currentSV:SpeedEvent =
-		{
-			position: 0,
-			startTime: 0,
-			songTime: 0,
-			speed: 1,
-			startSpeed: 1
-		};
-		
+	public var currentSV:SpeedEvent = {};
+	
 	var noteRows:Array<Array<Array<Note>>> = [[], []];
 	
 	public static var meta:Metadata = null;
@@ -97,30 +82,33 @@ class PlayState extends MusicBeatState
 		new RatingInfo('Sick!', 1),
 		new RatingInfo('Perfect!!', 1),
 	];
-
-
-	public var playbackRate(default,set):Float = 1;
-
+	
+	/**
+	 * Multiplier to game speed
+	 */
+	public var playbackRate(default, set):Float = 1;
+	
 	function set_playbackRate(value:Float):Float
 	{
 		#if FLX_PITCH
-		if(generatedMusic)
+		if (generatedMusic)
 		{
 			vocals.pitch = value;
 			FlxG.sound.music.pitch = value;
-
+			
 			var ratio:Float = playbackRate / value;
-			if(ratio != 1)
+			if (ratio != 1)
 			{
-				for (note in notes.members) note.resizeByRatio(ratio);
-				for (note in unspawnNotes) note.resizeByRatio(ratio);
+				for (note in notes.members)
+					note.resizeByRatio(ratio);
+				for (note in unspawnNotes)
+					note.resizeByRatio(ratio);
 			}
 		}
 		FlxG.animationTimeScale = value;
 		Conductor.safeZoneOffset = (ClientPrefs.safeFrames / 60) * 1000 * value;
-
+		
 		playbackRate = value;
-
 		#else
 		playbackRate = 1;
 		#end
@@ -228,10 +216,14 @@ class PlayState extends MusicBeatState
 	public var unspawnNotes:Array<Note> = [];
 	public var eventNotes:Array<EventNote> = [];
 	
-	var strumLine:FlxSprite;
-	
-	// Handles the new epic mega sexy cam code that i've done
+	/**
+	 * The target point the camera is moving to
+	 */
 	var camFollow:FlxPoint;
+	
+	/**
+	 * The current point the camera is at
+	 */
 	var camFollowPos:FlxObject;
 	
 	static var prevCamFollow:FlxPoint;
@@ -267,7 +259,7 @@ class PlayState extends MusicBeatState
 	var curSong:String = "";
 	
 	/**
-		Holds the minimum and max hp
+		The boundaries that `health` cannot go below or above
 	**/
 	public var healthBounds:FlxBounds<Float> = new FlxBounds(0.0, 2.0);
 	
@@ -433,7 +425,7 @@ class PlayState extends MusicBeatState
 	public var script_SUSTAINENDOffsets:Vector<FlxPoint>;
 	public var script_SPLASHOffsets:Vector<FlxPoint>;
 	
-	var luaDebugGroup:FlxTypedGroup<funkin.data.scripts.FunkinLua.DebugLuaText> = new FlxTypedGroup();
+	var debugText:FlxTypedGroup<DebugText> = new FlxTypedGroup();
 	
 	public var introSoundsSuffix:String = '';
 	
@@ -442,7 +434,7 @@ class PlayState extends MusicBeatState
 	var debugKeysCharacter:Array<FlxKey>;
 	
 	// Less laggy controls
-	public var keysArray:Array<Dynamic>;
+	public var keysArray:Array<Array<FlxKey>>; // did this need to be dynamic?
 	
 	public var camCurTarget:Character = null;
 	
@@ -509,7 +501,6 @@ class PlayState extends MusicBeatState
 		Cache.clearStoredMemory();
 		
 		skipCountdown = false;
-		countdownSounds = true;
 		
 		// for lua
 		instance = this;
@@ -519,6 +510,8 @@ class PlayState extends MusicBeatState
 		debugKeysChart = ClientPrefs.copyKey(ClientPrefs.keyBinds.get('debug_1'));
 		debugKeysCharacter = ClientPrefs.copyKey(ClientPrefs.keyBinds.get('debug_2'));
 		PauseSubState.songName = null; // Reset to default
+
+		playbackRate = ClientPrefs.getGameplaySetting('songspeed',1);
 		
 		keysArray = [
 			ClientPrefs.copyKey(ClientPrefs.keyBinds.get('note_left')),
@@ -566,7 +559,7 @@ class PlayState extends MusicBeatState
 		persistentUpdate = true;
 		persistentDraw = true;
 		
-		if (SONG == null) SONG = Song.loadFromJson('tutorial');
+		SONG ??= Song.loadFromJson('tutorial');
 		
 		Conductor.mapBPMChanges(SONG);
 		Conductor.bpm = SONG.bpm;
@@ -745,10 +738,6 @@ class PlayState extends MusicBeatState
 		
 		Conductor.songPosition = -5000;
 		
-		strumLine = new FlxSprite(ClientPrefs.middleScroll ? STRUM_X_MIDDLESCROLL : STRUM_X, 50);
-		strumLine.visible = false;
-		strumLine.scrollFactor.set();
-		
 		// temp
 		updateTime = true;
 		
@@ -774,9 +763,6 @@ class PlayState extends MusicBeatState
 		noteTypeMap = null;
 		eventPushedMap.clear();
 		eventPushedMap = null;
-		
-		// After all characters being loaded, it makes then invisible 0.01s later so that the player won't freeze when you change characters
-		// add(strumLine);
 		
 		camFollow = new FlxPoint();
 		camFollowPos = new FlxObject(0, 0, 1, 1);
@@ -865,8 +851,8 @@ class PlayState extends MusicBeatState
 			}
 		}
 		
-		luaDebugGroup.cameras = [camOther];
-		add(luaDebugGroup);
+		debugText.cameras = [camOther];
+		add(debugText);
 		
 		var daSong:String = Paths.formatToSongPath(curSong);
 		
@@ -1026,21 +1012,19 @@ class PlayState extends MusicBeatState
 	
 	public function addTextToDebug(text:String, color:FlxColor = FlxColor.WHITE)
 	{
-		#if LUA_ALLOWED
-		var recycledText = luaDebugGroup.recycle(DebugLuaText, () -> new DebugLuaText(text, luaDebugGroup, color));
+		var recycledText = debugText.recycle(DebugText, () -> new DebugText(text, color));
 		recycledText.text = text;
 		recycledText.color = color;
 		recycledText.disableTime = 6;
 		recycledText.alpha = 1;
 		
-		luaDebugGroup.insert(0, recycledText);
-		
-		luaDebugGroup.forEachAlive((spr:DebugLuaText) -> {
-			spr.y += recycledText.height;
+		debugText.forEachAlive((spr:DebugText) -> {
+			spr.y += spr.height;
 		});
 		
+		debugText.insert(0, recycledText);
+		
 		recycledText.y = 10;
-		#end
 	}
 	
 	public function addCharacterToList(newCharacter:String, type:Int)
@@ -1288,7 +1272,7 @@ class PlayState extends MusicBeatState
 				if (lane == 0)
 				{
 					playerStrums = new PlayField(ClientPrefs.middleScroll ? (FlxG.width / 2) : FlxG.width / 2
-						+ (FlxG.width / 4), strumLine.y, SONG.keys, boyfriend, true, cpuControlled, lane);
+						+ (FlxG.width / 4), 50, SONG.keys, boyfriend, true, cpuControlled, lane);
 					playerStrums.noteHitCallback = goodNoteHit;
 					playerStrums.noteMissCallback = noteMiss;
 					playerStrums.playerControls = true;
@@ -1302,7 +1286,7 @@ class PlayState extends MusicBeatState
 				}
 				else if (lane == 1)
 				{
-					opponentStrums = new PlayField(ClientPrefs.middleScroll ? (FlxG.width / 2) : (FlxG.width / 2 - (FlxG.width / 4)), strumLine.y, SONG.keys, dad, false, true, 1);
+					opponentStrums = new PlayField(ClientPrefs.middleScroll ? (FlxG.width / 2) : (FlxG.width / 2 - (FlxG.width / 4)), 50, SONG.keys, dad, false, true, 1);
 					opponentStrums.noteHitCallback = opponentNoteHit;
 					// opponentStrums.noteMissCallback = noteMiss;
 					if (!ClientPrefs.opponentStrums) opponentStrums.baseAlpha = 0;
@@ -1319,7 +1303,7 @@ class PlayState extends MusicBeatState
 					continue;
 				}
 				
-				var strum:PlayField = new PlayField((FlxG.width / 2), strumLine.y, SONG.keys, boyfriend, true, cpuControlled, lane);
+				var strum:PlayField = new PlayField((FlxG.width / 2), 50, SONG.keys, boyfriend, true, cpuControlled, lane);
 				callOnScripts('preReceptorGeneration', [strum, lane]);
 				strum.noteHitCallback = extraNoteHit;
 				// strum.noteMissCallback = noteMiss;
@@ -1422,8 +1406,7 @@ class PlayState extends MusicBeatState
 						introAlts = introAssets.get('pixel');
 						antialias = false;
 					}
-
-
+					
 					function makeCountdownSpr(path:String)
 					{
 						var spr = new FlxSprite().loadGraphic(Paths.image(path));
@@ -1433,15 +1416,15 @@ class PlayState extends MusicBeatState
 						if (PlayState.isPixelStage) spr.setGraphicSize(Std.int(spr.width * daPixelZoom));
 						spr.screenCenter();
 						spr.antialiasing = antialias;
-
+						
 						FlxTween.tween(spr, {alpha: 0}, Conductor.crotchet / 1000 / playbackRate,
-						{
-							ease: FlxEase.cubeInOut,
-							onComplete: function(twn:FlxTween) {
-								remove(spr);
-								spr.destroy();
-							}
-						});
+							{
+								ease: FlxEase.cubeInOut,
+								onComplete: function(twn:FlxTween) {
+									remove(spr);
+									spr.destroy();
+								}
+							});
 						return spr;
 					}
 					
@@ -1452,23 +1435,23 @@ class PlayState extends MusicBeatState
 						case 1:
 							countdownReady = makeCountdownSpr(introAlts[0]);
 							insert(members.indexOf(notes), countdownReady);
-
+							
 							if (countdownSounds) FlxG.sound.play(Paths.sound('intro2' + introSoundsSuffix), 0.6);
 							setOnHScripts('countdownReady', countdownReady);
 							
 						case 2:
 							countdownSet = makeCountdownSpr(introAlts[1]);
-
+							
 							insert(members.indexOf(notes), countdownSet);
-	
+							
 							if (countdownSounds) FlxG.sound.play(Paths.sound('intro1' + introSoundsSuffix), 0.6);
 							setOnHScripts('countdownSet', countdownSet);
 							
 						case 3:
 							countdownGo = makeCountdownSpr(introAlts[2]);
-
+							
 							insert(members.indexOf(notes), countdownGo);
-
+							
 							if (countdownSounds) FlxG.sound.play(Paths.sound('introGo' + introSoundsSuffix), 0.6);
 							setOnHScripts('countdownGo', countdownGo);
 						case 4:
@@ -1559,6 +1542,12 @@ class PlayState extends MusicBeatState
 		startingSong = false;
 		
 		FlxG.sound.playMusic(Paths.inst(PlayState.SONG.song), 1, false);
+		
+		#if FLX_PITCH
+		FlxG.sound.music.pitch = playbackRate;
+		vocals.pitch = playbackRate;
+		#end
+		
 		FlxG.sound.music.onComplete = finishSong.bind(false);
 		vocals.play();
 		vocals.volume = 1;
@@ -1607,13 +1596,8 @@ class PlayState extends MusicBeatState
 		var events:Array<EventNote> = [];
 		var songName:String = Paths.formatToSongPath(SONG.song);
 		var file:String = Paths.json(songName + '/events');
-		#if MODS_ALLOWED
-		if (FileSystem.exists(Paths.modsJson(songName + '/events')) || FileSystem.exists(file))
+		if (Paths.exists(file))
 		{
-		#else
-		if (Assets.exists(file))
-		{
-		#end
 			var eventsData:Array<Dynamic> = Song.loadFromJson('events', songName).events;
 			for (event in eventsData) // Event Notes
 			{
@@ -1631,12 +1615,7 @@ class PlayState extends MusicBeatState
 					events.push(subEvent);
 				}
 			}
-			// this is mainly to shut my syntax highlighting up
-		#if MODS_ALLOWED
 		}
-		#else
-		}
-		#end
 		
 		for (event in songData.events) // Event Notes
 		{
@@ -1693,7 +1672,7 @@ class PlayState extends MusicBeatState
 				vocals.addOpponentVocals(new FlxSound().loadEmbedded(opponentSound));
 			}
 		}
-
+		
 		#if FLX_PITCH
 		FlxG.sound.music.pitch = playbackRate;
 		vocals.pitch = playbackRate;
@@ -2267,8 +2246,7 @@ class PlayState extends MusicBeatState
 		if (finishTimer != null) return;
 		
 		#if FLX_PITCH FlxG.sound.music.pitch = playbackRate; #end
-
-
+		
 		vocals.pause();
 		
 		FlxG.sound.music.play();
@@ -2307,7 +2285,7 @@ class PlayState extends MusicBeatState
 		
 		if (!inCutscene)
 		{
-			var lerpVal:Float = FlxMath.bound(elapsed * 2.4 * cameraSpeed, 0, 1);
+			final lerpVal:Float = FlxMath.bound(elapsed * 2.4 * cameraSpeed * playbackRate, 0, 1);
 			camFollowPos.setPosition(FlxMath.lerp(camFollowPos.x, camFollow.x, lerpVal), FlxMath.lerp(camFollowPos.y, camFollow.y, lerpVal));
 			if (!startingSong
 				&& !endingSong
@@ -3724,11 +3702,7 @@ class PlayState extends MusicBeatState
 				// hold note functions
 				if (!daNote.playField.autoPlayed && daNote.playField.inControl && daNote.playField.playerControls)
 				{
-					if (daNote.isSustainNote
-						&& controlHoldArray[daNote.noteData]
-						&& daNote.canBeHit
-						&& !daNote.tooLate
-						&& !daNote.wasGoodHit)
+					if (daNote.isSustainNote && controlHoldArray[daNote.noteData] && daNote.canBeHit && !daNote.tooLate && !daNote.wasGoodHit)
 					{
 						if (daNote.playField.noteHitCallback != null) daNote.playField.noteHitCallback(daNote, daNote.playField);
 					}
@@ -3979,7 +3953,7 @@ class PlayState extends MusicBeatState
 			{
 				time += 0.15;
 			}
-
+			
 			time /= playbackRate;
 			strumPlayAnim(playfield, Std.int(Math.abs(note.noteData)) % SONG.keys, time, note);
 		}
@@ -4046,7 +4020,7 @@ class PlayState extends MusicBeatState
 					time += 0.15;
 				}
 				time /= playbackRate;
-
+				
 				strumPlayAnim(field, Std.int(Math.abs(note.noteData)) % SONG.keys, time, note);
 			}
 			else
@@ -4229,7 +4203,7 @@ class PlayState extends MusicBeatState
 					time += 0.15;
 				}
 				time /= playbackRate;
-
+				
 				strumPlayAnim(field, Std.int(Math.abs(note.noteData)) % SONG.keys, time, note);
 			}
 			else
@@ -4465,7 +4439,7 @@ class PlayState extends MusicBeatState
 		#end
 		notetypeScripts.clear();
 		eventScripts.clear();
-
+		
 		FlxG.animationTimeScale = 1;
 		#if FLX_PITCH FlxG.sound.music.pitch = 1; #end
 		
@@ -4503,7 +4477,7 @@ class PlayState extends MusicBeatState
 	override function stepHit()
 	{
 		super.stepHit();
-
+		
 		final maxToleratedOffset:Float = 20 * playbackRate;
 		
 		if (Math.abs(FlxG.sound.music.time - (Conductor.songPosition - Conductor.offset)) > maxToleratedOffset
@@ -4762,7 +4736,6 @@ class PlayState extends MusicBeatState
 			{
 				// Rating Percent
 				ratingPercent = Math.min(1, Math.max(0, totalNotesHit / totalPlayed));
-				// trace((totalNotesHit / totalPlayed) + ', Total: ' + totalPlayed + ', notes hit: ' + totalNotesHit);
 				
 				// Rating Name
 				if (ratingPercent >= 1)

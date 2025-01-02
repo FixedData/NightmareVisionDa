@@ -28,7 +28,7 @@
 				20
 			],
 			"loop": false,
-			"anim": "singLEFT",
+			"anim": "singRIGHT",
 			"fps": 24,
 			"name": "Monster left note",
 			"indices": []
@@ -39,7 +39,7 @@
 				30
 			],
 			"loop": false,
-			"anim": "singRIGHT",
+			"anim": "singLEFT",
 			"fps": 24,
 			"name": "Monster Right note",
 			"indices": []

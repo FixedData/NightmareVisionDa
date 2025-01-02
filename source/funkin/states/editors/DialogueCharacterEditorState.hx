@@ -2,19 +2,11 @@ package funkin.states.editors;
 
 import flixel.FlxG;
 import flixel.FlxSprite;
-import flixel.addons.display.FlxGridOverlay;
-import flixel.addons.transition.FlxTransitionableState;
 import funkin.objects.DialogueBoxPsych.DialogueCharacter;
 import funkin.objects.DialogueBoxPsych.DialogueCharacterFile;
-import funkin.objects.DialogueBoxPsych.DialogueLine;
 import funkin.objects.DialogueBoxPsych.DialogueAnimArray;
-import funkin.objects.DialogueBoxPsych.DialogueFile;
-import flixel.group.FlxGroup.FlxTypedGroup;
-import flixel.math.FlxMath;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
-import flixel.addons.ui.FlxInputText;
-import flixel.addons.ui.FlxUI9SliceSprite;
 import flixel.addons.ui.FlxUI;
 import flixel.addons.ui.FlxUICheckBox;
 import flixel.addons.ui.FlxUIInputText;
@@ -33,8 +25,6 @@ import lime.system.Clipboard;
 import sys.io.File;
 #end
 import funkin.objects.*;
-import funkin.data.*;
-import funkin.states.*;
 import extensions.FlxUIDropDownMenuEx;
 
 using StringTools;

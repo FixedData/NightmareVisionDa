@@ -9,7 +9,6 @@ import funkin.states.transitions.SwipeTransition;
 import flixel.addons.ui.FlxUIState;
 import flixel.FlxG;
 import funkin.data.*;
-import funkin.data.scripts.*;
 import funkin.states.PlayState;
 import funkin.states.FreeplayState;
 import flixel.addons.transition.FlxTransitionableState;

@@ -158,9 +158,16 @@ class Paths
 		return return null;
 	}
 	
-	inline public static function exists(key:String, ?type:AssetType):Bool
+	/**
+	 * Checks if a given path exists
+	 * 
+	 * A redirect to `Assets.exists` 
+	 * @param type the File type to look for. Default is `TEXT`
+	 * @return If it exists
+	 */
+	inline public static function exists(path:String, ?type:AssetType):Bool
 	{
-		return Assets.exists(key, type);
+		return Assets.exists(path, type);
 	}
 	
 	inline static public function formatToSongPath(path:String)

@@ -93,12 +93,12 @@ class Song
 		this.bpm = bpm;
 	}
 	
-	public static function loadFromJson(jsonInput:String, ?folder:String, ?mod:Bool = false):SwagSong
+	public static function loadFromJson(jsonInput:String, ?folder:String):SwagSong
 	{
 		var formattedFolder:String = Paths.formatToSongPath(folder);
 		var formattedSong:String = Paths.formatToSongPath(jsonInput);
 		
-		var rawJson = openfl.Assets.getText(Paths.json(formattedFolder + '/' + formattedSong)).trim();
+		var rawJson = Paths.getContent(Paths.json(formattedFolder + '/' + formattedSong)).trim();
 		
 		while (!rawJson.endsWith("}"))
 		{

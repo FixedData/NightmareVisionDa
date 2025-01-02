@@ -74,7 +74,7 @@ class PsychHUD extends BaseHUD
 		add(timeBar);
 		add(timeTxt);
 		
-		onUpdateScore(0,0,0);
+		onUpdateScore(0, 0, 0);
 		
 		parent.setOnScripts('healthBar', healthBar);
 		parent.setOnScripts('iconP1', iconP1);
@@ -92,7 +92,7 @@ class PsychHUD extends BaseHUD
 		FlxTween.tween(timeTxt, {alpha: 1}, 0.5, {ease: FlxEase.circOut});
 	}
 	
-	override function onUpdateScore(score:Float,acc:Float,misses:Float, missed:Bool = false)
+	override function onUpdateScore(score:Float, acc:Float, misses:Float, missed:Bool = false)
 	{
 		var str:String = parent.ratingName;
 		if (parent.totalPlayed != 0)
@@ -100,10 +100,8 @@ class PsychHUD extends BaseHUD
 			str += ' (${acc}%) - ${parent.ratingFC}';
 		}
 		
-		final tempScore:String = 'Score: ${FlxStringUtil.formatMoney(score, false)}'
-			+ (!parent.instakillOnMiss ? ' | Misses: ${misses}' : "")
-			+ ' | Rating: ${str}';
-			
+		final tempScore:String = 'Score: ${FlxStringUtil.formatMoney(score, false)}' + (!parent.instakillOnMiss ? ' | Misses: ${misses}' : "") + ' | Rating: ${str}';
+		
 		if (!missed && !parent.cpuControlled) doScoreBop();
 		
 		scoreTxt.text = '${tempScore}\n';
@@ -115,7 +113,7 @@ class PsychHUD extends BaseHUD
 		
 		FlxTween.cancelTweensOf(scoreTxt);
 		scoreTxt.scale.set(1.075, 1.075);
-		FlxTween.tween(scoreTxt.scale, {x: 1, y: 1}, 0.2);
+		FlxTween.tween(scoreTxt.scale, {x: 1, y: 1}, 0.2 / parent.playbackRate);
 	}
 	
 	public function updateIconsPosition()
@@ -127,11 +125,11 @@ class PsychHUD extends BaseHUD
 	
 	public function updateIconsScale(elapsed:Float)
 	{
-		var mult:Float = FlxMath.lerp(1, iconP1.scale.x, Math.exp(-elapsed * 9));
+		var mult:Float = FlxMath.lerp(1, iconP1.scale.x, Math.exp(-elapsed * 9 * parent.playbackRate));
 		iconP1.scale.set(mult, mult);
 		iconP1.updateHitbox();
 		
-		var mult:Float = FlxMath.lerp(1, iconP2.scale.x, Math.exp(-elapsed * 9));
+		var mult:Float = FlxMath.lerp(1, iconP2.scale.x, Math.exp(-elapsed * 9 * parent.playbackRate));
 		iconP2.scale.set(mult, mult);
 		iconP2.updateHitbox();
 	}
@@ -202,19 +200,18 @@ class PsychHUD extends BaseHUD
 	override function popUpScore(ratingImage:String,
 			combo:Int) // only uses daRating.image for the moment, ill change this later since I imagine ppl will want to use other parts of the rating im just lazy and wanna get a poc out - Orbyy
 	{
-		var rating:FlxSprite = new FlxSprite(); // Todo
-		
-		var coolText:FlxObject = new FlxObject(0, 0);
-		coolText.screenCenter();
-		coolText.x = FlxG.width * 0.35;
-		
-		rating.loadGraphic(Paths.image(ratingPrefix + ratingImage + ratingSuffix));
+
+		final baseX:Float = FlxG.width * 0.35;
+
+
+		//i feel we could recycle these
+		var rating:FlxSprite = new FlxSprite().loadGraphic(Paths.image(ratingPrefix + ratingImage + ratingSuffix));
 		rating.screenCenter();
-		rating.x = coolText.x - 40;
+		rating.x = baseX - 40;
 		rating.y -= 60;
-		rating.acceleration.y = 550;
-		rating.velocity.y -= FlxG.random.int(140, 175);
-		rating.velocity.x -= FlxG.random.int(0, 10);
+		rating.acceleration.y = 550 * parent.playbackRate;
+		rating.velocity.y -= FlxG.random.int(140, 175) * parent.playbackRate;
+		rating.velocity.x -= FlxG.random.int(0, 10) * parent.playbackRate;
 		rating.visible = (!ClientPrefs.hideHud && showRating);
 		rating.x += ClientPrefs.comboOffset[0];
 		rating.y -= ClientPrefs.comboOffset[1];
@@ -234,7 +231,7 @@ class PsychHUD extends BaseHUD
 		if (!PlayState.isPixelStage)
 		{
 			rating.scale.set(0.785, 0.785);
-			FlxTween.tween(rating.scale, {x: 0.7, y: 0.7}, 0.5, {ease: FlxEase.expoOut});
+			FlxTween.tween(rating.scale, {x: 0.7, y: 0.7}, 0.5 / parent.playbackRate, {ease: FlxEase.expoOut});
 		}
 		
 		var seperatedScore:Array<Int> = [];
@@ -252,7 +249,7 @@ class PsychHUD extends BaseHUD
 		{
 			var numScore:FlxSprite = new FlxSprite().loadGraphic(Paths.image(ratingPrefix + 'num' + Std.int(i) + ratingSuffix));
 			numScore.screenCenter();
-			numScore.x = coolText.x + (43 * daLoop) - 90;
+			numScore.x = baseX + (43 * daLoop) - 90;
 			numScore.y += 80;
 			
 			numScore.x += ClientPrefs.comboOffset[2];
@@ -269,9 +266,9 @@ class PsychHUD extends BaseHUD
 			}
 			numScore.updateHitbox();
 			
-			numScore.acceleration.y = FlxG.random.int(200, 300);
-			numScore.velocity.y -= FlxG.random.int(140, 160);
-			numScore.velocity.x = FlxG.random.float(-5, 5);
+			numScore.acceleration.y = FlxG.random.int(200, 300) * parent.playbackRate;
+			numScore.velocity.y -= FlxG.random.int(140, 160) * parent.playbackRate;
+			numScore.velocity.x = FlxG.random.float(-5, 5) * parent.playbackRate;
 			numScore.visible = (!ClientPrefs.hideHud && showCombo);
 			
 			insert(members.indexOf(rating), numScore);
@@ -279,31 +276,30 @@ class PsychHUD extends BaseHUD
 			if (!PlayState.isPixelStage)
 			{
 				numScore.scale.set(0.6, 0.6);
-				FlxTween.tween(numScore.scale, {x: 0.5, y: 0.5}, 0.5, {ease: FlxEase.expoOut});
+				FlxTween.tween(numScore.scale, {x: 0.5, y: 0.5}, 0.5 / parent.playbackRate, {ease: FlxEase.expoOut});
 			}
 			else
 			{
 				numScore.scale.set(6, 6);
 			}
 			
-			FlxTween.tween(numScore, {alpha: 0}, 0.2,
+			FlxTween.tween(numScore, {alpha: 0}, 0.2 / parent.playbackRate,
 				{
 					onComplete: function(tween:FlxTween) {
 						numScore.destroy();
 					},
-					startDelay: Conductor.crotchet * 0.002
+					startDelay: Conductor.crotchet * 0.002 / parent.playbackRate
 				});
 				
 			daLoop++;
 		}
 		
-		FlxTween.tween(rating, {alpha: 0}, 0.2,
+		FlxTween.tween(rating, {alpha: 0}, 0.2 / parent.playbackRate,
 			{
 				onComplete: function(tween:FlxTween) {
-					coolText.destroy();
 					rating.destroy();
 				},
-				startDelay: Conductor.crotchet * 0.001
+				startDelay: Conductor.crotchet * 0.001 / parent.playbackRate
 			});
 	}
 }

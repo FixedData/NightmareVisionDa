@@ -1,27 +1,17 @@
 package funkin.objects;
 
-import funkin.objects.*;
-import funkin.data.*;
 import funkin.states.*;
-import funkin.states.substates.*;
-import flixel.FlxG;
 import flixel.FlxSprite;
-import flixel.addons.effects.FlxTrail;
-import flixel.animation.FlxBaseAnimation;
-import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.tweens.FlxTween;
 import flixel.tweens.FlxEase;
 import flixel.util.FlxColor;
 import flixel.util.FlxSort;
-import funkin.data.Section.SwagSection;
 #if MODS_ALLOWED
 import sys.io.File;
 import sys.FileSystem;
 #end
-import openfl.utils.AssetType;
 import openfl.utils.Assets;
 import haxe.Json;
-import haxe.format.JsonParser;
 
 using StringTools;
 
@@ -51,6 +41,7 @@ typedef AnimArray =
 	var offsets:Array<Int>;
 	@:optional var cameraOffset:Array<Float>;
 }
+
 class Character extends FlxSprite
 {
 	public var mostRecentRow:Int = 0; // for ghost anims n shit
@@ -143,18 +134,8 @@ class Character extends FlxSprite
 				var spriteType = "sparrow";
 				// sparrow
 				// packer
-				// texture
-				#if MODS_ALLOWED
-				var modTxtToFind:String = Paths.modsTxt(json.image);
-				var txtToFind:String = Paths.getPath('images/' + json.image + '.txt', TEXT);
 				
-				// var modTextureToFind:String = Paths.modFolders("images/"+json.image);
-				// var textureToFind:String = Paths.getPath('images/' + json.image, new AssetType();
-				
-				if (FileSystem.exists(modTxtToFind) || FileSystem.exists(txtToFind) || Assets.exists(txtToFind))
-				#else
-				if (Assets.exists(Paths.getPath('images/' + json.image + '.txt', TEXT)))
-				#end
+				if (Paths.exists(Paths.getPath('images/' + json.image + '.txt', TEXT)))
 				{
 					spriteType = "packer";
 				}
@@ -163,7 +144,6 @@ class Character extends FlxSprite
 				{
 					case "packer":
 						frames = Paths.getPackerAtlas(json.image);
-						
 					case "sparrow":
 						frames = Paths.getSparrowAtlas(json.image);
 				}
@@ -385,6 +365,9 @@ class Character extends FlxSprite
 		}
 	}
 	
+	/**
+	 * Internal tracker for the current dance state when using the "gf" dance
+	 */
 	public var danced:Bool = false;
 	
 	override function draw()
@@ -400,7 +383,7 @@ class Character extends FlxSprite
 	}
 	
 	/**
-	 * FOR GF DANCING SHIT
+	 * Makes the character "dance"
 	 */
 	public function dance()
 	{
@@ -523,6 +506,10 @@ class Character extends FlxSprite
 		settingCharacterUp = false;
 	}
 	
+	/**
+	 * Helper function to easily set offsets for a given anim
+	 * @param name the Animation prefix 
+	 */
 	public function addOffset(name:String, x:Float = 0, y:Float = 0)
 	{
 		animOffsets[name] = [x, y];
@@ -539,7 +526,7 @@ class Character extends FlxSprite
 		animation.addByPrefix(name, anim, 24, false);
 	}
 	
-	public function playGhostAnim(ghostID = 0, AnimName:String, Force:Bool = false, Reversed:Bool = false, Frame:Int = 0)
+	public function playGhostAnim(ghostID = 0, animToPlay:String, isForced:Bool = false, isReversed:Bool = false, frame:Int = 0)
 	{
 		final ghost:FlxSprite = doubleGhosts[ghostID];
 		ghost.scale.copyFrom(scale);
@@ -553,12 +540,13 @@ class Character extends FlxSprite
 		ghost.alpha = alpha * 0.6;
 		ghost.visible = true;
 		ghost.color = FlxColor.fromRGB(healthColorArray[0], healthColorArray[1], healthColorArray[2]);
-		ghost.animation.play(AnimName, Force, Reversed, Frame);
-		if (ghostTweenGRP[ghostID] != null) ghostTweenGRP[ghostID].cancel();
+		ghost.animation.play(animToPlay, isForced, isReversed, frame);
 		
-		final direction:String = AnimName.substring(4).split('-')[0];
+		ghostTweenGRP[ghostID]?.cancel();
 		
-		function resolveDir(xDir:Bool = false)
+		final direction:String = animToPlay.substring(4).split('-')[0];
+		
+		function resolveDir(xDir:Bool = false):Float
 		{
 			switch (direction)
 			{
@@ -582,7 +570,7 @@ class Character extends FlxSprite
 		final moveX = x + resolveDir(true);
 		final moveY = y + resolveDir(false);
 		
-		ghostTweenGRP[ghostID] = FlxTween.tween(ghost, {alpha: 0, x: moveX, y: moveY}, 0.75,
+		ghostTweenGRP[ghostID] = FlxTween.tween(ghost, {alpha: 0, x: moveX, y: moveY}, 0.75 / PlayState?.instance.playbackRate ?? 1,
 			{
 				ease: FlxEase.linear,
 				onComplete: function(twn:FlxTween) {
@@ -592,6 +580,7 @@ class Character extends FlxSprite
 				}
 			});
 			
-		ghost.offset.copyFrom(this.offset);
+		if (animOffsets.exists(animToPlay)) ghost.offset.set(animOffsets[animToPlay][0], animOffsets[animToPlay][1]);
+		else ghost.offset.copyFrom(this.offset);
 	}
 }

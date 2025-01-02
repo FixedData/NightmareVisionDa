@@ -143,6 +143,7 @@ class ClientPrefs
 	
 	public static function saveSettings()
 	{
+
 		FlxG.save.data.gpuCaching = gpuCaching;
 		FlxG.save.data.editorGradColors = editorGradColors;
 		FlxG.save.data.editorBoxColors = editorBoxColors;
@@ -386,11 +387,7 @@ class ClientPrefs
 		}
 		if (FlxG.save.data.gameplaySettings != null)
 		{
-			var savedMap:Map<String, Dynamic> = FlxG.save.data.gameplaySettings;
-			for (name => value in savedMap)
-			{
-				gameplaySettings.set(name, value);
-			}
+			copyMapData(cast FlxG.save.data.gameplaySettings, gameplaySettings);
 		}
 		
 		// flixel automatically saves your volume!
@@ -407,11 +404,8 @@ class ClientPrefs
 		save.bind('controls_v2', 'ninjamuffin99');
 		if (save != null && save.data.customControls != null)
 		{
-			var loadedControls:Map<String, Array<FlxKey>> = save.data.customControls;
-			for (control => keys in loadedControls)
-			{
-				keyBinds.set(control, keys);
-			}
+			copyMapData(cast save.data.customControls, keyBinds);
+			
 			reloadControls();
 		}
 	}
@@ -451,5 +445,18 @@ class ClientPrefs
 		}
 		// trace(copiedArray);
 		return copiedArray;
+	}
+	
+	/**
+	 * Copies Map information from one map to another
+	 * @param from The Map we are copying from
+	 * @param to The Map we are copying to
+	 */
+	public static function copyMapData<K, V>(from:Map<K, V>, to:Map<K, V>)
+	{
+		for (k => v in from)
+		{
+			to.set(k, v);
+		}
 	}
 }

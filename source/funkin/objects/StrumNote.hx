@@ -1,16 +1,12 @@
 package funkin.objects;
 
-import flixel.FlxG;
 import flixel.FlxSprite;
-import flixel.graphics.frames.FlxAtlasFrames;
-import openfl.utils.AssetType;
 import openfl.utils.Assets;
 import funkin.objects.*;
 import funkin.shaders.*;
 import funkin.states.*;
 import flixel.math.FlxPoint;
 import funkin.data.*;
-import funkin.modchart.*;
 import math.Vector3;
 #if sys
 import sys.FileSystem;
