@@ -23,7 +23,7 @@ import openfl.events.Event;
 import openfl.net.FileReference;
 import openfl.events.IOErrorEvent;
 import openfl.events.KeyboardEvent;
-import extensions.FlxUIDropDownMenuCustom;
+import extensions.FlxUIDropDownMenuEx;
 
 using StringTools;
 
@@ -64,7 +64,7 @@ class NoteSkinEditor extends MusicBeatState
 	
 	private var blockPressWhileTypingOn:Array<FlxUIInputText> = [];
 	private var blockPressWhileTypingOnStepper:Array<FlxUINumericStepper> = [];
-	private var blockPressWhileScrolling:Array<FlxUIDropDownMenuCustom> = [];
+	private var blockPressWhileScrolling:Array<FlxUIDropDownMenuEx> = [];
 	
 	public var script_NOTEOffsets:Vector<FlxPoint>;
 	public var script_STRUMOffsets:Vector<FlxPoint>;
@@ -808,7 +808,7 @@ class NoteSkinEditor extends MusicBeatState
 		trace('added texture / settings ui');
 	}
 	
-	var animationDropDown:FlxUIDropDownMenuCustom;
+	var animationDropDown:FlxUIDropDownMenuEx;
 	var animationInputText:FlxUIInputText;
 	var animationNameInputText:FlxUIInputText;
 	var animationColorInputText:FlxUIInputText;
@@ -825,7 +825,7 @@ class NoteSkinEditor extends MusicBeatState
 		
 		animationColorInputText = new FlxUIInputText(animationNameInputText.x, animationNameInputText.y + 40, 250, '', 8);
 		
-		animationDropDown = new FlxUIDropDownMenuCustom(15, animationInputText.y - 55, FlxUIDropDownMenuCustom.makeStrIdLabelArray([''], true), function(pressed:String) {
+		animationDropDown = new FlxUIDropDownMenuEx(15, animationInputText.y - 55, FlxUIDropDownMenuEx.makeStrIdLabelArray([''], true), function(pressed:String) {
 			selectedAnimation = Std.parseInt(pressed);
 			var anim:Dynamic = null;
 			
@@ -984,7 +984,7 @@ class NoteSkinEditor extends MusicBeatState
 		}
 		if (animations.length < 1) animations.push('NO ANIMATIONS'); // Prevents crash
 		
-		animationDropDown.setData(FlxUIDropDownMenuCustom.makeStrIdLabelArray(animations, true));
+		animationDropDown.setData(FlxUIDropDownMenuEx.makeStrIdLabelArray(animations, true));
 	}
 	
 	function setMode(mode)

@@ -35,7 +35,7 @@ import sys.io.File;
 import funkin.objects.*;
 import funkin.data.*;
 import funkin.states.*;
-import extensions.FlxUIDropDownMenuCustom;
+import extensions.FlxUIDropDownMenuEx;
 
 using StringTools;
 
@@ -231,7 +231,7 @@ class DialogueCharacterEditorState extends MusicBeatState
 	
 	var curSelectedAnim:String;
 	var animationArray:Array<String> = [];
-	var animationDropDown:FlxUIDropDownMenuCustom;
+	var animationDropDown:FlxUIDropDownMenuEx;
 	var animationInputText:FlxUIInputText;
 	var loopInputText:FlxUIInputText;
 	var idleInputText:FlxUIInputText;
@@ -241,7 +241,7 @@ class DialogueCharacterEditorState extends MusicBeatState
 		var tab_group = new FlxUI(null, UI_mainbox);
 		tab_group.name = "Animations";
 		
-		animationDropDown = new FlxUIDropDownMenuCustom(10, 30, FlxUIDropDownMenuCustom.makeStrIdLabelArray([''], true), function(animation:String) {
+		animationDropDown = new FlxUIDropDownMenuEx(10, 30, FlxUIDropDownMenuEx.makeStrIdLabelArray([''], true), function(animation:String) {
 			var anim:String = animationArray[Std.parseInt(animation)];
 			if (character.dialogueAnimations.exists(anim))
 			{
@@ -361,7 +361,7 @@ class DialogueCharacterEditorState extends MusicBeatState
 		}
 		
 		if (animationArray.length < 1) animationArray = [''];
-		animationDropDown.setData(FlxUIDropDownMenuCustom.makeStrIdLabelArray(animationArray, true));
+		animationDropDown.setData(FlxUIDropDownMenuEx.makeStrIdLabelArray(animationArray, true));
 	}
 	
 	var imageInputText:FlxUIInputText;

@@ -54,7 +54,7 @@ import funkin.states.substates.*;
 import funkin.states.editors.*;
 import funkin.objects.*;
 import funkin.backend.MusicBeatSubstate;
-import extensions.FlxUIDropDownMenuCustom;
+import extensions.FlxUIDropDownMenuEx;
 
 using StringTools;
 
@@ -298,7 +298,7 @@ class ChartingState extends MusicBeatState
 	
 	private var blockPressWhileTypingOn:Array<FlxUIInputText> = [];
 	private var blockPressWhileTypingOnStepper:Array<FlxUINumericStepper> = [];
-	private var blockPressWhileScrolling:Array<FlxUIDropDownMenuCustom> = [];
+	private var blockPressWhileScrolling:Array<FlxUIDropDownMenuEx> = [];
 	
 	var waveformSprite:FlxSprite;
 	var gridLayer:FlxTypedGroup<FlxSprite>;
@@ -611,7 +611,7 @@ class ChartingState extends MusicBeatState
 	var UI_songTitle:FlxUIInputText;
 	var noteSkinInputText:FlxUIInputText;
 	var noteSplashesInputText:FlxUIInputText;
-	var stageDropDown:FlxUIDropDownMenuCustom;
+	var stageDropDown:FlxUIDropDownMenuEx;
 	var sliderRate:FlxUISlider;
 	
 	function addSongUI():Void
@@ -749,21 +749,21 @@ class ChartingState extends MusicBeatState
 		}
 		#end
 		
-		var player1DropDown = new FlxUIDropDownMenuCustom(10, stepperSpeed.y + 45, FlxUIDropDownMenuCustom.makeStrIdLabelArray(characters, true), function(character:String) {
+		var player1DropDown = new FlxUIDropDownMenuEx(10, stepperSpeed.y + 45, FlxUIDropDownMenuEx.makeStrIdLabelArray(characters, true), function(character:String) {
 			_song.player1 = characters[Std.parseInt(character)];
 			updateHeads();
 		});
 		player1DropDown.selectedLabel = _song.player1;
 		blockPressWhileScrolling.push(player1DropDown);
 		
-		var gfVersionDropDown = new FlxUIDropDownMenuCustom(player1DropDown.x, player1DropDown.y + 40, FlxUIDropDownMenuCustom.makeStrIdLabelArray(characters, true), function(character:String) {
+		var gfVersionDropDown = new FlxUIDropDownMenuEx(player1DropDown.x, player1DropDown.y + 40, FlxUIDropDownMenuEx.makeStrIdLabelArray(characters, true), function(character:String) {
 			_song.gfVersion = characters[Std.parseInt(character)];
 			updateHeads();
 		});
 		gfVersionDropDown.selectedLabel = _song.gfVersion;
 		blockPressWhileScrolling.push(gfVersionDropDown);
 		
-		var player2DropDown = new FlxUIDropDownMenuCustom(player1DropDown.x, gfVersionDropDown.y + 40, FlxUIDropDownMenuCustom.makeStrIdLabelArray(characters, true), function(character:String) {
+		var player2DropDown = new FlxUIDropDownMenuEx(player1DropDown.x, gfVersionDropDown.y + 40, FlxUIDropDownMenuEx.makeStrIdLabelArray(characters, true), function(character:String) {
 			_song.player2 = characters[Std.parseInt(character)];
 			updateHeads();
 		});
@@ -819,7 +819,7 @@ class ChartingState extends MusicBeatState
 		
 		if (stages.length < 1) stages.push('stage');
 		
-		stageDropDown = new FlxUIDropDownMenuCustom(player1DropDown.x + 140, player1DropDown.y, FlxUIDropDownMenuCustom.makeStrIdLabelArray(stages, true), function(character:String) {
+		stageDropDown = new FlxUIDropDownMenuEx(player1DropDown.x + 140, player1DropDown.y, FlxUIDropDownMenuEx.makeStrIdLabelArray(stages, true), function(character:String) {
 			_song.stage = stages[Std.parseInt(character)];
 		});
 		stageDropDown.selectedLabel = _song.stage;
@@ -1001,7 +1001,7 @@ class ChartingState extends MusicBeatState
 		var newPrsName = new FlxUIInputText(10, 240, 150, '', 8);
 		
 		var lPrs = new FlxText(10, 260, 0, "Load Preset", 6);
-		var prsList = new FlxUIDropDownMenuCustom(10, 270, FlxUIDropDownMenuCustom.makeStrIdLabelArray(ClientPrefs.chartPresetList), function(preset:String) {
+		var prsList = new FlxUIDropDownMenuEx(10, 270, FlxUIDropDownMenuEx.makeStrIdLabelArray(ClientPrefs.chartPresetList), function(preset:String) {
 			var presetToUse = ClientPrefs.chartPresets.get(preset);
 			ClientPrefs.editorGradColors = presetToUse[0];
 			ClientPrefs.editorGradVis = presetToUse[1];
@@ -1025,7 +1025,7 @@ class ChartingState extends MusicBeatState
 			]);
 			ClientPrefs.saveSettings();
 			
-			prsList.setData(FlxUIDropDownMenuCustom.makeStrIdLabelArray(ClientPrefs.chartPresetList));
+			prsList.setData(FlxUIDropDownMenuEx.makeStrIdLabelArray(ClientPrefs.chartPresetList));
 			
 			trace('New Preset! [${newPrsName.text}]\nValue: ${ClientPrefs.chartPresets.get(newPrsName.text)}');
 		});
@@ -1043,7 +1043,7 @@ class ChartingState extends MusicBeatState
 				]);
 				ClientPrefs.saveSettings();
 				
-				prsList.setData(FlxUIDropDownMenuCustom.makeStrIdLabelArray(ClientPrefs.chartPresetList));
+				prsList.setData(FlxUIDropDownMenuEx.makeStrIdLabelArray(ClientPrefs.chartPresetList));
 			}, null, ignoreWarnings));
 		});
 		clearPresets.color = FlxColor.RED;
@@ -1345,7 +1345,7 @@ class ChartingState extends MusicBeatState
 	
 	var stepperSusLength:FlxUINumericStepper;
 	var strumTimeInputText:FlxUIInputText; // I wanted to use a stepper but we can't scale these as far as i know :(
-	var noteTypeDropDown:FlxUIDropDownMenuCustom;
+	var noteTypeDropDown:FlxUIDropDownMenuEx;
 	var currentType:Int = 0;
 	
 	function addNoteUI():Void
@@ -1431,7 +1431,7 @@ class ChartingState extends MusicBeatState
 			displayNameList[i] = i + '. ' + displayNameList[i];
 		}
 		
-		noteTypeDropDown = new FlxUIDropDownMenuCustom(10, 105, FlxUIDropDownMenuCustom.makeStrIdLabelArray(displayNameList, true), function(character:String) {
+		noteTypeDropDown = new FlxUIDropDownMenuEx(10, 105, FlxUIDropDownMenuEx.makeStrIdLabelArray(displayNameList, true), function(character:String) {
 			currentType = Std.parseInt(character);
 			if (curSelectedNote != null && curSelectedNote[1] > -1)
 			{
@@ -1451,7 +1451,7 @@ class ChartingState extends MusicBeatState
 		UI_box.addGroup(tab_group_note);
 	}
 	
-	var eventDropDown:FlxUIDropDownMenuCustom;
+	var eventDropDown:FlxUIDropDownMenuEx;
 	var descText:FlxText;
 	var selectedEventText:FlxText;
 	
@@ -1524,7 +1524,7 @@ class ChartingState extends MusicBeatState
 		
 		var text:FlxText = new FlxText(20, 30, 0, "Event:");
 		tab_group_event.add(text);
-		eventDropDown = new FlxUIDropDownMenuCustom(20, 50, FlxUIDropDownMenuCustom.makeStrIdLabelArray(leEvents, true), function(pressed:String) {
+		eventDropDown = new FlxUIDropDownMenuEx(20, 50, FlxUIDropDownMenuEx.makeStrIdLabelArray(leEvents, true), function(pressed:String) {
 			var selectedEvent:Int = Std.parseInt(pressed);
 			descText.text = eventStuff[selectedEvent][1];
 			if (curSelectedNote != null && eventStuff != null)

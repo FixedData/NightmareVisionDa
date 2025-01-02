@@ -5,6 +5,10 @@ import flixel.sound.FlxSound;
 
 // based off smth i seen in the funkin repo i liked the idea of it
 // @:access(flixel.sound.FlxSound)
+
+/**
+ * Custom group for `FlxSound`'s that allows for all of them to be treated as one
+ */
 class SyncedFlxSoundGroup extends FlxTypedGroup<FlxSound>
 {
 	public var onComplete:Void->Void = null;
@@ -30,6 +34,11 @@ class SyncedFlxSoundGroup extends FlxTypedGroup<FlxSound>
 		super();
 	}
 	
+	/**
+	 * Adds a new FlxSound instance to the group 
+	 * @param sound The FlxSound instance
+	 * @return FlxSound
+	 */
 	override function add(sound:FlxSound):FlxSound
 	{
 		var f = super.add(sound);
@@ -37,35 +46,46 @@ class SyncedFlxSoundGroup extends FlxTypedGroup<FlxSound>
 		
 		// copy the group settings
 		f.time = time;
-		f.pitch = pitch;
 		f.volume = volume;
+
+		#if FLX_PITCH
+		f.pitch = pitch;
+		#end
 		
 		FlxG.sound.list.add(f);
 		
 		return f;
 	}
 	
-	public function getDesyncDifference(?desiredTime:Float)
+	/**
+	 * Culls through the group to find the largest desync value
+	 * @param baseTime The reference to compare difference to. Defaults to the groups first instance's time
+	 */
+	public function getDesyncDifference(?baseTime:Float)
 	{
-		desiredTime ??= getFirstAlive().time;
+		baseTime ??= getFirstAlive().time;
 		
 		var diff:Float = 0;
 		forEachAlive(f -> {
-			final s = Math.abs(f.time - desiredTime);
+			final s = Math.abs(f.time - baseTime);
 			if (s > diff) diff = s; // get the highest difference
 		});
 		
 		return diff;
 	}
 	
-	public function resync(?time:Float)
+	/**
+	 * Resyncs all group members to a given time. 
+	 * @param time The reference to compare difference to. Defaults to the groups first instance's time
+	 */
+	public function resync(?baseTime:Float)
 	{
-		time ??= getFirstAlive().time; // nothing given. synce to the first track
+		baseTime ??= getFirstAlive().time; // nothing given. synce to the first track
 		
 		forEachAlive(f -> {
 			f.pause();
-			f.time = time;
-			f.play(false, time);
+			f.time = baseTime;
+			f.play(false, baseTime);
 		});
 	}
 	

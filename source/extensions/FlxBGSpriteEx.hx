@@ -1,7 +1,20 @@
 package extensions;
 
+/**
+ * A FlxSprite that is a solid color thats scaled to fit to its cameras
+ * 
+ * Modified to contain a fix for incorrect sizing when cameras are not equal to 1 before `flixel 5.9.0`
+ * 
+ * and to set the color in its constructor
+ */
 class FlxBGSpriteEx extends flixel.system.FlxBGSprite
 {
+	public function new(color:FlxColor = FlxColor.WHITE)
+	{
+		super();
+		this.color = color;
+	}
+
     #if (flixel < "5.9.0")
 	@:access(flixel.FlxCamera)
 	override public function draw():Void
