@@ -34,7 +34,7 @@ class SortUtil
 	/**
 		Sorting method used for the modManagers speedEvents
 	**/
-	inline public static function svSort(Obj1:funkin.states.PlayState.SpeedEvent, Obj2:funkin.states.PlayState.SpeedEvent):Int
+	inline public static function svSort(Obj1:funkin.modchart.SpeedEvent, Obj2:funkin.modchart.SpeedEvent):Int
 	{
 		return FlxSort.byValues(FlxSort.ASCENDING, Obj1.startTime, Obj2.startTime);
 	}

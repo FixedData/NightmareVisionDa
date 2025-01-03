@@ -1,9 +1,5 @@
 package funkin.modchart;
 
-import funkin.data.*;
-import funkin.states.*;
-import funkin.states.substates.*;
-import funkin.objects.*;
 
 class SubModifier extends Modifier
 {

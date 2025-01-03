@@ -2,16 +2,10 @@ package funkin.modchart.modifiers;
 
 import flixel.FlxSprite;
 import funkin.modchart.*;
-import flixel.math.FlxPoint;
 import math.Vector3;
 import flixel.math.FlxMath;
 import flixel.FlxG;
 
-using StringTools;
-
-import funkin.data.*;
-import funkin.states.*;
-import funkin.states.substates.*;
 import funkin.objects.*;
 
 // NOTE: THIS SHOULDNT HAVE ITS PERCENTAGE MODIFIED

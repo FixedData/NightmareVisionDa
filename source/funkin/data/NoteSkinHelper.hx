@@ -1,7 +1,6 @@
 package funkin.data;
 
 import haxe.Json;
-import haxe.format.JsonParser;
 import funkin.objects.*;
 
 // havent implemented this
@@ -251,6 +250,8 @@ class NoteSkinHelper
 	static final defaultSingAnimations:Array<String> = ['singLEFT', 'singDOWN', 'singUP', 'singRIGHT'];
 	
 	public var data:NoteSkinData;
+	public static var instance:NoteSkinHelper;
+	public static var keys:Int = 4;
 	
 	public function new(path:String)
 	{
@@ -294,17 +295,18 @@ class NoteSkinHelper
 	}
 	
 	public static var arrowSkins:Array<String> = [];
-	
-	public static function setNoteHelpers(helper:NoteSkinHelper, keys:Int = 4)
+
+
+	/**
+	 * loads a new instance
+	 * @param path Path to the noteskin
+	 * @param keys How many keys to use
+	 */
+	public static function updateHandle(newInstance:NoteSkinHelper,?keys:Int)
 	{
-		// trace('set helpers!');
-		
-		Note.handler = helper;
-		StrumNote.handler = helper;
-		NoteSplash.handler = helper;
-		
-		Note.keys = keys;
-		StrumNote.keys = keys;
-		NoteSplash.keys = keys;
+		NoteSkinHelper.instance = newInstance;
+
+		keys ??= 4;
+	 	NoteSkinHelper.keys = keys;
 	}
 }

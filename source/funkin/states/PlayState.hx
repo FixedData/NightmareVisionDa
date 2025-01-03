@@ -41,15 +41,6 @@ import funkin.data.scripts.FunkinLua.ModchartSprite;
 import funkin.modchart.*;
 import funkin.backend.SyncedFlxSoundGroup;
 
-@:structInit class SpeedEvent
-{
-	public var position:Float = 0; // the y position where the change happens (modManager.getVisPos(songTime))
-	public var startTime:Float = 0; // the song position (conductor.songTime) where the change starts
-	public var songTime:Float = 0; // the song position (conductor.songTime) when the change ends
-	@:optional public var startSpeed:Null<Float> = 1; // the starting speed
-	public var speed:Float = 1; // speed mult after the change
-}
-
 class PlayState extends MusicBeatState
 {
 	/**
@@ -88,7 +79,7 @@ class PlayState extends MusicBeatState
 	];
 	
 	/**
-	 * Multiplier to game speed
+	 * Multiplier to the game speed
 	 */
 	public var playbackRate(default, set):Float = 1;
 	
@@ -272,7 +263,7 @@ class PlayState extends MusicBeatState
 	@:noCompletion function set_health(v:Float):Float
 	{
 		health = v;
-		callHUDFunc(p -> p.onHealthChange(v));
+		callHUDFunc(hud -> hud.onHealthChange(v));
 		return v;
 	}
 	
@@ -966,8 +957,9 @@ class PlayState extends MusicBeatState
 		}
 		
 		noteSkin ??= new NoteSkinHelper(Paths.noteskin('default'));
+
+		NoteSkinHelper.updateHandle(noteSkin,SONG.keys);
 		
-		NoteSkinHelper.setNoteHelpers(noteSkin, SONG.keys);
 		
 		// trace(noteSkin.data);
 		
@@ -2569,9 +2561,7 @@ class PlayState extends MusicBeatState
 				var strumX:Float = field.members[daNote.noteData].x;
 				var strumY:Float = field.members[daNote.noteData].y;
 				var strumAngle:Float = field.members[daNote.noteData].angle;
-				var strumDirection:Float = field.members[daNote.noteData].direction;
 				var strumAlpha:Float = field.members[daNote.noteData].alpha;
-				var strumScroll:Bool = field.members[daNote.noteData].downScroll;
 				
 				strumX += daNote.offsetX * (daNote.scale.x / daNote.baseScaleX);
 				strumY += daNote.offsetY;
@@ -2579,8 +2569,6 @@ class PlayState extends MusicBeatState
 				strumAlpha *= daNote.multAlpha;
 				var visPos = -((Conductor.visualPosition - daNote.visualTime) * songSpeed);
 				var pos = modManager.getPos(daNote.strumTime, visPos, daNote.strumTime - Conductor.songPosition, curDecBeat, daNote.noteData, daNote.lane, daNote, [], daNote.vec3Cache);
-				
-				// trace(modManager.getVisPos(Conductor.songPosition, daNote.strumTime, songSpeed));
 				
 				modManager.updateObject(curDecBeat, daNote, pos, daNote.lane);
 				pos.x += daNote.offsetX;

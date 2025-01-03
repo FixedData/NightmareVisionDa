@@ -1,5 +1,6 @@
 package funkin.objects;
 
+import funkin.utils.MathUtil;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxSpriteGroup;
@@ -376,15 +377,17 @@ class Alphabet extends FlxSpriteGroup
 		{
 			var scaledY = FlxMath.remapToRange(targetY, 0, 1, 0, 1.3);
 			
-			var lerpVal:Float = FlxMath.bound(elapsed * 9.6, 0, 1);
-			y = FlxMath.lerp(y, (scaledY * yMult) + (FlxG.height * 0.48) + yAdd, lerpVal);
+			var lerpVal:Float = 0.2;
+
+			
+			y = MathUtil.fpsLerp(y, (scaledY * yMult) + (FlxG.height * 0.48) + yAdd, lerpVal);
 			if (forceX != Math.NEGATIVE_INFINITY)
 			{
 				x = forceX;
 			}
 			else
 			{
-				x = FlxMath.lerp(x, (targetY * 20) + 90 + xAdd, lerpVal);
+				x = MathUtil.fpsLerp(x, (targetY * 20) + 90 + xAdd, lerpVal);
 			}
 		}
 		

@@ -1,5 +1,6 @@
 package funkin.data;
 
+import openfl.Assets;
 import funkin.data.Section.SwagSection;
 import haxe.Json;
 #if sys
@@ -98,8 +99,8 @@ class Song
 		var formattedFolder:String = Paths.formatToSongPath(folder);
 		var formattedSong:String = Paths.formatToSongPath(jsonInput);
 		
-		var rawJson = Paths.getContent(Paths.json(formattedFolder + '/' + formattedSong)).trim();
-		
+		var rawJson = Assets.getText(Paths.json(formattedFolder + '/' + formattedSong)).trim();
+
 		while (!rawJson.endsWith("}"))
 		{
 			rawJson = rawJson.substr(0, rawJson.length - 1);

@@ -90,7 +90,7 @@ class NoteSkinEditor extends MusicBeatState
 		if (overrideHandler != null) handler = overrideHandler;
 		else handler = new NoteSkinHelper(Paths.noteskin(path));
 		
-		NoteSkinHelper.setNoteHelpers(handler, handler.data.noteAnimations.length);
+		NoteSkinHelper.updateHandle(handler, handler.data.noteAnimations.length);
 		
 		name = path;
 		keys = handler.data.noteAnimations.length;

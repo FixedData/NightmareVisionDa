@@ -2,8 +2,6 @@ package funkin.modchart.modifiers;
 
 import flixel.FlxSprite;
 import funkin.modchart.*;
-import flixel.math.FlxPoint;
-import flixel.math.FlxMath;
 import flixel.FlxG;
 import math.Vector3;
 import funkin.objects.Note;

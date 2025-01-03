@@ -2,15 +2,12 @@
 package funkin.modchart;
 
 import flixel.tweens.FlxEase;
-import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.FlxSprite;
 import flixel.FlxG;
 import funkin.modchart.Modifier.ModifierType;
 import funkin.modchart.modifiers.*;
 import funkin.modchart.events.*;
-import funkin.data.*;
 import funkin.states.*;
-import funkin.states.substates.*;
 import funkin.objects.*;
 import math.Vector3;
 

@@ -3,98 +3,9 @@ package funkin.shaders;
 // STOLEN FROM HAXEFLIXEL DEMO LOL
 import flixel.system.FlxAssets.FlxShader;
 import openfl.display.BitmapData;
-import openfl.display.Shader;
 import openfl.display.ShaderInput;
-import openfl.utils.Assets;
 import flixel.FlxG;
 import openfl.Lib;
-import funkin.states.*;
-import funkin.data.*;
-
-using StringTools;
-
-typedef ShaderEffect =
-{
-	var shader:Dynamic;
-}
-
-class AllShaders
-{
-	public static var nameToShader:Array<Dynamic> = [
-		BuildingShader,
-		ChromaticAberrationShader,
-		EndlessShader,
-		FlipShader,
-		ScanlineShader,
-		Tiltshift,
-		GreyscaleShader,
-		Grain,
-		VCRDistortionShader,
-		ThreeDShader,
-		FuckingTriangle,
-		BloomShader,
-		GlitchShader,
-		InvertShader,
-		DistortBGShader,
-		PulseShader,
-		GrainChromaFuckingNightmareShader
-	];
-	public static var shaderNames = [
-		"Building",
-		"ChromaticAberration",
-		"Endless",
-		"Flip",
-		"Scanline",
-		"Tiltshift",
-		"Greyscale",
-		"Grain",
-		"VCRDistortion",
-		"ThreeD",
-		"FuckingTriangle",
-		"Bloom",
-		"Glitch",
-		"Invert",
-		"DistortBG",
-		"Pulse",
-		"GrainChromaFuckingNightmare",
-	];
-	public static var nameToEffect:Array<Dynamic> = [
-		BuildingEffect,
-		ChromaticAberrationEffect,
-		EndlessEffect,
-		ScanlineEffect,
-		TiltshiftEffect,
-		GreyscaleEffect,
-		GrainEffect,
-		VCRDistortionEffect,
-		ThreeDEffect,
-		FuckingTriangleEffect,
-		BloomEffect,
-		GlitchEffect,
-		DistortBGEffect,
-		PulseEffect,
-		InvertColorsEffect,
-		GrainChromaFuckingNightmare
-	];
-	public static var effectNames = [
-		"Building",
-		"ChromaticAberration",
-		"Endless",
-		"Scanline",
-		"Titlshift",
-		"Greyscale",
-		"Grain",
-		"VCRDistortion",
-		"ThreeD",
-		"FuckingTriangle",
-		"Bloom",
-		"Glitch",
-		"DistortBG",
-		"Pulse",
-		"InvertColors",
-		"GrainChromaFuckingNightmare"
-	];
-}
 
 class BuildingEffect
 {
@@ -122,7 +33,9 @@ class FlipShader extends FlxShader
 {
 	@:glFragmentSource('
 	#pragma header
-	void main(){
+	
+	void main()
+	{
 		vec4 color = flixel_texture2D(bitmap, 1.0 - openfl_TextureCoordv);
 		
 		gl_FragColor = color;

@@ -16,8 +16,6 @@ using StringTools;
 
 class StrumNote extends FlxSprite
 {
-	public static var handler:NoteSkinHelper;
-	public static var keys:Int = 4;
 	
 	public var intThing:Int = 0;
 	
@@ -105,7 +103,7 @@ class StrumNote extends FlxSprite
 				if (Assets.exists(Paths.getPath("images/pixelUI/QUANT" + texture + ".png", IMAGE))
 					|| FileSystem.exists(Paths.modsImages("pixelUI/QUANT" + texture)))
 				{
-					if (handler.data.hasQuants) br = "QUANT" + texture;
+					if (NoteSkinHelper.instance.data.hasQuants) br = "QUANT" + texture;
 					isQuant = true;
 				}
 			}
@@ -125,7 +123,7 @@ class StrumNote extends FlxSprite
 				if (Assets.exists(Paths.getPath("images/QUANT" + texture + ".png", IMAGE))
 					|| FileSystem.exists(Paths.modsImages("QUANT" + texture)))
 				{
-					if (handler.data.hasQuants) br = "QUANT" + texture;
+					if (NoteSkinHelper.instance.data.hasQuants) br = "QUANT" + texture;
 					isQuant = true;
 					trace(br);
 				}
@@ -150,21 +148,21 @@ class StrumNote extends FlxSprite
 	{
 		// what?
 		// for(note in 0...keys){ animation.addByPrefix(handler.data.noteAnimations[note][0].anim, handler.data.receptorAnimations[noteData][0].anim ); }
-		for (i in 0...handler.data.receptorAnimations[noteData].length)
+		for (i in 0...NoteSkinHelper.instance.data.receptorAnimations[noteData].length)
 		{
-			if (handler != null)
+			if (NoteSkinHelper.instance != null)
 			{
-				animation.addByPrefix(handler.data.receptorAnimations[noteData][i].anim, handler.data.receptorAnimations[noteData][i].xmlName, 24, false);
-				addOffset(handler.data.receptorAnimations[noteData][i].anim, handler.data.receptorAnimations[noteData][i].offsets[0], handler.data.receptorAnimations[noteData][i].offsets[1]);
+				animation.addByPrefix(NoteSkinHelper.instance.data.receptorAnimations[noteData][i].anim, NoteSkinHelper.instance.data.receptorAnimations[noteData][i].xmlName, 24, false);
+				addOffset(NoteSkinHelper.instance.data.receptorAnimations[noteData][i].anim, NoteSkinHelper.instance.data.receptorAnimations[noteData][i].offsets[0], NoteSkinHelper.instance.data.receptorAnimations[noteData][i].offsets[1]);
 			}
 		}
 	}
 	
 	function loadPixelAnimations()
 	{
-		for (note in 0...keys)
+		for (note in 0...NoteSkinHelper.keys)
 		{
-			animation.add(handler.data.noteAnimations[note][0].anim, [note + 4]);
+			animation.add(NoteSkinHelper.instance.data.noteAnimations[note][0].anim, [note + 4]);
 		}
 		
 		animation.add('static', [noteData]);

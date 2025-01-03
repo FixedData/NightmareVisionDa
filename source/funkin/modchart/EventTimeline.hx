@@ -2,10 +2,6 @@ package funkin.modchart;
 
 import funkin.modchart.events.ModEvent;
 import funkin.modchart.events.BaseEvent;
-import funkin.data.*;
-import funkin.states.*;
-import funkin.states.substates.*;
-import funkin.objects.*;
 
 class EventTimeline
 {

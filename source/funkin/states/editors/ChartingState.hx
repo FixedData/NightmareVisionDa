@@ -352,7 +352,7 @@ class ChartingState extends MusicBeatState
 		
 		if (PlayState.noteSkin != null)
 		{
-			NoteSkinHelper.setNoteHelpers(PlayState.noteSkin, _song.keys);
+			NoteSkinHelper.updateHandle(PlayState.noteSkin, _song.keys);
 		}
 		
 		#if DISCORD_ALLOWED
@@ -3232,7 +3232,7 @@ class ChartingState extends MusicBeatState
 			}
 		}
 		
-		if (skin != null) NoteSkinHelper.setNoteHelpers(skin, _song.keys);
+		if (skin != null) NoteSkinHelper.updateHandle(skin, _song.keys);
 		
 		if (_song.notes[curSec].changeBPM && _song.notes[curSec].bpm > 0)
 		{

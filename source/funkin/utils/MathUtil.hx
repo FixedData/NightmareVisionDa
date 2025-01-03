@@ -60,15 +60,4 @@ class MathUtil
 		if (input > max) input = max;
 		return input;
 	}
-	
-	public static function betterLerp(a:Float, b:Float, ratio:Float)
-	{
-		if (a == b) return b;
-		if (Math.abs(b - a) < 0.001) // not the best
-		{
-			return b;
-		}
-		
-		return fpsLerp(a, b, ratio);
-	}
 }
