@@ -1,7 +1,11 @@
 import funkin.scripting.classes.ScriptedStage;
+import funkin.scripting.classes.ScriptedFlxSpriteGroup;
 
 class stage extends ScriptedStage 
 {
+	var dadbattleBlack:BGSprite;
+	var dadbattleLight:BGSprite;
+	var dadbattleFog:ScriptedFlxSpriteGroup;
 
     public function new()
     {
@@ -26,14 +30,78 @@ class stage extends ScriptedStage
 
         stageCurtains.zIndex = 10;
 
-        game.refreshZ(game.newStage);
 
     }
 
+    override function onEventPushedUnique(event)
+    {
+        switch(event.event)
+		{
+			case "Dadbattle Spotlight":
+				dadbattleBlack = new BGSprite(null, -800, -400, 0, 0);
+				dadbattleBlack.makeScaledGraphic(FlxG.width * 2,FlxG.height * 2, FlxColor.BLACK);
+				dadbattleBlack.alpha = 0.25;
+				dadbattleBlack.visible = false;
+				add(dadbattleBlack);
+
+				dadbattleBlack.zIndex = 20;
+
+				dadbattleLight = new BGSprite('spotlight', 400, -400);
+				dadbattleLight.alpha = 0.375;
+				dadbattleLight.blend = BlendMode.ADD;
+				dadbattleLight.visible = false;
+				add(dadbattleLight);
+				dadbattleLight.zIndex = 21;
 
 
+				dadbattleFog = ScriptedFlxSpriteGroup.init('DadSmoke',-200,0);
+				dadbattleFog.visible = false;
+				add(dadbattleFog);
+				dadbattleFog.zIndex = 22;
 
+				game.refreshZ();
 
+        }
+    }
 
+    override function onEventTrigger(ev,v1,v2)
+    {
+        switch(ev)
+		{
+			case "Dadbattle Spotlight":
+                var flValue1 = Std.parseFloat(v1);
+                if (Math.isNaN(flValue1)) flValue1 = 0;
+				var val:Int = Math.round(flValue1);
+
+				switch(val)
+				{
+					case 1, 2, 3: //enable and target dad
+						if(val == 1) //enable
+						{
+							dadbattleBlack.visible = true;
+							dadbattleLight.visible = true;
+							dadbattleFog.visible = true;
+							game.defaultCamZoom += 0.12;
+						}
+
+						var who:Character = dad;
+						if(val > 2) who = boyfriend;
+						//2 only targets dad
+						dadbattleLight.alpha = 0;
+						new FlxTimer().start(0.12, function(tmr:FlxTimer) {
+							dadbattleLight.alpha = 0.375;
+						});
+						dadbattleLight.setPosition(who.getGraphicMidpoint().x - dadbattleLight.width / 2, who.y + who.height - dadbattleLight.height + 50);
+						FlxTween.tween(dadbattleFog, {alpha: 0.7}, 1.5, {ease: FlxEase.quadInOut});
+
+					default:
+						dadbattleBlack.visible = false;
+						dadbattleLight.visible = false;
+						game.defaultCamZoom -= 0.12;
+						FlxTween.tween(dadbattleFog, {alpha: 0}, 0.7, {onComplete: function(twn:FlxTween) dadbattleFog.visible = false});
+				}
+		}
+	
+    }
 
 }
