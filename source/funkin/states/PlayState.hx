@@ -189,7 +189,7 @@ class PlayState extends MusicBeatState
 	public static var curStage:String = 'stage';
 	
 	/**
-		Container that holds all bg elements and the characters
+		Container for all bg elements and the characters
 	**/
 	public var stage:Stage;
 	

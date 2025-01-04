@@ -37,7 +37,7 @@ class mall extends ScriptedStage
         add(tree);
 
         bottomBoppers = new BGSprite('week5/bottomBop', -300, 140, 0.9, 0.9, ['Bottom Level Boppers Idle']);
-        bottomBoppers.animation.addByPrefix('hey', 'Bottom Level Boppers HEY', 24, false);
+        bottomBoppers.animation.addByPrefix('hey', 'Bottom Level Boppers HEY!!', 24, false);
         bottomBoppers.updateHitbox();
         add(bottomBoppers);
 
@@ -55,7 +55,7 @@ class mall extends ScriptedStage
         game.dadGroup.zIndex = 11;
         game.boyfriendGroup.zIndex = 12;
 
-        Paths.sound('Lights_Shut_off')
+        Paths.sound('Lights_Shut_off');
 
 
 		if(PlayState.isStoryMode && !PlayState.seenCutscene)
