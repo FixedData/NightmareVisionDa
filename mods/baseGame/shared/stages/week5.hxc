@@ -55,9 +55,11 @@ class mall extends ScriptedStage
         game.dadGroup.zIndex = 11;
         game.boyfriendGroup.zIndex = 12;
 
-        game.refreshZ();
+        Paths.sound('Lights_Shut_off')
 
 
+		if(PlayState.isStoryMode && !PlayState.seenCutscene)
+			game.songEndCallback = horrorEnding;
     }
 
     override function onCountdownTick(tick)
@@ -86,6 +88,32 @@ class mall extends ScriptedStage
     }
 
 
+    function horrorEnding()
+    {
+        if(PlayState.storyPlaylist[1] == null)
+        {
+            game.endSong();
+            return;
+        }
+
+        if(Paths.formatToSongPath(PlayState.storyPlaylist[1]) == 'winter-horrorland')
+        {
+            FlxG.sound.play(Paths.sound('Lights_Shut_off'));
+
+            var blackShit:FlxSprite = new FlxSprite(-FlxG.width * FlxG.camera.zoom,
+                -FlxG.height * FlxG.camera.zoom).makeScaledGraphic(FlxG.width * 3, FlxG.height * 3, FlxColor.BLACK);
+            blackShit.scrollFactor.set();
+            add(blackShit);
+
+            game.camHUD.visible = false;
+
+            game.inCutscene = true;
+            game.canPause = false;
+
+            FlxTimer.wait(1.5,game.endSong);
+        }
+        else game.endSong();
+    }
 
 
 }

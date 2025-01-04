@@ -48,13 +48,11 @@ class spooky extends ScriptedStage
         game.dadGroup.zIndex = 6;
         game.boyfriendGroup.zIndex = 7;
 
-        game.refreshZ(game.newStage);
-
 
         Paths.sound('thunder_1');
 		Paths.sound('thunder_2');
 
-        if (PlayState.isStoryMode && !game.seenCutscene)
+        if (PlayState.isStoryMode && !PlayState.seenCutscene)
         {
             if (PlayState.SONG.song.toLowerCase() == 'monster')
             {

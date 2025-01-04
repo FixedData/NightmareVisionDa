@@ -31,9 +31,31 @@ class mallEvil extends ScriptedStage
         game.dadGroup.zIndex = 11;
         game.boyfriendGroup.zIndex = 12;
 
-        game.refreshZ();
+		if(PlayState.isStoryMode && !PlayState.seenCutscene)
+			game.songStartCallback = horrorIntro;
+    }
 
+    function horrorIntro()
+    {
+        game.camHUD.visible = false;
+        game.inCutscene = true;
 
+        FlxG.sound.play(Paths.sound('Lights_Turn_On'));
+        FlxG.camera.zoom = 1.5;
+        game.snapCamFollowToPos(400, -2050);
+
+        // blackout at the start
+        var blackScreen:FlxSprite = new FlxSprite().makeScaledGraphic(Std.int(FlxG.width * 2), Std.int(FlxG.height * 2), FlxColor.BLACK);
+        blackScreen.scrollFactor.set();
+        add(blackScreen);
+
+        FlxTween.tween(blackScreen, {alpha: 0}, 0.7, {ease: FlxEase.linear,onComplete: (f)-> remove(blackScreen)});
+
+        FlxTimer.wait(0.8,()->
+        {
+            game.camHUD.visible = true;
+            FlxTween.tween(FlxG.camera, {zoom: game.defaultCamZoom}, 2.5, {ease: FlxEase.quadInOut,onComplete: (f)->game.startCountdown()});
+        });
     }
 
 

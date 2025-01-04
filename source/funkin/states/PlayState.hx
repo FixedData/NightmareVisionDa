@@ -319,10 +319,13 @@ class PlayState extends MusicBeatState
 	public var camHUD:FlxCamera;
 	
 	/**
-		additional unused camera for any extra effects
+		Additional camera for extra elements that need to be drawn over everything
 	**/
 	public var camOther:FlxCamera;
 	
+	/**
+	 * Multiplier thats applied to the camera Speed
+	 */
 	public var cameraSpeed:Float = 1;
 	
 	public var defaultScoreAddition:Bool = true;
@@ -332,13 +335,43 @@ class PlayState extends MusicBeatState
 	var dialogue:Array<String> = ['blah blah blah', 'coolswag'];
 	var dialogueJson:DialogueFile = null;
 	
+	/**
+	 * The total score within a song
+	 */
 	public var songScore:Int = 0;
+
+	/**
+	 * The total amount of notes hit within a song
+	 */
 	public var songHits:Int = 0;
+
+	/**
+	 * The total amount of misses within a song
+	 */
 	public var songMisses:Int = 0;
 	
+	/**
+	 * The total score gained throughout a week
+	 * 
+	 * Only in Story Mode
+	 */
 	public static var campaignScore:Int = 0;
+
+	/**
+	 * The total amount of misses throughout a week
+	 * 
+	 * Only in Story Mode
+	 */
 	public static var campaignMisses:Int = 0;
+
+	/**
+	 * Persistent var for songs to use to prevent replaying cutscenes
+	 */
 	public static var seenCutscene:Bool = false;
+
+	/**
+	 * Tracks how many times you have died in a given song or week
+	 */
 	public static var deathCounter:Int = 0;
 	
 	/**

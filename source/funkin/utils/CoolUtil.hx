@@ -117,7 +117,9 @@ class CoolUtil
 	}
 	
 	/**
-		goes through every pixel a sprites graphic to find its most prominent color. very expensive
+		Finds the most used Color on a given sprite 
+
+		should be used lightly as its very performance heavy
 	**/
 	public static function dominantColor(sprite:flixel.FlxSprite):Int
 	{
@@ -154,12 +156,15 @@ class CoolUtil
 		return maxKey;
 	}
 	
-	public static function browserLoad(site:String)
+	/**
+	 * Opens a given url on your browser
+	 */
+	public static function browserLoad(url:String)
 	{
 		#if linux
-		Sys.command('/usr/bin/xdg-open', [site]);
+		Sys.command('/usr/bin/xdg-open', [url]);
 		#else
-		FlxG.openURL(site);
+		FlxG.openURL(url);
 		#end
 	}
 	
