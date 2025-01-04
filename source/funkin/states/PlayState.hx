@@ -434,6 +434,30 @@ class PlayState extends MusicBeatState
 	public var camCurTarget:Character = null;
 	
 	public var playHUD:BaseHUD = null;
+
+
+	/**
+	 * Called when the Song should start
+	 * 
+	 * Change this to set custom behavior
+	 * 
+	 * Generally though your custom callback Should end with `startCountdown` to start the song
+	 * 
+	 * dont make it null though pls u will die
+	 */
+	public var songStartCallback:Void->Void;
+
+	/**
+	 * Called when the Song should end
+	 * 
+	 * Change this to set custom behavior
+	 * 
+	 * dont make it null though pls u will die
+	 */
+	public var songEndCallback:Void->Void;
+
+
+
 	
 	@:noCompletion public function set_cpuControlled(val:Bool)
 	{
@@ -488,8 +512,11 @@ class PlayState extends MusicBeatState
 		}
 	}
 	
-	// null checking
-	function callHUDFunc(f:BaseHUD->Void) if (playHUD != null) f(playHUD);
+	/**
+	 * Calls a function on the `playHUD`. Does a null check before so
+	 * @param func the function to call 
+	 */
+	function callHUDFunc(func:BaseHUD->Void) if (playHUD != null && playHUD.active && playHUD.exists) func(playHUD);
 	
 	override public function create()
 	{
@@ -514,6 +541,10 @@ class PlayState extends MusicBeatState
 			ClientPrefs.copyKey(ClientPrefs.keyBinds.get('note_up')),
 			ClientPrefs.copyKey(ClientPrefs.keyBinds.get('note_right'))
 		];
+
+
+		songStartCallback = startCountdown;
+		songEndCallback = endSong;
 		
 		// For the "Just the Two of Us" achievement
 		for (i in 0...keysArray.length)
@@ -849,30 +880,8 @@ class PlayState extends MusicBeatState
 		debugText.cameras = [camOther];
 		add(debugText);
 		
-		var daSong:String = Paths.formatToSongPath(curSong);
-		
-		if (isStoryMode && !seenCutscene)
-		{
-			switch (daSong)
-			{
-				default:
-					final ret:Dynamic = callOnHScripts("doStartCountdown", []);
-					// trace(ret);
-					if (ret != null && ret == Globals.Function_Continue) startCountdown();
-					else callOnHScripts("presongCutscene", []);
-			}
-			seenCutscene = true;
-		}
-		else
-		{
-			final ret:Dynamic = callOnHScripts("doStartCountdown", []);
-			// trace(ret);
-			if (ret != null && ret == Globals.Function_Continue)
-			{
-				startCountdown();
-			}
-			else callOnHScripts("presongCutscene", []);
-		}
+		songStartCallback();
+
 		RecalculateRating();
 		updateScoreBar();
 		
@@ -1263,7 +1272,7 @@ class PlayState extends MusicBeatState
 			
 			// generateStaticArrows(0, skipArrowStartTween );
 			// generateStaticArrows(1, skipArrowStartTween );
-			for (lane in 0...SONG.lanes)
+			for (lane in 0...SONG.lanes) //this is messy
 			{
 				if (lane == 0)
 				{
@@ -1299,16 +1308,16 @@ class PlayState extends MusicBeatState
 					continue;
 				}
 				
-				var strum:PlayField = new PlayField((FlxG.width / 2), 50, SONG.keys, boyfriend, true, cpuControlled, lane);
-				callOnScripts('preReceptorGeneration', [strum, lane]);
-				strum.noteHitCallback = extraNoteHit;
+				var additionalStrumline:PlayField = new PlayField((FlxG.width / 2), 50, SONG.keys, boyfriend, true, cpuControlled, lane);
+				callOnScripts('preReceptorGeneration', [additionalStrumline, lane]);
+				additionalStrumline.noteHitCallback = extraNoteHit;
 				// strum.noteMissCallback = noteMiss;
-				strum.playerControls = false;
-				strum.autoPlayed = true;
-				strum.ID = lane;
-				strum.generateReceptors();
-				strum.fadeIn(isStoryMode || skipArrowStartTween);
-				extraFields.push(strum);
+				additionalStrumline.playerControls = false;
+				additionalStrumline.autoPlayed = true;
+				additionalStrumline.ID = lane;
+				additionalStrumline.generateReceptors();
+				additionalStrumline.fadeIn(isStoryMode || skipArrowStartTween);
+				extraFields.push(additionalStrumline);
 			}
 			
 			if (extraFields.length != 0) for (extra in extraFields)
@@ -1950,6 +1959,8 @@ class PlayState extends MusicBeatState
 		generatedMusic = true;
 	}
 	
+	public inline function getVisualPosition() return getTimeFromSV(Conductor.songPosition, currentSV);
+
 	public function getNoteInitialTime(time:Float)
 	{
 		var event:SpeedEvent = getSV(time);
@@ -1981,7 +1992,6 @@ class PlayState extends MusicBeatState
 		return event;
 	}
 	
-	public inline function getVisualPosition() return getTimeFromSV(Conductor.songPosition, currentSV);
 	
 	function eventPushed(event:EventNote)
 	{
@@ -3290,21 +3300,19 @@ class PlayState extends MusicBeatState
 	}
 	
 	public function finishSong(?ignoreNoteOffset:Bool = false):Void
-	{
-		var finishCallback:Void->Void = endSong; // In case you want to change it in a specific song.
-		
+	{	
 		updateTime = false;
 		FlxG.sound.music.volume = 0;
 		vocals.volume = 0;
 		vocals.pause();
 		if (ClientPrefs.noteOffset <= 0 || ignoreNoteOffset)
 		{
-			finishCallback();
+			songEndCallback();
 		}
 		else
 		{
 			finishTimer = new FlxTimer().start(ClientPrefs.noteOffset / 1000, function(tmr:FlxTimer) {
-				finishCallback();
+				songEndCallback();
 			});
 		}
 	}

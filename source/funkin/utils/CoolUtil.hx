@@ -11,8 +11,28 @@ import openfl.utils.Assets;
 **/
 class CoolUtil
 {
+	/**
+	 * Remaps a value from a range to a new range
+	 * 
+	 * Akin to `FlxMath.remapToRange`
+	 * @param x Input value
+	 * @param l1 Low bound of range 1
+	 * @param h1 High bound of range 1
+	 * @param l2 Low bound of range 2
+	 * @param h2 High bound of range 2
+	 * @return Input value remapped to range 2
+	 */
 	inline public static function scale(x:Float, l1:Float, h1:Float, l2:Float, h2:Float):Float return ((x - l1) * (h2 - l2) / (h1 - l1) + l2);
 	
+	/**
+	 * Clamps/Bounds a value between a range that it cannot go below or over
+	 * 
+	 * Akin to `FlxMath.bound`
+	 * @param n Input value
+	 * @param l Low boundary
+	 * @param h High Boundary
+	 * @return Clamped value
+	 */
 	inline public static function clamp(n:Float, l:Float, h:Float)
 	{
 		if (n > h) n = h;
@@ -20,9 +40,19 @@ class CoolUtil
 		return n;
 	}
 	
+	/**
+	 * Creates or uses a provided point and rotates it around a given `x` and `y` by radians
+	 * 
+	 * Akin to `new FlxPoint(x,y).radians += angle`
+	 * @param x 
+	 * @param y 
+	 * @param angle 
+	 * @param point 
+	 * @return A rotated FlxPoint
+	 */
 	public static function rotate(x:Float, y:Float, angle:Float, ?point:FlxPoint):FlxPoint
 	{
-		var p = point == null ? FlxPoint.weak() : point;
+		var p = point ?? FlxPoint.weak();
 		p.set((x * Math.cos(angle)) - (y * Math.sin(angle)), (x * Math.sin(angle)) + (y * Math.cos(angle)));
 		return p;
 	}

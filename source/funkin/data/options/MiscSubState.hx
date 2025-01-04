@@ -30,16 +30,6 @@ class MiscSubState extends BaseOptionsMenu
 			
 			addOption(option);
 		}
-		else
-		{
-			// if you guys ever add more options to misc that dont rely on the thread count
-			var option:Option = new Option("Nothin' here!", // Name
-				"Usually there'd be options about multi-thread loading, but you only have 1 thread to use so no real use", // Description
-				'', // Save data variable name
-				'label', // Variable type
-				true); // Default value
-			addOption(option);
-		}
 		
 		var option:Option = new Option('GPU Caching', 'If checked, GPU caching will be enabled.', 'gpuCaching', 'bool', false);
 		addOption(option);
