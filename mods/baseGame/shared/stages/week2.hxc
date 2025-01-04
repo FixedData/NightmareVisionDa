@@ -30,6 +30,7 @@ class spooky extends ScriptedStage
         {
             halloweenBG = new BGSprite('week2/halloween_bg_low', -200, -100,1,1);
         }
+        
         add(halloweenBG);
         halloweenBG.scale.x *= 1.1;
         halloweenBG.scale.y *= 1.1;
@@ -48,6 +49,19 @@ class spooky extends ScriptedStage
         game.boyfriendGroup.zIndex = 7;
 
         game.refreshZ(game.newStage);
+
+
+        Paths.sound('thunder_1');
+		Paths.sound('thunder_2');
+
+        if (PlayState.isStoryMode && !game.seenCutscene)
+        {
+            if (PlayState.SONG.song.toLowerCase() == 'monster')
+            {
+                game.songStartCallback = monsterIntro;
+            }
+        }
+
 
     }
 
@@ -97,6 +111,38 @@ class spooky extends ScriptedStage
             FlxTween.tween(halloweenWhite, {alpha: 0.5}, 0.075);
             FlxTween.tween(halloweenWhite, {alpha: 0}, 0.25, {startDelay: 0.15});
         }
+    }
+
+    function monsterIntro()
+    {
+        game.inCutscene = true;
+        game.camHUD.visible = false;
+
+        game.snapCamFollowToPos(dad.getMidpoint().x + 150, dad.getMidpoint().y - 100);
+
+
+        // character anims
+        FlxG.sound.play(Paths.sound('thunder_' + FlxG.random.int(1,2)));
+        if(gf != null) gf.playAnim('scared', true);
+        boyfriend.playAnim('scared', true);
+
+        // white flash
+        var whiteScreen:FlxSprite = new FlxSprite().makeScaledGraphic(Std.int(FlxG.width * 2), Std.int(FlxG.height * 2), FlxColor.WHITE);
+        whiteScreen.scrollFactor.set();
+        whiteScreen.blend = BlendMode.ADD;
+        add(whiteScreen);
+        FlxTween.tween(whiteScreen, {alpha: 0}, 1, {
+            startDelay: 0.1,
+            ease: FlxEase.linear,
+            onComplete: function(twn:FlxTween)
+            {
+                remove(whiteScreen);
+                whiteScreen.destroy();
+
+                game.camHUD.visible = true;
+                game.startCountdown();
+            }
+        });
     }
 
 
