@@ -16,73 +16,58 @@ class school extends ScriptedStage
     override function onCreate()
     {
 
-        var bgSky:BGSprite = new BGSprite('week6/weebSky', 0, 0, 0.1, 0.1);
+        FlxG.camera.pixelPerfectRender = true;
+
+        var bgSky:BGSprite = new BGSprite('week6/weebSky', 0, 0, 1,1);
         add(bgSky);
         bgSky.antialiasing = false;
+
     
-        var xOffset = -200;
-    
-        var bgSchool:BGSprite = new BGSprite('week6/weebSchool', xOffset, 0, 0.6, 0.90);
+        var bgSchool:BGSprite = new BGSprite('week6/weebSchool', bgSky.x, bgSky.y , 1,1);
         add(bgSchool);
         bgSchool.antialiasing = false;
     
-        var bgStreet:BGSprite = new BGSprite('week6/weebStreet', xOffset, 0, 0.95, 0.95);
+        var bgStreet:BGSprite = new BGSprite('week6/weebStreet', bgSky.x, bgSky.y,1,1);
         add(bgStreet);
         bgStreet.antialiasing = false;
     
-        var widShit = Std.int(bgSky.width * 6);
 
-        if(!ClientPrefs.lowQuality) 
-        {
-            var fgTrees:BGSprite = new BGSprite('week6/weebTreesBack', xOffset + 170, 130, 0.9, 0.9);
-            fgTrees.setGraphicSize(Std.int(widShit * 0.8));
-            fgTrees.updateHitbox();
-            add(fgTrees);
-            fgTrees.antialiasing = false;
-        }
-    
-        var bgTrees:FlxSprite = new FlxSprite(xOffset - 380, -800);
+
+        var bgTrees:FlxSprite = new FlxSprite(-30, -120);
         bgTrees.frames = Paths.getPackerAtlas('week6/weebTrees');
         bgTrees.animation.add('treeLoop', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18], 12);
         bgTrees.animation.play('treeLoop');
         bgTrees.scrollFactor.set(0.85, 0.85);
         add(bgTrees);
-        bgTrees.antialiasing = false;
+        bgTrees.zIndex = 1;
     
         if(!ClientPrefs.lowQuality) 
         {
-            var treeLeaves:BGSprite = new BGSprite('week6/petals', xOffset, -40, 0.85, 0.85, ['PETALS ALL'], true);
-            treeLeaves.setGraphicSize(widShit);
+            var fgTrees:BGSprite = new BGSprite('week6/weebTreesBack', (170 / 6), 40, 0.9, 0.9 );
+            fgTrees.updateHitbox();
+            add(fgTrees);
+            fgTrees.antialiasing = false;
+
+            bgGirls = ScriptedFlxSprite.init('WeekSixBGGirls',-30, 60);
+            bgGirls.scrollFactor.set(0.9, 0.9);
+            bgGirls.updateHitbox();
+            add(bgGirls);
+            // bgGirls.visible = false;
+            bgGirls.zIndex = 1;
+
+
+            var treeLeaves:BGSprite = new BGSprite('week6/petals', 20,50, 0.85, 0.85, ['PETALS ALL'], true);
             treeLeaves.updateHitbox();
             add(treeLeaves);
             treeLeaves.antialiasing = false;
+            treeLeaves.zIndex = 15;
         }
-    
-        bgSky.setGraphicSize(widShit);
-        bgSchool.setGraphicSize(widShit);
-        bgStreet.setGraphicSize(widShit);
-        bgTrees.setGraphicSize(Std.int(widShit * 1.4));
-    
-        bgSky.updateHitbox();
-        bgSchool.updateHitbox();
-        bgStreet.updateHitbox();
-        bgTrees.updateHitbox();
 
-        if(!ClientPrefs.lowQuality)
-        {
-            bgGirls = ScriptedFlxSprite.init('WeekSixBGGirls',-100, 190);
-            bgGirls.scrollFactor.set(0.9, 0.9);
-
-            bgGirls.scale.set(6,6);
-            bgGirls.updateHitbox();
-            add(bgGirls);
-        }
 
         game.gfGroup.zIndex = 10;
         game.dadGroup.zIndex = 11;
         game.boyfriendGroup.zIndex = 12;
 
-        game.refreshZ();
 
 
     }
@@ -92,6 +77,18 @@ class school extends ScriptedStage
     {
         game.playHUD.ratingPrefix = 'pixelUI/';
         game.playHUD.ratingSuffix = '-pixel';
+
+
+        
+        for (i in [game.gfGroup,game.dadGroup,game.boyfriendGroup])
+            {
+                for (k in i)
+                {
+                    k.ghostMoveOffset /= 6;
+                    k.baseCameraDisplacement /= 5;
+    
+                }
+            }
     }
 
 
@@ -110,4 +107,15 @@ class school extends ScriptedStage
             bgGirls.scriptCall('dance',[]);
         }
     }
+
+    	// For events
+	override function onEventTrigger(eventName:String, value1:String, value2:String)
+    {
+        switch(eventName)
+        {
+            case "BG Freaks Expression":
+                if(bgGirls != null) bgGirls.scriptCall('swapDanceType',[]);
+        }
+    }
+    
 }

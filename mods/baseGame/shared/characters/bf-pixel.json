@@ -9,7 +9,7 @@
 			"fps": 24,
 			"anim": "idle",
 			"indices": [],
-			"name": "BF_IDLE"
+			"name": "BF_IDLE_instance_1"
 		},
 		{
 			"loop": false,
@@ -19,7 +19,7 @@
 			],
 			"anim": "singLEFTmiss",
 			"fps": 24,
-			"name": "BF_LEFT_MISS",
+			"name": "BF_LEFT_MISS_instance_1",
 			"indices": []
 		},
 		{
@@ -30,7 +30,7 @@
 			],
 			"anim": "singLEFT",
 			"fps": 24,
-			"name": "BF_LEFT_NOTE",
+			"name": "BF_LEFT_NOTE_instance_1",
 			"indices": []
 		},
 		{
@@ -41,7 +41,7 @@
 			],
 			"anim": "singUPmiss",
 			"fps": 24,
-			"name": "BF_UP_MISS",
+			"name": "BF_UP_MISS_instance_1",
 			"indices": []
 		},
 		{
@@ -52,7 +52,7 @@
 			],
 			"anim": "singUP",
 			"fps": 24,
-			"name": "BF_UP_NOTE",
+			"name": "BF_UP_NOTE_instance_1",
 			"indices": []
 		},
 		{
@@ -63,7 +63,7 @@
 			],
 			"anim": "singRIGHT",
 			"fps": 24,
-			"name": "BF_RIGHT_NOTE",
+			"name": "BF_RIGHT_NOTE_instance_1",
 			"indices": []
 		},
 		{
@@ -74,7 +74,7 @@
 			],
 			"anim": "singRIGHTmiss",
 			"fps": 24,
-			"name": "BF_RIGHT_MISS",
+			"name": "BF_RIGHT_MISS_instance_1",
 			"indices": []
 		},
 		{
@@ -85,7 +85,7 @@
 			],
 			"anim": "singDOWN",
 			"fps": 24,
-			"name": "BF_DOWN_NOTE",
+			"name": "BF_DOWN_NOTE_instance_1",
 			"indices": []
 		},
 		{
@@ -96,7 +96,7 @@
 			],
 			"anim": "singDOWNmiss",
 			"fps": 24,
-			"name": "BF_DOWN_MISS",
+			"name": "BF_DOWN_MISS_instance_1",
 			"indices": []
 		}
 	],
@@ -104,7 +104,7 @@
 	"image": "characters/bfPixel",
 	"position": [
 		0,
-		350
+		58
 	],
 	"healthicon": "bf-pixel",
 	"flip_x": true,
@@ -114,9 +114,9 @@
 		246
 	],
 	"camera_position": [
-		50,
-		-60
+		8,
+		-10
 	],
 	"sing_duration": 4,
-	"scale": 6
+	"scale": 1
 }

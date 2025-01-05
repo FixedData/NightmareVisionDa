@@ -56,12 +56,10 @@ class PlayState extends MusicBeatState
 	
 	public static var meta:Metadata = null;
 	
-
-	//might remove as these are not needed?
+	// might remove as these are not needed?
 	public static var STRUM_X = 42;
 	public static var STRUM_X_MIDDLESCROLL = -278;
-
-
+	
 	public static var arrowSkin:String = '';
 	public static var noteSplashSkin:String = '';
 	public static var ratingStuff:Array<RatingInfo> = [
@@ -339,12 +337,12 @@ class PlayState extends MusicBeatState
 	 * The total score within a song
 	 */
 	public var songScore:Int = 0;
-
+	
 	/**
 	 * The total amount of notes hit within a song
 	 */
 	public var songHits:Int = 0;
-
+	
 	/**
 	 * The total amount of misses within a song
 	 */
@@ -356,19 +354,19 @@ class PlayState extends MusicBeatState
 	 * Only in Story Mode
 	 */
 	public static var campaignScore:Int = 0;
-
+	
 	/**
 	 * The total amount of misses throughout a week
 	 * 
 	 * Only in Story Mode
 	 */
 	public static var campaignMisses:Int = 0;
-
+	
 	/**
 	 * Persistent var for songs to use to prevent replaying cutscenes
 	 */
 	public static var seenCutscene:Bool = false;
-
+	
 	/**
 	 * Tracks how many times you have died in a given song or week
 	 */
@@ -467,8 +465,7 @@ class PlayState extends MusicBeatState
 	public var camCurTarget:Character = null;
 	
 	public var playHUD:BaseHUD = null;
-
-
+	
 	/**
 	 * Called when the Song should start
 	 * 
@@ -479,7 +476,7 @@ class PlayState extends MusicBeatState
 	 * dont make it null though pls u will die
 	 */
 	public var songStartCallback:Void->Void;
-
+	
 	/**
 	 * Called when the Song should end
 	 * 
@@ -488,9 +485,6 @@ class PlayState extends MusicBeatState
 	 * dont make it null though pls u will die
 	 */
 	public var songEndCallback:Void->Void;
-
-
-
 	
 	@:noCompletion public function set_cpuControlled(val:Bool)
 	{
@@ -565,8 +559,8 @@ class PlayState extends MusicBeatState
 		debugKeysChart = ClientPrefs.copyKey(ClientPrefs.keyBinds.get('debug_1'));
 		debugKeysCharacter = ClientPrefs.copyKey(ClientPrefs.keyBinds.get('debug_2'));
 		PauseSubState.songName = null; // Reset to default
-
-		playbackRate = ClientPrefs.getGameplaySetting('songspeed',1);
+		
+		playbackRate = ClientPrefs.getGameplaySetting('songspeed', 1);
 		
 		keysArray = [
 			ClientPrefs.copyKey(ClientPrefs.keyBinds.get('note_left')),
@@ -574,8 +568,7 @@ class PlayState extends MusicBeatState
 			ClientPrefs.copyKey(ClientPrefs.keyBinds.get('note_up')),
 			ClientPrefs.copyKey(ClientPrefs.keyBinds.get('note_right'))
 		];
-
-
+		
 		songStartCallback = startCountdown;
 		songEndCallback = endSong;
 		
@@ -914,7 +907,7 @@ class PlayState extends MusicBeatState
 		add(debugText);
 		
 		songStartCallback();
-
+		
 		RecalculateRating();
 		updateScoreBar();
 		
@@ -999,9 +992,8 @@ class PlayState extends MusicBeatState
 		}
 		
 		noteSkin ??= new NoteSkinHelper(Paths.noteskin('default'));
-
-		NoteSkinHelper.updateHandle(noteSkin,SONG.keys);
 		
+		NoteSkinHelper.updateHandle(noteSkin, SONG.keys);
 		
 		// trace(noteSkin.data);
 		
@@ -1305,7 +1297,7 @@ class PlayState extends MusicBeatState
 			
 			// generateStaticArrows(0, skipArrowStartTween );
 			// generateStaticArrows(1, skipArrowStartTween );
-			for (lane in 0...SONG.lanes) //this is messy
+			for (lane in 0...SONG.lanes) // this is messy
 			{
 				if (lane == 0)
 				{
@@ -1454,6 +1446,8 @@ class PlayState extends MusicBeatState
 						if (PlayState.isPixelStage) spr.setGraphicSize(Std.int(spr.width * daPixelZoom));
 						spr.screenCenter();
 						spr.antialiasing = antialias;
+
+						spr.cameras = [camHUD];
 						
 						FlxTween.tween(spr, {alpha: 0}, Conductor.crotchet / 1000 / playbackRate,
 							{
@@ -1704,7 +1698,6 @@ class PlayState extends MusicBeatState
 			var playerSound = Paths.voices(PlayState.SONG.song, 'player');
 			vocals.addPlayerVocals(new FlxSound().loadEmbedded(playerSound ?? Paths.voices(PlayState.SONG.song)));
 			
-
 			var opponentSound = Paths.voices(PlayState.SONG.song, 'opp');
 			if (opponentSound != null)
 			{
@@ -1993,7 +1986,7 @@ class PlayState extends MusicBeatState
 	}
 	
 	public inline function getVisualPosition() return getTimeFromSV(Conductor.songPosition, currentSV);
-
+	
 	public function getNoteInitialTime(time:Float)
 	{
 		var event:SpeedEvent = getSV(time);
@@ -2024,7 +2017,6 @@ class PlayState extends MusicBeatState
 		
 		return event;
 	}
-	
 	
 	function eventPushed(event:EventNote)
 	{
@@ -3290,6 +3282,8 @@ class PlayState extends MusicBeatState
 	
 	public function getCharacterCameraPos(char:Character)
 	{
+		if (char == null) return FlxPoint.weak();
+		
 		var desiredPos = char.getMidpoint();
 		if (char.isPlayer)
 		{
@@ -3333,7 +3327,7 @@ class PlayState extends MusicBeatState
 	}
 	
 	public function finishSong(?ignoreNoteOffset:Bool = false):Void
-	{	
+	{
 		updateTime = false;
 		FlxG.sound.music.volume = 0;
 		vocals.volume = 0;

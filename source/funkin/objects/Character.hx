@@ -75,6 +75,8 @@ class Character extends FlxSprite
 	public var positionArray:Array<Float> = [0, 0];
 	public var cameraPosition:Array<Float> = [0, 0];
 	
+	//ghost stuff
+	public var ghostMoveOffset:Float = 40;
 	public var ghostsEnabled:Bool = true;
 	public var doubleGhosts:Array<FlxSprite> = [];
 	public var ghostID:Int = 0;
@@ -533,6 +535,7 @@ class Character extends FlxSprite
 		ghost.frames = frames;
 		ghost.animation.copyFrom(animation);
 		ghost.antialiasing = antialiasing;
+		ghost.scrollFactor.copyFrom(scrollFactor);
 		ghost.x = x;
 		ghost.y = y;
 		ghost.flipX = flipX;
@@ -552,15 +555,15 @@ class Character extends FlxSprite
 			{
 				case 'UP':
 					if (xDir) return 0;
-					else return -45;
+					else return -ghostMoveOffset;
 				case 'DOWN':
 					if (xDir) return 0;
-					else return 45;
+					else return ghostMoveOffset;
 				case 'RIGHT':
-					if (xDir) return 45;
+					if (xDir) return ghostMoveOffset;
 					else return 0;
 				case 'LEFT':
-					if (xDir) return -45;
+					if (xDir) return -ghostMoveOffset;
 					else return 0;
 			}
 			
