@@ -12,6 +12,11 @@ import funkin.states.*;
 
 using StringTools;
 
+//should i soft code this????
+
+/**
+ * Dialogue box used in week 6 
+ */
 class DialogueBox extends FlxSpriteGroup
 {
 	var box:FlxSprite;

@@ -2271,23 +2271,7 @@ class PlayState extends MusicBeatState
 	
 	override public function update(elapsed:Float)
 	{
-		#if debug
-		if (FlxG.keys.justPressed.SIX)
-		{
-			cpuControlled = !cpuControlled;
-			botplayTxt.visible = !botplayTxt.visible;
-		}
-		if (FlxG.keys.justPressed.ONE)
-		{
-			KillNotes();
-			if (FlxG.sound.music.onComplete != null) FlxG.sound.music.onComplete();
-		}
-		if (FlxG.keys.justPressed.TWO)
-		{
-			setSongTime(Conductor.songPosition + 10000);
-			clearNotesBefore(Conductor.songPosition);
-		}
-		#end
+
 		
 		if (!inCutscene)
 		{
@@ -2640,6 +2624,7 @@ class PlayState extends MusicBeatState
 				// Kill extremely late notes and cause misses
 				if (Conductor.songPosition > noteKillOffset + daNote.strumTime)
 				{
+
 					daNote.garbage = true;
 					if (daNote.playField != null && daNote.playField.playerControls && !daNote.playField.autoPlayed && !daNote.ignoreNote && !endingSong && (daNote.tooLate || !daNote.wasGoodHit))
 					{
@@ -2648,7 +2633,6 @@ class PlayState extends MusicBeatState
 				}
 				if (daNote.garbage)
 				{
-					// trace("GONE");
 					daNote.active = false;
 					daNote.visible = false;
 					
@@ -2661,6 +2645,11 @@ class PlayState extends MusicBeatState
 		}
 		
 		#if debug
+		if (FlxG.keys.justPressed.SIX)
+		{
+			cpuControlled = !cpuControlled;
+			botplayTxt.visible = !botplayTxt.visible;
+		}
 		if (!endingSong && !startingSong)
 		{
 			if (FlxG.keys.justPressed.ONE)
