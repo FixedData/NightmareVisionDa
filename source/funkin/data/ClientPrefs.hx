@@ -143,6 +143,7 @@ class ClientPrefs
 	
 	public static function saveSettings()
 	{
+		FlxG.save.data.useEpicRankings = useEpicRankings;
 
 		FlxG.save.data.gpuCaching = gpuCaching;
 		FlxG.save.data.editorGradColors = editorGradColors;
@@ -202,6 +203,8 @@ class ClientPrefs
 	
 	public static function loadPrefs()
 	{
+		if (FlxG.save.data.useEpicRankings != null) useEpicRankings = FlxG.save.data.useEpicRankings;
+
 		if (FlxG.save.data.gpuCaching != null) gpuCaching = FlxG.save.data.gpuCaching;
 		
 		if (FlxG.save.data.editorGradColors != null)
