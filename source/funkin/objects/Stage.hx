@@ -1,8 +1,10 @@
 package funkin.objects;
 
+import flixel.group.FlxSpriteGroup;
 import funkin.objects.Note.EventNote;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import funkin.states.PlayState;
+
 class Stage extends FlxTypedGroup<FlxBasic>
 {
 	public function addBehindGF(obj:FlxBasic)
@@ -18,6 +20,16 @@ class Stage extends FlxTypedGroup<FlxBasic>
 	public function addBehindDad(obj:FlxBasic)
 	{
 		insert(members.indexOf(game.dadGroup), obj);
+	}
+
+	/**
+	 * Sorts the groups members by its Z index
+	 * @param group The group to sort. Default is the stage
+	 */
+	public function refreshZ(?group:FlxTypedGroup<FlxBasic>)
+	{ 
+		group ??= this;
+		MusicBeatState.getState().refreshZ(group);
 	}
 	
 	public function onCreate() {}
@@ -46,6 +58,12 @@ class Stage extends FlxTypedGroup<FlxBasic>
 	
 	public var gf(get, never):Character;
 	
+	public var boyfriendGroup(get, never):FlxSpriteGroup;
+	
+	public var dadGroup(get, never):FlxSpriteGroup;
+	
+	public var gfGroup(get, never):FlxSpriteGroup;
+	
 	public function new()
 	{
 		super();
@@ -54,6 +72,21 @@ class Stage extends FlxTypedGroup<FlxBasic>
 	function get_game():PlayState
 	{
 		return PlayState.instance;
+	}
+	
+	function get_boyfriendGroup():FlxSpriteGroup
+	{
+		return PlayState.instance.boyfriendGroup;
+	}
+	
+	function get_dadGroup():FlxSpriteGroup
+	{
+		return PlayState.instance.dadGroup;
+	}
+	
+	function get_gfGroup():FlxSpriteGroup
+	{
+		return PlayState.instance.gfGroup;
 	}
 	
 	function get_boyfriend():Character

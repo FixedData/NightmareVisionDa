@@ -44,7 +44,7 @@ import funkin.backend.SyncedFlxSoundGroup;
 class PlayState extends MusicBeatState
 {
 	/**
-		Handles the playfields and modifiers to the notes. Mess with this to do neat stuff
+		Handles the playfields and modifiers to the notes
 	**/
 	public var modManager:ModManager;
 	
@@ -716,7 +716,7 @@ class PlayState extends MusicBeatState
 		
 		if (!stageData.hide_girlfriend)
 		{
-			gf = new Character(0, 0, gfVersion);
+			gf = generateCharacter(gfVersion);
 			startCharacterPos(gf);
 			gf.scrollFactor.set(0.95, 0.95);
 			gfGroup.add(gf);
@@ -726,13 +726,13 @@ class PlayState extends MusicBeatState
 			setOnScripts('gfGroup', gfGroup);
 		}
 		
-		dad = new Character(0, 0, SONG.player2);
+		dad = generateCharacter(SONG.player2);
 		startCharacterPos(dad, true);
 		dadGroup.add(dad);
 		startCharacterLua(dad.curCharacter, dad);
 		dadMap.set(dad.curCharacter, dad);
 		
-		boyfriend = new Character(0, 0, SONG.player1, true);
+		boyfriend = generateCharacter(SONG.player1, true);
 		startCharacterPos(boyfriend);
 		boyfriendGroup.add(boyfriend);
 		startCharacterLua(boyfriend.curCharacter, boyfriend);
@@ -769,7 +769,6 @@ class PlayState extends MusicBeatState
 			dialogueJson = DialogueBoxPsych.parseDialogue(file);
 		}
 		
-
 		Conductor.songPosition = -Conductor.crotchet * 5 + Conductor.offset;
 		
 		// temp
@@ -839,7 +838,6 @@ class PlayState extends MusicBeatState
 		setOnScripts('notes', notes);
 		
 		setOnScripts('botplayTxt', botplayTxt);
-		
 		
 		callOnLuas('onCreate', []);
 		
@@ -1044,7 +1042,7 @@ class PlayState extends MusicBeatState
 			case 0:
 				if (!boyfriendMap.exists(newCharacter))
 				{
-					var newBoyfriend:Character = new Character(0, 0, newCharacter, true);
+					var newBoyfriend:Character = generateCharacter(newCharacter, true);
 					boyfriendMap.set(newCharacter, newBoyfriend);
 					boyfriendGroup.add(newBoyfriend);
 					startCharacterPos(newBoyfriend);
@@ -1055,7 +1053,7 @@ class PlayState extends MusicBeatState
 			case 1:
 				if (!dadMap.exists(newCharacter))
 				{
-					var newDad:Character = new Character(0, 0, newCharacter);
+					var newDad:Character = generateCharacter(newCharacter);
 					dadMap.set(newCharacter, newDad);
 					dadGroup.add(newDad);
 					startCharacterPos(newDad, true);
@@ -1066,7 +1064,7 @@ class PlayState extends MusicBeatState
 			case 2:
 				if (gf != null && !gfMap.exists(newCharacter))
 				{
-					var newGf:Character = new Character(0, 0, newCharacter);
+					var newGf:Character = generateCharacter(newCharacter);
 					newGf.scrollFactor.set(0.95, 0.95);
 					gfMap.set(newCharacter, newGf);
 					gfGroup.add(newGf);
@@ -1075,6 +1073,28 @@ class PlayState extends MusicBeatState
 					startCharacterLua(newGf.curCharacter, newGf);
 				}
 		}
+	}
+
+	/**
+	 * Creates a new Character. If possible, creates a scripted character
+	 * @param charName the name of the character
+	 * @param isPlayer are they player
+	 * @return Character
+	 */
+	public function generateCharacter(charName:String,isPlayer:Bool = false):Character
+	{
+		#if !display
+		if (funkin.scripting.classes.ScriptedCharacter.listScriptClasses().contains(charName))
+		{
+			return funkin.scripting.classes.ScriptedCharacter.init(charName,0,0,charName,isPlayer);
+		}
+		#end
+		else
+		{
+			return new Character(0, 0, charName,isPlayer);
+		}
+
+
 	}
 	
 	function startCharacterLua(name:String, char:Character)
@@ -1426,7 +1446,7 @@ class PlayState extends MusicBeatState
 						if (PlayState.isPixelStage) spr.setGraphicSize(Std.int(spr.width * daPixelZoom));
 						spr.screenCenter();
 						spr.antialiasing = antialias;
-
+						
 						spr.cameras = [camHUD];
 						
 						FlxTween.tween(spr, {alpha: 0}, Conductor.crotchet / 1000 / playbackRate,
@@ -2271,8 +2291,6 @@ class PlayState extends MusicBeatState
 	
 	override public function update(elapsed:Float)
 	{
-
-		
 		if (!inCutscene)
 		{
 			final lerpVal:Float = FlxMath.bound(elapsed * 2.4 * cameraSpeed * playbackRate, 0, 1);
@@ -2624,7 +2642,6 @@ class PlayState extends MusicBeatState
 				// Kill extremely late notes and cause misses
 				if (Conductor.songPosition > noteKillOffset + daNote.strumTime)
 				{
-
 					daNote.garbage = true;
 					if (daNote.playField != null && daNote.playField.playerControls && !daNote.playField.autoPlayed && !daNote.ignoreNote && !endingSong && (daNote.tooLate || !daNote.wasGoodHit))
 					{
