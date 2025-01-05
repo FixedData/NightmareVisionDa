@@ -769,26 +769,8 @@ class PlayState extends MusicBeatState
 			dialogueJson = DialogueBoxPsych.parseDialogue(file);
 		}
 		
-		final vanillaText:String = songName + '/' + songName + 'Dialogue';
-		var file:String = Paths.txt(vanillaText); // Checks for vanilla/Senpai dialogue
-		if (Assets.exists(file))
-		{
-			dialogue = CoolUtil.coolTextFile(file);
-		}
-		#if MODS_ALLOWED
-		file = Paths.modFolders('${Paths.currentModDirectory}/data/${vanillaText}.txt');
-		if (file != null)
-		{
-			dialogue = CoolUtil.coolTextFile(file);
-		}
-		#end
-		var doof:DialogueBox = new DialogueBox(false, dialogue);
-		doof.scrollFactor.set();
-		doof.finishThing = startCountdown;
-		doof.nextDialogueThing = startNextDialogue;
-		doof.skipDialogueThing = skipDialogue;
-		
-		Conductor.songPosition = -5000;
+
+		Conductor.songPosition = -Conductor.crotchet * 5 + Conductor.offset;
 		
 		// temp
 		updateTime = true;
@@ -851,7 +833,6 @@ class PlayState extends MusicBeatState
 		grpNoteSplashes.cameras = [camHUD];
 		notes.cameras = [camHUD];
 		botplayTxt.cameras = [camHUD];
-		doof.cameras = [camOther];
 		
 		setOnScripts('playFields', playFields);
 		setOnScripts('grpNoteSplashes', grpNoteSplashes);
@@ -859,7 +840,6 @@ class PlayState extends MusicBeatState
 		
 		setOnScripts('botplayTxt', botplayTxt);
 		
-		setOnScripts('doof', doof);
 		
 		callOnLuas('onCreate', []);
 		
@@ -1584,10 +1564,7 @@ class PlayState extends MusicBeatState
 		vocals.play();
 		vocals.volume = 1;
 		
-		if (startOnTime > 0)
-		{
-			setSongTime(startOnTime - 500);
-		}
+		setSongTime(Math.max(0, startOnTime - 500) + Conductor.offset);
 		startOnTime = 0;
 		
 		if (paused)

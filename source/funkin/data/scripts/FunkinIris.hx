@@ -341,8 +341,8 @@ class FunkinIris extends FunkinScript
 			
 			try
 			{
-				runtime = new flixel.addons.display.FlxRuntimeShader(fragFile == null ? null : Paths.getContent(Paths.modsShaderFragment(fragFile)),
-					vertFile == null ? null : Paths.getContent(Paths.modsShaderVertex(vertFile)));
+				runtime = new flixel.addons.display.FlxRuntimeShader(fragFile == null ? null : Paths.getContent(Paths.frag(fragFile)),
+					vertFile == null ? null : Paths.getContent(Paths.vert(vertFile)));
 			}
 			catch (e:Dynamic)
 			{

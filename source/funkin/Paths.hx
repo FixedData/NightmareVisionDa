@@ -211,16 +211,6 @@ class Paths
 		return modFolders('noteskins/$key.json');
 	}
 	
-	inline static public function shaderFragment(key:String, ?library:String)
-	{
-		return getPath('shaders/$key.frag', TEXT, library);
-	}
-	
-	inline static public function shaderVertex(key:String, ?library:String)
-	{
-		return getPath('shaders/$key.vert', TEXT, library);
-	}
-	
 	static public function getTextFromFile(key:String, ?ignoreMods:Bool = false):String
 	{
 		#if sys
@@ -246,9 +236,6 @@ class Paths
 		return Assets.getText(getPath(key, TEXT));
 	}
 	
-	inline static public function modsShaderFragment(key:String, ?library:String) return modFolders('shaders/' + key + '.frag');
-	
-	inline static public function modsShaderVertex(key:String, ?library:String) return modFolders('shaders/' + key + '.vert');
 	
 	#if MODS_ALLOWED
 	inline static public function mods(key:String = '')

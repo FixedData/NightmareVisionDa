@@ -1,8 +1,8 @@
-
-
+import funkin.objects.DialogueBox;
+import extensions.FlxBGSpriteEx;
+import funkin.utils.CoolUtil;
 class school extends ScriptedStage 
 {
-
 
 
     var bgGirls:ScriptedFlxSprite;
@@ -15,7 +15,6 @@ class school extends ScriptedStage
 
     override function onCreate()
     {
-
         FlxG.camera.pixelPerfectRender = true;
 
         var bgSky:BGSprite = new BGSprite('week6/weebSky', 0, 0, 1,1);
@@ -52,7 +51,6 @@ class school extends ScriptedStage
             bgGirls.scrollFactor.set(0.9, 0.9);
             bgGirls.updateHitbox();
             add(bgGirls);
-            // bgGirls.visible = false;
             bgGirls.zIndex = 1;
 
 
@@ -70,6 +68,33 @@ class school extends ScriptedStage
 
 
 
+
+    
+        switch (PlayState.SONG.song.toLowerCase())
+        {
+            case 'senpai':
+				FlxG.sound.playMusic(Paths.music('Lunchbox'), 0);
+				FlxG.sound.music.fadeIn(1, 0, 0.8);
+            case 'roses':
+				FlxG.sound.play(Paths.sound('ANGRY_TEXT_BOX'));
+
+        }
+
+        if (PlayState.isStoryMode && !PlayState.seenCutscene)
+        {
+			if(PlayState.SONG.song.toLowerCase() == 'roses') FlxG.sound.play(Paths.sound('ANGRY'));
+
+            dialogueInit();
+            game.songStartCallback = intro;
+
+        }
+
+
+
+
+
+
+
     }
 
 
@@ -77,6 +102,7 @@ class school extends ScriptedStage
     {
         game.playHUD.ratingPrefix = 'pixelUI/';
         game.playHUD.ratingSuffix = '-pixel';
+
 
 
         
@@ -108,7 +134,7 @@ class school extends ScriptedStage
         }
     }
 
-    	// For events
+    // For events
 	override function onEventTrigger(eventName:String, value1:String, value2:String)
     {
         switch(eventName)
@@ -118,4 +144,50 @@ class school extends ScriptedStage
         }
     }
     
+
+    var dialogueBox:DialogueBox;
+
+    function dialogueInit()
+    {
+        var formattedSong = Paths.formatToSongPath(PlayState.SONG.song);
+        var path = Paths.txt(formattedSong + '/' + formattedSong + '_dialogue');
+
+        if (Paths.exists(path))
+        {
+            dialogueBox = new DialogueBox(false,CoolUtil.coolTextFile(path));
+            dialogueBox.cameras = [game.camHUD];
+            dialogueBox.scrollFactor.set();
+            dialogueBox.finishThing = game.startCountdown;
+        }
+    }
+
+    function intro()
+    {
+        game.inCutscene = true;
+
+        var black = new FlxBGSpriteEx(FlxColor.BLACK);
+        add(black);
+        black.zIndex = 10000000;
+        game.refreshZ();
+
+        function retroEase()
+        {
+            return function (t:Float):Float return Math.floor(t * 8) / 8;
+        }
+        
+        FlxTween.tween(black, {alpha: 0},1,{ease: retroEase(),onComplete: Void->{
+            if (dialogueBox != null)
+            {
+                
+                add(dialogueBox);
+            }
+            else
+            {
+                game.startCountdown();
+            }
+            remove(black);
+            black.destroy();
+        }});
+
+    }
 }

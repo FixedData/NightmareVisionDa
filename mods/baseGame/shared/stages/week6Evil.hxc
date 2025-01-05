@@ -1,0 +1,185 @@
+import funkin.objects.DialogueBox;
+import extensions.FlxBGSpriteEx;
+import funkin.utils.CoolUtil;
+import flixel.addons.effects.FlxTrail;
+
+class schoolEvil extends ScriptedStage 
+{
+
+
+    var bgGirls:BGSprite = null;
+
+
+    public function new()
+    {
+        super();
+    }
+
+    override function onCreate()
+    {
+        FlxG.camera.pixelPerfectRender = true;
+
+		var posX = 0;
+		var posY = 0;
+
+		var bg:BGSprite;
+		if(!ClientPrefs.lowQuality)
+			bg = new BGSprite('week6/animatedEvilSchool', posX, posY, 0.8, 0.9, ['background 2'], true);
+		else
+			bg = new BGSprite('week6/animatedEvilSchool_low', posX, posY, 0.8, 0.9);
+
+        bg.antialiasing = false;
+		add(bg);
+
+        game.gfGroup.zIndex = 10;
+        game.dadGroup.zIndex = 11;
+        game.boyfriendGroup.zIndex = 12;
+
+
+		FlxG.sound.playMusic(Paths.music('LunchboxScary'), 0);
+		FlxG.sound.music.fadeIn(1, 0, 0.8);
+
+        if (PlayState.isStoryMode && !PlayState.seenCutscene)
+        {
+            dialogueInit();
+            game.songStartCallback = schoolIntro;
+        }
+
+    }
+
+
+    override function onCreatePost()
+    {
+        game.playHUD.ratingPrefix = 'pixelUI/';
+        game.playHUD.ratingSuffix = '-pixel';
+
+
+        var trail:FlxTrail = new FlxTrail(dad, null, 4, 24, 0.3, 0.069);
+        trail.zIndex = game.dadGroup.zIndex;
+		addBehindDad(trail);
+        game.refreshZ();
+
+        
+        for (i in [game.gfGroup,game.dadGroup,game.boyfriendGroup])
+            {
+                for (k in i)
+                {
+                    k.ghostMoveOffset /= 6;
+                    k.baseCameraDisplacement /= 5;
+    
+                }
+            }
+    }
+
+    // For events
+	override function onEventTrigger(eventName:String, value1:String, value2:String)
+    {
+        switch(eventName)
+        {
+            case "Trigger BG Ghouls":
+                
+                if(!ClientPrefs.lowQuality) 
+                {
+					bgGirls.dance(true);
+					bgGirls.visible = true;
+                }
+        }
+    }
+    
+    override function onEventPushedUnique(event:objects.Note.EventNote)
+    {
+        // used for preloading assets used on events
+        switch(event.event)
+        {
+            case "Trigger BG Ghouls":
+                if(!ClientPrefs.lowQuality)
+                {
+                    bgGirls = new BGSprite('week6/bgGhouls', 0, 200, 0.9, 0.9, ['BG freaks glitch instance'], false);
+                    bgGirls.zIndex =  1;
+
+                    bgGirls.visible = false;
+                    bgGirls.antialiasing = false;
+                    bgGirls.animation.finishCallback = function(name:String)
+                    {
+                        if(name == 'BG freaks glitch instance')
+                            bgGirls.visible = false;
+                    }
+                    addBehindGF(bgGirls);
+
+                    game.refreshZ();
+                }
+        }
+    }
+
+    var dialogueBox:DialogueBox;
+
+    function dialogueInit()
+    {
+        var formattedSong = Paths.formatToSongPath(PlayState.SONG.song);
+        var path = Paths.txt(formattedSong + '/' + formattedSong + '_dialogue');
+
+        if (Paths.exists(path))
+        {
+            dialogueBox = new DialogueBox(false,CoolUtil.coolTextFile(path));
+            dialogueBox.cameras = [game.camHUD];
+            dialogueBox.scrollFactor.set();
+            dialogueBox.finishThing = game.startCountdown;
+        }
+    }
+    	
+	function schoolIntro()
+    {
+        game.inCutscene = true;
+        var red:FlxSprite = new FlxBGSpriteEx(0xFFff1b31);
+        add(red);
+        red.zIndex = 20;
+
+        var senpaiEvil:FlxSprite = new FlxSprite().loadSparrowFrames('week6/senpaiCrazy');
+        senpaiEvil.animation.addByPrefix('idle', 'Senpai Pre Explosion', 24, false);
+        senpaiEvil.scrollFactor.set();
+        senpaiEvil.updateHitbox();
+        senpaiEvil.screenCenter();
+        senpaiEvil.x += 300 / 6;
+        senpaiEvil.zIndex = 21;
+
+        game.camHUD.visible = false;
+
+
+        new FlxTimer().start(2.1, function(tmr:FlxTimer)
+        {
+            if (dialogueBox != null)
+            {
+                add(senpaiEvil);
+                senpaiEvil.alpha = 0;
+                new FlxTimer().start(0.3, function(swagTimer:FlxTimer)
+                {
+                    senpaiEvil.alpha += 0.15;
+                    if (senpaiEvil.alpha < 1)
+                    {
+                        swagTimer.reset();
+                    }
+                    else
+                    {
+                        senpaiEvil.animation.play('idle');
+                        FlxG.sound.play(Paths.sound('Senpai_Dies'), 1, false, null, true, function()
+                        {
+                            remove(senpaiEvil);
+                            senpaiEvil.destroy();
+                            remove(red);
+                            red.destroy();
+                            FlxG.camera.fade(FlxColor.WHITE, 0.01, true, function()
+                            {
+                                add(dialogueBox);
+                                game.camHUD.visible = true;
+                            }, true);
+                        });
+                        new FlxTimer().start(3.2, function(deadTime:FlxTimer)
+                        {
+                            FlxG.camera.fade(FlxColor.WHITE, 1.6, false);
+                        });
+                    }
+                });
+            }
+        });
+    }
+}

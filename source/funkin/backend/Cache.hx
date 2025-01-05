@@ -127,8 +127,7 @@ class Cache
 		
 		if (!Assets.exists(key, IMAGE)) // couldnt find it
 		{
-			trace('Graphic "$key" was not found!');
-			
+			FlxG.log.warn('Graphic "$key" was not found!');
 			return null;
 		}
 		

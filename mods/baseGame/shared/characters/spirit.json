@@ -1,59 +1,59 @@
 {
 	"animations": [
 		{
+			"loop": false,
 			"offsets": [
 				-218,
 				-280
 			],
-			"loop": false,
+			"fps": 24,
 			"anim": "idle",
-			"fps": 24,
-			"name": "idle spirit_",
-			"indices": []
+			"indices": [],
+			"name": "idle spirit_"
 		},
 		{
-			"offsets": [
-				-200,
-				-280
-			],
 			"loop": false,
+			"offsets": [
+				-210,
+				-281
+			],
+			"fps": 24,
 			"anim": "singLEFT",
-			"fps": 24,
-			"name": "left_",
-			"indices": []
+			"indices": [],
+			"name": "left_"
 		},
 		{
-			"offsets": [
-				170,
-				110
-			],
 			"loop": false,
-			"anim": "singDOWN",
+			"offsets": [
+				-152,
+				-218
+			],
 			"fps": 24,
-			"name": "spirit down_",
-			"indices": []
+			"anim": "singDOWN",
+			"indices": [],
+			"name": "spirit down_"
 		},
 		{
+			"loop": false,
 			"offsets": [
-				-220,
+				-223,
 				-280
 			],
-			"loop": false,
-			"anim": "singRIGHT",
 			"fps": 24,
-			"name": "right_",
-			"indices": []
+			"anim": "singRIGHT",
+			"indices": [],
+			"name": "right_"
 		},
 		{
-			"offsets": [
-				-220,
-				-240
-			],
 			"loop": false,
-			"anim": "singUP",
+			"offsets": [
+				-216,
+				-274
+			],
 			"fps": 24,
-			"name": "up_",
-			"indices": []
+			"anim": "singUP",
+			"indices": [],
+			"name": "up_"
 		}
 	],
 	"no_antialiasing": true,
@@ -74,5 +74,5 @@
 		0
 	],
 	"sing_duration": 4,
-	"scale": 6
+	"scale": 1
 }
