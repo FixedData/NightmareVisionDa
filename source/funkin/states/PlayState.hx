@@ -720,7 +720,6 @@ class PlayState extends MusicBeatState
 			startCharacterPos(gf);
 			gf.scrollFactor.set(0.95, 0.95);
 			gfGroup.add(gf);
-			startCharacterLua(gf.curCharacter, gf);
 			
 			setOnScripts('gf', gf);
 			setOnScripts('gfGroup', gfGroup);
@@ -729,13 +728,11 @@ class PlayState extends MusicBeatState
 		dad = generateCharacter(SONG.player2);
 		startCharacterPos(dad, true);
 		dadGroup.add(dad);
-		startCharacterLua(dad.curCharacter, dad);
 		dadMap.set(dad.curCharacter, dad);
 		
 		boyfriend = generateCharacter(SONG.player1, true);
 		startCharacterPos(boyfriend);
 		boyfriendGroup.add(boyfriend);
-		startCharacterLua(boyfriend.curCharacter, boyfriend);
 		boyfriendMap.set(boyfriend.curCharacter, boyfriend);
 		
 		setOnScripts('dad', dad);
@@ -1047,7 +1044,6 @@ class PlayState extends MusicBeatState
 					boyfriendGroup.add(newBoyfriend);
 					startCharacterPos(newBoyfriend);
 					newBoyfriend.alpha = 0.00001;
-					startCharacterLua(newBoyfriend.curCharacter, newBoyfriend);
 				}
 				
 			case 1:
@@ -1058,7 +1054,6 @@ class PlayState extends MusicBeatState
 					dadGroup.add(newDad);
 					startCharacterPos(newDad, true);
 					newDad.alpha = 0.00001;
-					startCharacterLua(newDad.curCharacter, newDad);
 				}
 				
 			case 2:
@@ -1070,7 +1065,6 @@ class PlayState extends MusicBeatState
 					gfGroup.add(newGf);
 					startCharacterPos(newGf);
 					newGf.alpha = 0.00001;
-					startCharacterLua(newGf.curCharacter, newGf);
 				}
 		}
 	}
@@ -1083,61 +1077,21 @@ class PlayState extends MusicBeatState
 	 */
 	public function generateCharacter(charName:String,isPlayer:Bool = false):Character
 	{
-		#if !display
+		//i think in the ver of polymod used here mentioning any typed group breaks auto complete so this is okay i think?
+		
+		// #if !display
 		if (funkin.scripting.classes.ScriptedCharacter.listScriptClasses().contains(charName))
 		{
 			return funkin.scripting.classes.ScriptedCharacter.init(charName,0,0,charName,isPlayer);
 		}
-		#end
+		// #end
 		else
 		{
 			return new Character(0, 0, charName,isPlayer);
 		}
-
-
+		
 	}
-	
-	function startCharacterLua(name:String, char:Character)
-	{
-		#if LUA_ALLOWED
-		var doPush:Bool = false;
-		var scriptFile:String = 'characters/' + name;
-		var shitters = [];
-		#if MODS_ALLOWED
-		var baseFile = scriptFile;
-		if (FileSystem.exists(Paths.modFolders(baseFile + '.lua')))
-		{
-			scriptFile = Paths.modFolders(baseFile + '.lua');
-			doPush = true;
-			// add proper support for the other hx exts
-		}
-		else if (FileSystem.exists(Paths.modFolders(baseFile + '.hscript')))
-		{
-			scriptFile = Paths.modFolders(baseFile + '.hscript');
-			doPush = true;
-		}
-		else
-		{
-			scriptFile = Paths.getSharedPath(baseFile);
-			if (FileSystem.exists(scriptFile + '.lua') || FileSystem.exists(scriptFile + '.hscript'))
-			{
-				doPush = true;
-			}
-		}
-		#else
-		scriptFile = Paths.getSharedPath(scriptFile);
-		if (Assets.exists(scriptFile))
-		{
-			doPush = true;
-		}
-		#end
-		if (doPush)
-		{
-			trace(scriptFile);
-			initFunkinIris(scriptFile);
-		}
-		#end
-	}
+
 	
 	function initFunkinIris(filePath:String, ?name:String)
 	{
