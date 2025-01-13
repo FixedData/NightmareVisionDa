@@ -31,7 +31,7 @@ class Difficulty
 	 */
 	public static function getDifficultyFilePath(?number:Int)
 	{
-		number ??= PlayState.storyDifficulty;
+		number ??= PlayState.storyMeta.difficulty;
 		
 		var fileSuffix:String = difficulties[number];
 		if (fileSuffix != defaultDifficulty)
@@ -47,6 +47,6 @@ class Difficulty
 	
 	public static function getCurDifficulty():String
 	{
-		return difficulties[PlayState.storyDifficulty].toUpperCase();
+		return difficulties[PlayState.storyMeta.difficulty].toUpperCase();
 	}
 }

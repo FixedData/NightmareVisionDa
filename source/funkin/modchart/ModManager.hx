@@ -16,7 +16,7 @@ class ModManager
 {
 	public function registerDefaultModifiers()
 	{
-		var quickRegs:Array<Class<NoteModifier>> = [
+		var quickRegs:Array<Class<Modifier>> = [
 			FlipModifier,
 			ReverseModifier,
 			InvertModifier,
@@ -112,6 +112,9 @@ class ModManager
 		else
 		{
 			var daMod = register.get(modName);
+
+			if (daMod == null) return; //u tried getting a nonexistent mod
+
 			var mod = daMod.parent == null ? daMod : daMod.parent;
 			var name = mod.getName();
 			// optimization shit!! :)

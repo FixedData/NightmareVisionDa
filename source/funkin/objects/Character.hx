@@ -42,6 +42,7 @@ typedef AnimArray =
 	@:optional var cameraOffset:Array<Float>;
 }
 
+
 class Character extends FlxSprite
 {
 	public var mostRecentRow:Int = 0; // for ghost anims n shit

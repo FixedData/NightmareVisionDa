@@ -72,8 +72,8 @@ class CreditsState extends MusicBeatState
 		var pisspoop:Array<Array<String>> = [ // Name - Icon name - Description - Link - BG Color
 			['NIGHTMARISH FEDS'],
 			['DuskieWhy', 'duskie', 'Main Developer', 'https://twitter.com/DuskieWhy', '0x6D32A8'],
-			['Data', 'data', 'Programmer', 'https://twitter.com/FixedData', '0xFFAF64'],
-			['NebulaZorua', 'neb', 'Creator the modchart implementation', 'https://twitter.com/Nebula_Zorua', '0xB300B3'],
+			['Data', 'data', 'Programmer, Polymod implementation', 'https://twitter.com/FixedData', '0xFFAF64'],
+			['NebulaZorua', 'neb', 'Created the modchart backend', 'https://twitter.com/Nebula_Zorua', '0xB300B3'],
 			['PHO', 'pho', 'Programmer', 'https://twitter.com/Phomow1', '0x7455be'],
 			['Decoy', 'decoy', 'Programmer, Charter', 'https://www.youtube.com/watch?v=PuYZ-9zcp4w', '0x5833B6'],
 			['JoggingScout', 'joggingscout', 'Artist (SUPER KUTTY!!!!)', 'https://twitter.com/JoggingScout', '0x3366CC'],
@@ -100,7 +100,7 @@ class CreditsState extends MusicBeatState
 			[''],
 			["Funkin' Crew"],
 			['ninjamuffin99', 'ninjamuffin99', "Programmer of Friday Night Funkin'", 'https://twitter.com/ninja_muffin99', '0xF73838'],
-			['eliteMasterEric', 'mastereric', "Programmer of Friday Night Funkin'", 'https://twitter.com/ninja_muffin99', '0xF73838'],
+			['eliteMasterEric', 'mastereric', "Programmer of Friday Night Funkin', Maintainer of Polymod", 'https://twitter.com/ninja_muffin99', '0xF73838'],
 			['PhantomArcade', 'phantomarcade', "Animator of Friday Night Funkin'", 'https://twitter.com/PhantomArcade3K', '0xFFBB1B'],
 			['evilsk8r', 'evilsk8r', "Artist of Friday Night Funkin'", 'https://twitter.com/evilsk8r', '0x53E52C'],
 			['kawaisprite', 'kawaisprite', "Composer of Friday Night Funkin'", 'https://twitter.com/kawaisprite', '0x6475F3']];

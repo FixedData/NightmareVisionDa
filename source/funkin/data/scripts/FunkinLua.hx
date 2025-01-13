@@ -109,8 +109,8 @@ class FunkinLua extends FunkinScript
 			set('startedCountdown', false);
 
 			set('isStoryMode', PlayState.isStoryMode);
-			set('difficulty', PlayState.storyDifficulty);
-			set('difficultyName', CoolUtil.difficulties[PlayState.storyDifficulty]);
+			set('difficulty', PlayState.storyMeta.difficulty);
+			set('difficultyName', CoolUtil.difficulties[PlayState.storyMeta.difficulty]);
 			set('weekRaw', PlayState.storyWeek);
 			set('week', WeekData.weeksList[PlayState.storyWeek]);
 			set('seenCutscene', PlayState.seenCutscene); */
@@ -620,11 +620,11 @@ class FunkinLua extends FunkinScript
 		
 		Lua_helper.add_callback(lua, "loadSong", function(?name:String = null, ?difficultyNum:Int = -1) {
 			if (name == null || name.length < 1) name = PlayState.SONG.song;
-			if (difficultyNum == -1) difficultyNum = PlayState.storyDifficulty;
+			if (difficultyNum == -1) difficultyNum = PlayState.storyMeta.difficulty;
 			
 			var poop = Highscore.formatSong(name, difficultyNum);
 			PlayState.SONG = Song.loadFromJson(poop, name);
-			PlayState.storyDifficulty = difficultyNum;
+			PlayState.storyMeta.difficulty = difficultyNum;
 			PlayState.instance.persistentUpdate = false;
 			LoadingState.loadAndSwitchState(new PlayState());
 			

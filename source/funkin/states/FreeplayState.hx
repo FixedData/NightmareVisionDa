@@ -323,7 +323,7 @@ class FreeplayState extends MusicBeatState
 			{
 				PlayState.SONG = Song.loadFromJson(poop, songLowercase);
 				PlayState.isStoryMode = false;
-				PlayState.storyDifficulty = curDifficulty;
+				PlayState.storyMeta.difficulty = curDifficulty;
 			}
 			catch (e)
 			{
@@ -389,7 +389,7 @@ class FreeplayState extends MusicBeatState
 		intendedRating = Highscore.getRating(songs[curSelected].songName, curDifficulty);
 		#end
 		
-		PlayState.storyDifficulty = curDifficulty;
+		PlayState.storyMeta.difficulty = curDifficulty;
 		diffText.text = '< ' + Difficulty.getCurDifficulty() + ' >';
 		positionHighscore();
 	}
@@ -439,7 +439,7 @@ class FreeplayState extends MusicBeatState
 		}
 		
 		Paths.currentModDirectory = songs[curSelected].folder;
-		PlayState.storyWeek = songs[curSelected].week;
+		PlayState.storyMeta.curWeek = songs[curSelected].week;
 		
 		Difficulty.reset();
 		

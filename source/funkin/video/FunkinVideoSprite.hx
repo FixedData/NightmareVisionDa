@@ -58,6 +58,14 @@ class FunkinVideoSprite extends FlxVideoSprite
 		hxvlc.util.Handle.init();
 	}
 	
+
+	/**
+	 * Bool that decides if `this` should be affected by states
+	 * 
+	 * Disable this if you dont want your video to pause when paused in `PlayState`
+	 */
+	public var isStateAffected:Bool = true;
+
 	/**
 	 * Creates a new FunkinVideoSprite
 	 * @param x `x` position

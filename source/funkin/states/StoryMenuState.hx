@@ -288,18 +288,21 @@ class StoryMenuState extends MusicBeatState
 			}
 			
 			// Nevermind that's stupid lmao
-			PlayState.storyPlaylist = songArray;
+			PlayState.storyMeta.playlist = songArray;
 			PlayState.isStoryMode = true;
 			selectedWeek = true;
 			
 			var diffic = Difficulty.getDifficultyFilePath(curDifficulty);
 			if (diffic == null) diffic = '';
 			
-			PlayState.storyDifficulty = curDifficulty;
+			PlayState.storyMeta.difficulty = curDifficulty;
 			
-			PlayState.SONG = Song.loadFromJson(PlayState.storyPlaylist[0].toLowerCase() + diffic, PlayState.storyPlaylist[0].toLowerCase());
-			PlayState.campaignScore = 0;
-			PlayState.campaignMisses = 0;
+			PlayState.SONG = Song.loadFromJson(PlayState.storyMeta.playlist[0].toLowerCase() + diffic, PlayState.storyMeta.playlist[0].toLowerCase());
+			PlayState.storyMeta.storyScore = 0;
+			PlayState.storyMeta.storyMisses = 0;
+
+			// PlayState.campaignScore = 0;
+			// PlayState.campaignMisses = 0;
 			new FlxTimer().start(1, function(tmr:FlxTimer) {
 				LoadingState.loadAndSwitchState(new PlayState(), true);
 				FreeplayState.destroyFreeplayVocals();
@@ -387,7 +390,7 @@ class StoryMenuState extends MusicBeatState
 		{
 			bgSprite.loadGraphic(Paths.image('menubackgrounds/menu_' + assetName));
 		}
-		PlayState.storyWeek = curWeek;
+		PlayState.storyMeta.curWeek = curWeek;
 		
 		Difficulty.reset();
 		var diffStr:String = WeekData.getCurrentWeek().difficulties;

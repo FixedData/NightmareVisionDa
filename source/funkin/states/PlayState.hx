@@ -40,6 +40,7 @@ import funkin.states.editors.*;
 import funkin.data.scripts.FunkinLua.ModchartSprite;
 import funkin.modchart.*;
 import funkin.backend.SyncedFlxSoundGroup;
+import funkin.game.StoryMeta;
 
 class PlayState extends MusicBeatState
 {
@@ -116,17 +117,58 @@ class PlayState extends MusicBeatState
 	public var modchartSaves:Map<String, FlxSave> = new Map<String, FlxSave>();
 	public var modchartObjects:Map<String, FlxSprite> = new Map<String, FlxSprite>();
 	
-	// event variables
+	/**
+	 * Map containing values thats used as a means to access values between scripts
+	 */
 	public var variables:Map<String, Dynamic> = new Map();
 	
+	/**
+	 * Var to disable the cameras auto character tracking
+	 * 
+	 * Used primarily for events
+	 */
 	public var isCameraOnForcedPos:Bool = false;
 	
+	/**
+	 * Map of the `boyfriend`'s by name
+	 * 
+	 * exists for the `Change Character` event
+	 */
 	public var boyfriendMap:Map<String, Character> = new Map();
+	
+	/**
+	 * Map of the `dad`'s by name
+	 * 
+	 * exists for the `Change Character` event
+	 */
 	public var dadMap:Map<String, Character> = new Map();
+	
+	/**
+	 * Map of the `gf`'s by name
+	 * 
+	 * exists for the `Change Character` event
+	 */
 	public var gfMap:Map<String, Character> = new Map();
 	
+	/**
+	 * Group of the `boyfriend`'s thats added to the state
+	 * 
+	 * exists for the `Change Character` event
+	 */
 	public var boyfriendGroup:FlxSpriteGroup;
+	
+	/**
+	 * Group of the `dad`'s thats added to the state
+	 * 
+	 * exists for the `Change Character` event
+	 */
 	public var dadGroup:FlxSpriteGroup;
+	
+	/**
+	 * Group of the `gf`'s thats added to the state
+	 * 
+	 * exists for the `Change Character` event
+	 */
 	public var gfGroup:FlxSpriteGroup;
 	
 	/**
@@ -191,12 +233,21 @@ class PlayState extends MusicBeatState
 	**/
 	public var stage:Stage;
 	
+	/**
+	 * Static bool of whether the current stage is a pixel stage
+	 */
 	public static var isPixelStage:Bool = false;
 	public static var SONG:SwagSong = null;
+
+	/**
+	 * Contains a bunch of information about Story Mode
+	 */
+	public static var storyMeta:StoryMeta = new StoryMeta();
+
+	/**
+	 * Bool telling if we loaded through Story Mode or Freeplay
+	 */
 	public static var isStoryMode:Bool = false;
-	public static var storyWeek:Int = 0;
-	public static var storyPlaylist:Array<String> = [];
-	public static var storyDifficulty:Int = 1;
 	
 	public var spawnTime:Float = 3000;
 	
@@ -347,20 +398,6 @@ class PlayState extends MusicBeatState
 	 * The total amount of misses within a song
 	 */
 	public var songMisses:Int = 0;
-	
-	/**
-	 * The total score gained throughout a week
-	 * 
-	 * Only in Story Mode
-	 */
-	public static var campaignScore:Int = 0;
-	
-	/**
-	 * The total amount of misses throughout a week
-	 * 
-	 * Only in Story Mode
-	 */
-	public static var campaignMisses:Int = 0;
 	
 	/**
 	 * Persistent var for songs to use to prevent replaying cutscenes
@@ -621,7 +658,7 @@ class PlayState extends MusicBeatState
 		initNoteSkinning();
 		
 		#if DISCORD_ALLOWED
-		storyDifficultyText = Difficulty.difficulties[storyDifficulty];
+		storyDifficultyText = Difficulty.difficulties[storyMeta.difficulty];
 		
 		// String that contains the mode defined here so it isn't necessary to call changePresence for each mode
 		detailsText = isStoryMode ? 'Story Mode' : 'Freeplay';
@@ -902,7 +939,6 @@ class PlayState extends MusicBeatState
 		}
 		
 		#if DISCORD_ALLOWED
-		// Updating Discord Rich Presence.
 		DiscordClient.changePresence(detailsText, FlxG.random.getObject(DiscordClient.discordPresences), null);
 		#end
 		
@@ -1068,30 +1104,30 @@ class PlayState extends MusicBeatState
 				}
 		}
 	}
-
+	
+	// MIGHT BE SCRAPPED IDK IF I LIKE THIS
+	
 	/**
 	 * Creates a new Character. If possible, creates a scripted character
 	 * @param charName the name of the character
 	 * @param isPlayer are they player
 	 * @return Character
 	 */
-	public function generateCharacter(charName:String,isPlayer:Bool = false):Character
+	public function generateCharacter(charName:String, isPlayer:Bool = false):Character
 	{
-		//i think in the ver of polymod used here mentioning any typed group breaks auto complete so this is okay i think?
+		// i think in the ver of polymod used here mentioning any typed group breaks auto complete so this is okay i think?
 		
 		// #if !display
 		if (funkin.scripting.classes.ScriptedCharacter.listScriptClasses().contains(charName))
 		{
-			return funkin.scripting.classes.ScriptedCharacter.init(charName,0,0,charName,isPlayer);
+			return funkin.scripting.classes.ScriptedCharacter.init(charName, 0, 0, charName, isPlayer);
 		}
 		// #end
 		else
 		{
-			return new Character(0, 0, charName,isPlayer);
+			return new Character(0, 0, charName, isPlayer);
 		}
-		
 	}
-
 	
 	function initFunkinIris(filePath:String, ?name:String)
 	{
@@ -2127,7 +2163,7 @@ class PlayState extends MusicBeatState
 			}
 			
 			#if VIDEOS_ALLOWED
-			forEachOfType(FunkinVideoSprite, video -> video?.pause(), true);
+			forEachOfType(FunkinVideoSprite, video -> if (video != null && video.isStateAffected) video.pause(), true);
 			#end
 			
 			FlxTimer.globalManager.forEach((i:FlxTimer) -> if (!i.finished) i.active = false);
@@ -2162,7 +2198,7 @@ class PlayState extends MusicBeatState
 			}
 			
 			#if VIDEOS_ALLOWED
-			forEachOfType(FunkinVideoSprite, video -> video?.resume(), true);
+			forEachOfType(FunkinVideoSprite, video -> if (video != null && video.isStateAffected) video.resume(), true);
 			#end
 			
 			FlxTimer.globalManager.forEach((i:FlxTimer) -> if (!i.finished) i.active = true);
@@ -3361,7 +3397,7 @@ class PlayState extends MusicBeatState
 				#if !switch
 				var percent:Float = ratingPercent;
 				if (Math.isNaN(percent)) percent = 0;
-				Highscore.saveScore(SONG.song, songScore, storyDifficulty, percent);
+				Highscore.saveScore(SONG.song, songScore, storyMeta.difficulty, percent);
 				#end
 			}
 			
@@ -3373,12 +3409,14 @@ class PlayState extends MusicBeatState
 			
 			if (isStoryMode)
 			{
-				campaignScore += songScore;
-				campaignMisses += songMisses;
+				storyMeta.storyScore += songScore;
+				storyMeta.storyMisses += songMisses;
+				// campaignScore += songScore;
+				// campaignMisses += songMisses;
 				
-				storyPlaylist.remove(storyPlaylist[0]);
+				storyMeta.playlist.remove(storyMeta.playlist[0]);
 				
-				if (storyPlaylist.length <= 0)
+				if (storyMeta.playlist.length <= 0)
 				{
 					FlxG.sound.playMusic(Paths.music('freakyMenu'));
 					FlxG.sound.music.volume = 1;
@@ -3388,11 +3426,11 @@ class PlayState extends MusicBeatState
 					
 					if (!ClientPrefs.getGameplaySetting('practice', false) && !ClientPrefs.getGameplaySetting('botplay', false))
 					{
-						StoryMenuState.weekCompleted.set(WeekData.weeksList[storyWeek], true);
+						StoryMenuState.weekCompleted.set(WeekData.weeksList[storyMeta.curWeek], true);
 						
 						if (SONG.validScore)
 						{
-							Highscore.saveWeekScore(WeekData.getWeekFileName(), campaignScore, storyDifficulty);
+							Highscore.saveWeekScore(WeekData.getWeekFileName(), storyMeta.storyScore, storyMeta.difficulty);
 						}
 						
 						FlxG.save.data.weekCompleted = StoryMenuState.weekCompleted;
@@ -3405,7 +3443,7 @@ class PlayState extends MusicBeatState
 					var difficulty:String = Difficulty.getDifficultyFilePath();
 					
 					trace('LOADING NEXT SONG');
-					trace(Paths.formatToSongPath(PlayState.storyPlaylist[0]) + difficulty);
+					trace(Paths.formatToSongPath(PlayState.storyMeta.playlist[0]) + difficulty);
 					
 					FlxTransitionableState.skipNextTransIn = true;
 					FlxTransitionableState.skipNextTransOut = true;
@@ -3413,7 +3451,7 @@ class PlayState extends MusicBeatState
 					prevCamFollow = camFollow;
 					prevCamFollowPos = camFollowPos;
 					
-					PlayState.SONG = Song.loadFromJson(PlayState.storyPlaylist[0] + difficulty, PlayState.storyPlaylist[0]);
+					PlayState.SONG = Song.loadFromJson(PlayState.storyMeta.playlist[0] + difficulty, PlayState.storyMeta.playlist[0]);
 					FlxG.sound.music.stop();
 					
 					cancelMusicFadeTween();

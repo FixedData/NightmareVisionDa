@@ -32,6 +32,7 @@ import sys.FileSystem;
 
 using StringTools;
 
+
 @:bitmap("assets/images/debugger/cursorCross.png")
 class Crosshair extends openfl.display.BitmapData {}
 

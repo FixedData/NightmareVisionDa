@@ -3703,15 +3703,15 @@ class ChartingState extends MusicBeatState
 		// shitty null fix, i fucking hate it when this happens
 		// make it look sexier if possible
 		reloadGridLayer();
-		if (Difficulty.difficulties[PlayState.storyDifficulty] != Difficulty.defaultDifficulty)
+		if (Difficulty.difficulties[PlayState.storyMeta.difficulty] != Difficulty.defaultDifficulty)
 		{
-			if (Difficulty.difficulties[PlayState.storyDifficulty] == null)
+			if (Difficulty.difficulties[PlayState.storyMeta.difficulty] == null)
 			{
 				PlayState.SONG = Song.loadFromJson(song.toLowerCase(), song.toLowerCase());
 			}
 			else
 			{
-				PlayState.SONG = Song.loadFromJson(song.toLowerCase() + "-" + Difficulty.difficulties[PlayState.storyDifficulty], song.toLowerCase());
+				PlayState.SONG = Song.loadFromJson(song.toLowerCase() + "-" + Difficulty.difficulties[PlayState.storyMeta.difficulty], song.toLowerCase());
 			}
 		}
 		else
