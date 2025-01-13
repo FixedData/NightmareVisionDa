@@ -996,9 +996,9 @@ class PlayState extends MusicBeatState
 		}
 		else
 		{
-			if (FileSystem.exists(Paths.modsNoteskin('default')))
+			if (FileSystem.exists(Paths.noteskin('default')))
 			{
-				noteSkin = new NoteSkinHelper(Paths.modsNoteskin('default'));
+				noteSkin = new NoteSkinHelper(Paths.noteskin('default'));
 			}
 		}
 		
